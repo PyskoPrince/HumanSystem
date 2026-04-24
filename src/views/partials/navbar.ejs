@@ -1,0 +1,78 @@
+<% if (login) { %>
+        <header class="navbar-authenticated-container mt-3">
+            <nav class="gadgets-menu" id="gadgetsMenu" aria-label="Menú principal de usuario">
+                <ul>
+                    <% if (typeof gadgets !== 'undefined' && gadgets.length > 0) { %>
+                        <% gadgets.forEach(gadget => { %>
+                            <li>
+                                <a href="<%= gadget.href %>" class="gadget" aria-label="<%= gadget.label %>" title="<%= gadget.label %>">
+                                    <span class="<%= gadget.iconClass %>" aria-hidden="true"></span>
+                                </a>
+                            </li>
+                        <% }); %>
+                    <% } %>
+                </ul>
+            </nav>
+        </header>
+
+    <% } else { %>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top align-items-center">
+            <% 
+               let isInfoPage = (typeof currentPage !== 'undefined' && currentPage === 'info') || 
+                                (typeof pageClass !== 'undefined' && pageClass.includes('page-info'));
+               let isLoginPage = (typeof currentPage !== 'undefined' && currentPage === 'login') || 
+                                 (typeof pageClass !== 'undefined' && pageClass.includes('page-login'));
+            %>
+            
+            <% if (isInfoPage) { %>
+                <a class="navbar-brand d-flex align-items-center" href="/">
+                    <img src="https://i.ibb.co/fwsGRsn/Human-kmjknk.png" alt="Isotipo" class="brand-logo">
+                    <span class="brand-text-stack">
+                        <span class="brand-name">
+                            <em><span class="text-human">Human</span> <span class="text-system">System</span></em>
+                        </span>
+                        <span class="brand-sub">Human Identification Technologies</span>
+                    </span>
+                </a>
+            <% } else { %>
+                <a class="navbar-brand" href="/">
+                    <img src="https://i.ibb.co/G3XDtMJ/Logoapp.png" alt="Logo Human System" class="brand-logo" style="margin: 0;">
+                </a>
+            <% } %>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavPublic" aria-controls="navbarNavPublic" aria-expanded="false" aria-label="Toggle navigation">
+                <div class="hamburger">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNavPublic">
+                <ul class="navbar-nav ml-auto align-items-center">
+                    <% if (!isInfoPage) { %>
+                        <li class="nav-item" data-page="info">
+                            <a class="nav-link info" href="/info">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="nav-text-mobile ml-1"> Información</span>
+                            </a>
+                        </li>
+                    <% } %>
+                    
+                    <li class="nav-item" data-page="register">
+                        <a class="nav-link registro" href="/register">
+                            <i class="mr-1 fas fa-user-plus"></i> Registro
+                        </a>
+                    </li>
+                    
+                    <% if (!isLoginPage) { %>
+                        <li class="nav-item" data-page="login">
+                            <a class="nav-link ingreso" href="/login">
+                                <i class="mr-1 fas fa-sign-in-alt"></i> Ingreso
+                            </a>
+                        </li>
+                    <% } %>
+                </ul>
+            </div>
+        </nav>
+    <% } %>

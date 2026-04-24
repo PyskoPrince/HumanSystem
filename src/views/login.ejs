@@ -1,0 +1,1846 @@
+<%- include('partials/header', { title: 'Iniciar Sesión', pageClass: 'page-login-liquid' }) %>
+<%- include('partials/navbar', { login: false, currentPage: 'login' }) %>
+
+<div id="loader-wrapper">
+    <div class="biometric-container">
+        <div class="fingerprint-scanner">
+            <i class="fas fa-fingerprint"></i>
+            <div class="scan-bar"></div>
+        </div>
+        <div class="loading-track">
+            <div class="loading-fill"></div>
+        </div>
+        <div class="loader-status">
+            <span class="status-text" id="loader-text">SYSTEM_AUTH_REQUIRED</span>
+            <span class="status-dots">...</span>
+        </div>
+    </div>
+</div>
+
+<style>
+  /* ========== PALETA DE COLORES HUMAN SYSTEM ========== */
+  :root {
+    --hs-dark: #0a1120;           /* Azul oscuro principal */
+    --hs-blue: #1F4E67;          /* Azul corporativo */
+    --hs-cyan: #4ca1af;          /* Cyan acento */
+    --hs-accent: #d71d00;        /* Rojo acento */
+    --hs-red: #f10821;           /* Rojo vibrante */
+    --hs-light: rgba(255, 255, 255, 0.9);
+    --hs-glass-bg: rgba(255, 255, 255, 0.05);
+    --hs-glass-border: rgba(255, 255, 255, 0.1);
+  }
+
+  /* ========== FONDO SÓLIDO ========== */
+  .page-login-liquid {
+    background: linear-gradient(135deg, #0a1120 0%, #1a1f2e 50%, #1F4E67 100%);
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+  }
+
+  /* ========== CONTENEDOR PRINCIPAL ========== */
+  .login-liquid-container {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1;
+  }
+
+  /* ========== FONDO CON EFECTOS SUTILES ========== */
+  .login-liquid-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0a1120 0%, #1a1f2e 50%, #1F4E67 100%);
+  }
+
+  .login-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    animation: floatBlob 25s infinite ease-in-out;
+    opacity: 0.15;
+  }
+
+  .blob-1 {
+    width: 400px;
+    height: 400px;
+    top: 10%;
+    left: 10%;
+    background: radial-gradient(circle at 30% 30%, var(--hs-cyan), transparent 70%);
+    animation-delay: 0s;
+  }
+
+  .blob-2 {
+    width: 300px;
+    height: 300px;
+    bottom: 20%;
+    right: 15%;
+    background: radial-gradient(circle at 30% 30%, var(--hs-accent), transparent 70%);
+    animation-delay: -8s;
+  }
+
+  .blob-3 {
+    width: 250px;
+    height: 250px;
+    top: 50%;
+    left: 80%;
+    background: radial-gradient(circle at 30% 30%, var(--hs-blue), transparent 70%);
+    animation-delay: -16s;
+  }
+
+  /* ========== CONTAINER DEL FORMULARIO GLASS ========== */
+  .login-glass-container {
+    background: linear-gradient(
+      135deg,
+      rgba(31, 78, 103, 0.1) 0%,
+      rgba(10, 17, 32, 0.2) 100%
+    ) !important;
+    backdrop-filter: blur(35px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(35px) saturate(180%) !important;
+    border: 1.5px solid rgba(76, 161, 175, 0.25) !important;
+    border-radius: 24px !important;
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      inset 0 0 30px rgba(76, 161, 175, 0.1) !important;
+    padding: 40px;
+    width: 100%;
+    max-width: 440px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  }
+
+  /* Efecto de brillo líquido */
+  .login-glass-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent 30%,
+      rgba(76, 161, 175, 0.08) 50%,
+      transparent 70%
+    );
+    transform: rotate(30deg);
+    animation: liquidShine 8s infinite linear;
+    pointer-events: none;
+  }
+
+  @keyframes liquidShine {
+    0% { transform: rotate(30deg) translateX(-100%); }
+    100% { transform: rotate(30deg) translateX(100%); }
+  }
+
+  @keyframes floatBlob {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(30px, -30px) scale(1.05); }
+    50% { transform: translate(-20px, 20px) scale(0.95); }
+    75% { transform: translate(15px, -15px) scale(1.02); }
+  }
+
+  .login-glass-container:hover {
+    background: linear-gradient(
+      135deg,
+      rgba(31, 78, 103, 0.15) 0%,
+      rgba(10, 17, 32, 0.25) 100%
+    ) !important;
+    border: 1.5px solid var(--hs-cyan) !important;
+    box-shadow: 
+      0 30px 60px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 0 40px rgba(76, 161, 175, 0.2) !important;
+    transform: translateY(-5px);
+  }
+
+  /* ========== HEADER DEL FORMULARIO ========== */
+  .login-glass-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .login-logo-circle {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 20px;
+  }
+
+  .login-logo-glass {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(76, 161, 175, 0.3);
+    padding: 12px;
+    box-shadow: 0 4px 20px rgba(31, 78, 103, 0.2);
+  }
+
+  .login-logo-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, var(--hs-cyan), transparent 70%);
+    border-radius: 50%;
+    filter: blur(20px);
+    opacity: 0.4;
+    animation: pulseGlow 4s infinite ease-in-out;
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.05); }
+  }
+
+  .login-glass-title {
+    font-size: 28px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff, var(--hs-cyan)) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    text-shadow: 0 2px 10px rgba(76, 161, 175, 0.3) !important;
+    letter-spacing: 0.5px !important;
+    font-family: 'Iceland', cursive !important;
+    margin: 0 0 8px 0;
+  }
+
+  .login-glass-subtitle {
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  /* ========== SELECTOR DE MÉTODO ========== */
+  .login-method-selector {
+    margin-bottom: 32px;
+  }
+
+  .login-selector-tabs {
+    display: flex;
+    background: rgba(10, 17, 32, 0.3) !important;
+    backdrop-filter: blur(20px) !important;
+    border-radius: 16px !important;
+    padding: 4px;
+    border: 1px solid rgba(76, 161, 175, 0.1);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .login-tab-btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    background: transparent;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .login-tab-btn i {
+    font-size: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .login-tab-btn.active {
+    background: linear-gradient(135deg, rgba(31, 78, 103, 0.3), rgba(76, 161, 175, 0.2)) !important;
+    color: white;
+    box-shadow: 0 4px 15px rgba(76, 161, 175, 0.4);
+    font-weight: 600;
+  }
+
+  .login-tab-btn.active i {
+    color: var(--hs-cyan);
+    text-shadow: 0 0 15px rgba(76, 161, 175, 0.5);
+  }
+
+  .login-tab-btn:hover:not(.active) {
+    background: rgba(76, 161, 175, 0.1);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* ========== INPUTS GLASS ========== */
+  .login-input-group-glass {
+    position: relative;
+    margin-bottom: 28px;
+  }
+
+  .login-input-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 20px;
+    z-index: 2;
+    transition: color 0.3s ease;
+  }
+
+  .login-glass-input {
+    width: 100%;
+    padding: 18px 20px 18px 60px;
+    background: rgba(10, 17, 32, 0.3) !important;
+    border: 1.5px solid rgba(76, 161, 175, 0.2) !important;
+    color: #fff !important;
+    border-radius: 16px !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    font-size: 16px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+      inset 0 2px 8px rgba(0, 0, 0, 0.2),
+      0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  }
+
+  .login-glass-input:focus {
+    background: rgba(10, 17, 32, 0.4) !important;
+    border: 1.5px solid var(--hs-cyan) !important;
+    box-shadow: 
+      0 0 0 4px rgba(76, 161, 175, 0.2),
+      inset 0 2px 8px rgba(0, 0, 0, 0.3),
+      0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    outline: none !important;
+    transform: translateY(-2px);
+  }
+
+  .login-glass-input:focus + .login-input-icon {
+    color: var(--hs-cyan);
+    text-shadow: 0 0 10px rgba(76, 161, 175, 0.5);
+  }
+
+  .login-glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
+  }
+
+  .login-toggle-password {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-size: 20px;
+    padding: 4px;
+    transition: color 0.3s ease;
+    z-index: 2;
+  }
+
+  .login-toggle-password:hover {
+    color: var(--hs-cyan);
+    text-shadow: 0 0 10px rgba(76, 161, 175, 0.5);
+  }
+
+  /* ========== OPCIONES DEL FORMULARIO ========== */
+  .login-form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+  }
+
+  .login-checkbox-glass {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .login-checkbox-glass input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .login-checkmark {
+    width: 22px;
+    height: 22px;
+    background: rgba(10, 17, 32, 0.3);
+    border: 2px solid rgba(76, 161, 175, 0.3);
+    border-radius: 6px;
+    margin-right: 12px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  .login-checkbox-glass input:checked ~ .login-checkmark {
+    background: linear-gradient(135deg, var(--hs-blue), var(--hs-cyan)) !important;
+    border-color: transparent;
+    box-shadow: 0 0 15px rgba(76, 161, 175, 0.5) !important;
+  }
+
+  .login-checkmark::after {
+    content: '✓';
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+  }
+
+  .login-checkbox-glass input:checked ~ .login-checkmark::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .login-checkbox-label {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .login-forgot-link {
+    color: var(--hs-cyan) !important;
+    text-decoration: none !important;
+    font-size: 14px;
+    font-weight: 600;
+    position: relative;
+    padding: 2px 0;
+    transition: all 0.3s ease;
+  }
+
+  .login-forgot-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--hs-cyan), var(--hs-blue));
+    transition: width 0.3s ease;
+  }
+
+  .login-forgot-link:hover {
+    color: white !important;
+  }
+
+  .login-forgot-link:hover::after {
+    width: 100%;
+  }
+
+  /* ========== BOTONES ========== */
+  .login-glass-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 18px;
+    border: none !important;
+    border-radius: 16px !important;
+    font-size: 16px;
+    font-weight: 700 !important;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Iceland', cursive !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .login-glass-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
+
+  .login-glass-btn:hover::before {
+    left: 100%;
+  }
+
+  .login-glass-btn.primary {
+    background: linear-gradient(135deg, var(--hs-blue), var(--hs-cyan)) !important;
+    color: white !important;
+    box-shadow: 
+      0 10px 30px rgba(31, 78, 103, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.2) !important;
+  }
+
+  .login-glass-btn.primary:hover {
+    background: linear-gradient(135deg, var(--hs-cyan), var(--hs-blue)) !important;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 
+      0 20px 40px rgba(76, 161, 175, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.2) !important;
+  }
+
+  .login-glass-btn.outline {
+    background: transparent !important;
+    color: var(--hs-cyan) !important;
+    border: 1.5px solid var(--hs-cyan) !important;
+    font-weight: 500 !important;
+  }
+
+  .login-glass-btn.outline:hover {
+    background: rgba(76, 161, 175, 0.1) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(76, 161, 175, 0.3) !important;
+  }
+
+  .login-glass-btn.google {
+    background: white !important;
+    color: #333 !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+    font-weight: 500 !important;
+    text-transform: none;
+  }
+
+  .login-glass-btn.google:hover {
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25) !important;
+    transform: translateY(-2px);
+    border-color: var(--hs-cyan) !important;
+  }
+
+  /* ========== SEPARADOR ========== */
+  .login-separator {
+    display: flex;
+    align-items: center;
+    margin: 28px 0;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .login-separator::before,
+  .login-separator::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(76, 161, 175, 0.3), transparent);
+    margin: 0 15px;
+  }
+
+  /* ========== SECCIONES DEL FORMULARIO ========== */
+  .login-form-section {
+    display: none;
+    animation: fadeInUp 0.5s ease;
+  }
+
+  @keyframes fadeInUp {
+    from { 
+      opacity: 0; 
+      transform: translateY(20px); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+  }
+
+  .login-form-section.active {
+    display: block;
+  }
+
+  /* ========== SECCIÓN BIOMÉTRICA ========== */
+  .login-biometric-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .login-biometric-icon {
+    width: 90px;
+    height: 90px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    border: 2px solid rgba(76, 161, 175, 0.3);
+    box-shadow: 
+      0 10px 30px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .login-biometric-icon i {
+    font-size: 36px;
+    background: linear-gradient(135deg, var(--hs-cyan), var(--hs-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .login-face-scanner,
+  .login-voice-scanner {
+    text-align: center;
+  }
+
+  .login-scanner-frame {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin: 0 auto 28px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 2px solid rgba(76, 161, 175, 0.4);
+    background: rgba(0, 0, 0, 0.2);
+    box-shadow: 
+      inset 0 0 30px rgba(0, 0, 0, 0.3),
+      0 10px 40px rgba(76, 161, 175, 0.3);
+  }
+
+  .login-scanner-frame video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .login-scanner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .login-face-guide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 180px;
+    height: 220px;
+    border: 2px dashed rgba(76, 161, 175, 0.6);
+    border-radius: 40%;
+  }
+
+  .login-scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--hs-cyan), transparent);
+    animation: scan 2s linear infinite;
+    box-shadow: 0 0 15px rgba(76, 161, 175, 0.7);
+  }
+
+  @keyframes scan {
+    0% { top: 0; }
+    100% { top: 100%; }
+  }
+
+  .login-scanner-controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+  }
+
+  /* ========== MEDIDOR DE CONFIANZA ========== */
+  .login-confidence-meter {
+    margin-top: 25px;
+    animation: slideUp 0.5s ease;
+    padding: 20px;
+    background: rgba(10, 17, 32, 0.3);
+    border-radius: 16px;
+    border: 1px solid rgba(76, 161, 175, 0.2);
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .login-meter-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .login-meter-bar {
+    height: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.4);
+  }
+
+  .login-meter-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e74c3c, #f39c12, #00b894);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 15px rgba(0, 184, 148, 0.4);
+  }
+
+  /* ========== RECONOCIMIENTO DE VOZ ========== */
+  .login-voice-visualizer {
+    margin: 32px 0;
+    padding: 25px;
+    background: rgba(10, 17, 32, 0.3);
+    border-radius: 16px;
+    border: 1px solid rgba(76, 161, 175, 0.2);
+  }
+
+  .login-visualizer-bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 6px;
+    height: 50px;
+  }
+
+  .login-visualizer-bars .bar {
+    width: 8px;
+    background: linear-gradient(180deg, var(--hs-cyan), var(--hs-blue));
+    border-radius: 4px;
+    animation: voicePulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes voicePulse {
+    0%, 100% { transform: scaleY(0.5); opacity: 0.7; }
+    50% { transform: scaleY(1); opacity: 1; }
+  }
+
+  .login-visualizer-bars .bar:nth-child(1) { animation-delay: 0s; height: 15px; }
+  .login-visualizer-bars .bar:nth-child(2) { animation-delay: 0.2s; height: 25px; }
+  .login-visualizer-bars .bar:nth-child(3) { animation-delay: 0.4s; height: 35px; }
+  .login-visualizer-bars .bar:nth-child(4) { animation-delay: 0.6s; height: 30px; }
+  .login-visualizer-bars .bar:nth-child(5) { animation-delay: 0.8s; height: 20px; }
+
+  .login-phrase-display {
+    background: rgba(10, 17, 32, 0.4);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    padding: 25px;
+    margin: 28px 0;
+    border: 1px solid rgba(76, 161, 175, 0.3);
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0 8px 25px rgba(31, 78, 103, 0.2);
+    text-align: center;
+  }
+
+  /* ========== ENLACES DE PIE ========== */
+  .login-footer-links {
+    text-align: center;
+    margin-top: 28px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(76, 161, 175, 0.2);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+  }
+
+  .login-footer-links a {
+    color: var(--hs-cyan) !important;
+    text-decoration: none !important;
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
+
+  .login-footer-links a:hover {
+    color: white !important;
+    text-decoration: underline !important;
+  }
+
+  /* ========== ALERTAS ========== */
+  .login-alert {
+    border-radius: 12px !important;
+    background: rgba(10, 17, 32, 0.3) !important;
+    border: 1px solid rgba(76, 161, 175, 0.3) !important;
+    color: white !important;
+    backdrop-filter: blur(10px) !important;
+    padding: 15px 20px !important;
+    margin-top: 20px !important;
+    text-align: center;
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 480px) {
+    .login-glass-container {
+      padding: 25px;
+      margin: 15px;
+      border-radius: 20px !important;
+    }
+    
+    .login-selector-tabs {
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .login-scanner-frame {
+      width: 220px;
+      height: 220px;
+    }
+    
+    .login-scanner-controls {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .login-scanner-controls .login-glass-btn {
+      width: 100%;
+      max-width: 200px;
+    }
+    
+    .login-glass-title {
+      font-size: 24px;
+    }
+    
+    .login-biometric-icon {
+      width: 70px;
+      height: 70px;
+    }
+    
+    .login-biometric-icon i {
+      font-size: 28px;
+    }
+  }
+</style>
+
+<style>
+#loader-wrapper {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(10, 17, 32, 0.98) !important; 
+    backdrop-filter: blur(15px) !important;
+    z-index: 999999 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 0.3s ease, visibility 0.3s ease !important;
+    transform: 0.4s ease-in-out !important;
+}
+
+#loader-wrapper.loader-visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+#loader-wrapper.loader-hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+#loader-wrapper .biometric-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 20px !important;
+    transform: scale(0.9) !important;
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+}
+
+#loader-wrapper.loader-visible .biometric-container {
+    transform: scale(1) !important;
+}
+
+#loader-wrapper.loader-hidden .biometric-container {
+    transform: scale(0.9) !important;
+}
+
+#loader-wrapper .fingerprint-scanner {
+    position: relative !important;
+    font-size: 80px !important;
+}
+
+#loader-wrapper .fingerprint-scanner .fa-fingerprint {
+    font-family: "Font Awesome 6 Free", "Font Awesome 5 Free", "FontAwesome" !important;
+    font-weight: 900 !important;
+    display: inline-block !important;
+    font-size: 80px !important;
+    background: linear-gradient(135deg, #1F4E67 0%, #f10821 100%) !important;
+    background-size: 200% 200% !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: transparent !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+#loader-wrapper .scan-bar {
+    position: absolute !important;
+    top: 0 ;
+    left: -10% !important;
+    width: 120% !important;
+    height: 4px !important;
+    background: #f10821 !important;
+    box-shadow: 0 0 20px #f10821 !important;
+    border-radius: 10px !important;
+    opacity: 0; 
+}
+
+#loader-wrapper .loading-track {
+    width: 200px !important;
+    height: 2px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    position: relative !important;
+}
+
+#loader-wrapper .loading-fill {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 0% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, #1F4E67, #f10821) !important;
+    box-shadow: 0 0 10px #f10821 !important;
+    transition: width 2s cubic-bezier(0.1, 0.7, 1.0, 0.1), background 0.5s ease, box-shadow 0.5s ease !important;
+}
+
+#loader-wrapper.loading-active .loading-fill {
+    width: 85% !important;
+}
+
+#loader-wrapper.loading-success .loading-fill {
+    width: 100% !important;
+    background: linear-gradient(90deg, #00b894, #00cec9) !important;
+    box-shadow: 0 0 15px #00b894 !important;
+    transition: width 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55), background 0.5s ease, box-shadow 0.5s ease !important;
+}
+
+#loader-wrapper.loading-active .fingerprint-scanner i {
+    animation: loader-fingerprint-pulse 2s infinite ease-in-out;
+}
+
+#loader-wrapper.loading-active .scan-bar {
+    animation: loader-laser-scan 2.5s infinite ease-in-out !important;
+}
+
+#loader-wrapper.loading-success .fingerprint-scanner {
+    filter: drop-shadow(0 0 20px rgba(0, 184, 148, 0.8));
+}
+
+#loader-wrapper.loading-success .fingerprint-scanner .fa-fingerprint {
+    background: linear-gradient(180deg, #00b894 0%, #00cec9 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: transparent !important;
+    transform: scale(1.1);
+    animation: none;
+}
+
+#loader-wrapper.loading-success .scan-bar {
+    display: none !important;
+}
+
+#loader-wrapper .loader-status {
+    font-family: 'Iceland', cursive !important;
+    font-size: 14px !important;
+    color: #4ca1af !important;
+    letter-spacing: 2px !important;
+    text-transform: uppercase !important;
+}
+
+/* Animaciones */
+@keyframes loader-laser-scan {
+    0%, 100% { top: 0%; opacity: 0; }
+    50% { top: 100%; opacity: 1; }
+}
+
+@keyframes loader-fingerprint-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.05); opacity: 1; }
+}
+</style>
+
+<div class="login-liquid-container">
+  <div class="login-liquid-bg">
+    <div class="login-blob blob-1"></div>
+    <div class="login-blob blob-2"></div>
+    <div class="login-blob blob-3"></div>
+  </div>
+
+  <!-- Contenedor principal con efecto glassmorphism -->
+  <div class="login-glass-container">
+    <!-- Cabecera con logo -->
+    <div class="login-glass-header">
+      <div class="login-logo-circle">
+        <img src="https://storage.googleapis.com/humansystem/LogoHS.png" alt="Logo" 
+             class="login-logo-glass">
+        <div class="login-logo-glow"></div>
+      </div>
+      <h1 class="login-glass-title">Iniciar Sesión</h1>
+      <p class="login-glass-subtitle">Verifica tu identidad para continuar</p>
+    </div>
+
+    <!-- Selector de método de autenticación -->
+    <div class="login-method-selector">
+      <div class="login-selector-tabs">
+        <button class="login-tab-btn active" data-method="traditional">
+          <i class="fas fa-key"></i>
+          <span>Credenciales</span>
+        </button>
+        <!-- <button class="login-tab-btn" data-method="facial">
+          <i class="fas fa-camera"></i>
+          <span>Facial</span>
+        </button>
+        <button class="login-tab-btn" data-method="voice">
+          <i class="fas fa-microphone-alt"></i>
+          <span>Voz</span>
+        </button> -->
+      </div>
+    </div>
+
+    <!-- Formulario principal -->
+    <form id="loginForm" action="/auth" method="POST" class="login-glass-form">
+      
+      <!-- Sección tradicional -->
+      <div id="traditionalSection" class="login-form-section active">
+        <div class="login-input-group-glass">
+          <i class="login-input-icon fas fa-user"></i>
+          <input type="text" name="humano" 
+                 class="login-glass-input" 
+                 id="humanoInput" 
+                 placeholder="ID, Celular, Correo, CURP, RFC"
+                 required
+                 oninput="this.value = this.value.toUpperCase()">
+        </div>
+
+        <div class="login-input-group-glass">
+          <i class="login-input-icon fas fa-lock"></i>
+          <input type="password" name="contraseña" 
+                 class="login-glass-input" 
+                 id="passwordInput"
+                 placeholder="Contraseña"
+                 required>
+          <button type="button" class="login-toggle-password" id="togglePassword">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+
+        <div class="login-form-options">
+          <label class="login-checkbox-glass">
+            <input type="checkbox" id="rememberMe" name="remember-me">
+            <span class="login-checkmark"></span>
+            <span class="login-checkbox-label">Recordarme</span>
+          </label>
+          
+          <a href="#" class="login-forgot-link mb-2" id="forgotPasswordLink">
+            Olvidé mi contraseña
+          </a>
+        </div>
+
+        <button type="submit" class="login-glass-btn primary">
+          <i class="fas fa-sign-in-alt"></i>
+          <span>Ingresar</span>
+        </button>
+      </div>
+
+      <!-- Sección facial -->
+      <div id="facialSection" class="login-form-section">
+        <div class="login-biometric-header">
+          <div class="login-biometric-icon">
+            <i class="fas fa-camera"></i>
+          </div>
+          <h3>Reconocimiento Facial</h3>
+          <p>Posiciona tu rostro en el área indicada</p>
+        </div>
+
+        <div class="login-face-scanner">
+          <div class="login-scanner-frame">
+            <video id="faceVideo" autoplay playsinline></video>
+            <div class="login-scanner-overlay">
+              <div class="login-face-guide"></div>
+              <div class="login-scan-line"></div>
+            </div>
+            <canvas id="faceCanvas" style="display: none;"></canvas>
+          </div>
+          
+          <div class="login-scanner-controls">
+            <button type="button" class="login-glass-btn outline" id="startCamera">
+              <i class="fas fa-camera"></i>
+              Activar Cámara
+            </button>
+            <button type="button" class="login-glass-btn" id="captureFace" disabled>
+              <i class="fas fa-check"></i>
+              Verificar
+            </button>
+          </div>
+          
+          <div class="login-confidence-meter" style="display: none;">
+            <div class="login-meter-label">
+              <span>Confianza:</span>
+              <span id="confidenceValue">0%</span>
+            </div>
+            <div class="login-meter-bar">
+              <div id="confidenceProgress" class="login-meter-fill"></div>
+            </div>
+          </div>
+          
+          <!-- Resultado del análisis facial -->
+          <div id="faceMatchResult" class="login-alert" style="display: none;">
+            <i class="fas fa-search mr-2"></i>
+            <span id="matchStatus">Analizando rostro...</span>
+          </div>
+          
+          <button id="retryCapture" class="login-glass-btn outline mt-3" type="button" style="display: none; width: auto; padding: 12px 25px; margin: 15px auto;">
+            <i class="fas fa-redo mr-1"></i> Reintentar
+          </button>
+        </div>
+      </div>
+
+      <!-- Sección de voz -->
+      <div id="voiceSection" class="login-form-section">
+        <div class="login-biometric-header">
+          <div class="login-biometric-icon">
+            <i class="fas fa-microphone-alt"></i>
+          </div>
+          <h3>Reconocimiento de Voz</h3>
+          <p>Pronuncia la frase de seguridad</p>
+        </div>
+
+        <div class="login-voice-scanner">
+          <div class="login-phrase-display">
+            <p>"Mi identidad es segura en Human System"</p>
+          </div>
+          
+          <div class="login-voice-visualizer">
+            <div class="login-visualizer-bars">
+              <div class="bar"></div>
+              <div class="bar"></div>
+              <div class="bar"></div>
+              <div class="bar"></div>
+              <div class="bar"></div>
+            </div>
+          </div>
+          
+          <div class="login-scanner-controls">
+            <button type="button" class="login-glass-btn outline" id="startRecording">
+              <i class="fas fa-microphone"></i>
+              Iniciar Grabación
+            </button>
+            <button type="button" class="login-glass-btn" id="stopRecording" disabled>
+              <i class="fas fa-stop"></i>
+              Analizar Voz
+            </button>
+          </div>
+          
+          <!-- Resultado del análisis de voz -->
+          <div id="voiceMatchResult" class="login-alert" style="display: none;">
+            <i class="fas fa-ear-listen mr-2"></i>
+            <span id="voiceStatus">Procesando muestra de voz...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Separador -->
+      <div class="login-separator">
+        <span>o continuar con</span>
+      </div>
+
+      <!-- Botón Google -->
+      <button type="button" class="login-glass-btn google" id="googleLoginBtn">
+        <i class="fab fa-google"></i>
+        <span>Google</span>
+      </button>
+    </form>
+
+    <!-- Enlace de registro -->
+    <div class="login-footer-links">
+      <p>¿No tienes una cuenta? <a href="register">Regístrate</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  
+  // --- SISTEMA DE AUTENTICACIÓN BIOMÉTRICA ---
+  class BiometricAuth {
+    constructor() {
+      this.stream = null;
+      this.isCameraActive = false;
+      this.recognitionAttempts = 0;
+      this.maxAttempts = 3;
+      this.mediaRecorder = null;
+      this.audioChunks = [];
+      this.isRecording = false;
+      
+      this.initializeBiometricEvents();
+    }
+
+    initializeBiometricEvents() {
+      // Control de cámara facial
+      const startCameraBtn = document.getElementById('startCamera');
+      const captureFaceBtn = document.getElementById('captureFace');
+      const retryCaptureBtn = document.getElementById('retryCapture');
+      
+      if (startCameraBtn) {
+        startCameraBtn.addEventListener('click', () => {
+          this.initializeCamera();
+        });
+      }
+
+      if (captureFaceBtn) {
+        captureFaceBtn.addEventListener('click', () => {
+          this.captureAndVerifyFace();
+        });
+      }
+
+      if (retryCaptureBtn) {
+        retryCaptureBtn.addEventListener('click', () => {
+          this.retryCapture();
+        });
+      }
+
+      // Control de grabación de voz
+      const startRecordingBtn = document.getElementById('startRecording');
+      const stopRecordingBtn = document.getElementById('stopRecording');
+      
+      if (startRecordingBtn) {
+        startRecordingBtn.addEventListener('click', () => {
+          this.startVoiceRecording();
+        });
+      }
+
+      if (stopRecordingBtn) {
+        stopRecordingBtn.addEventListener('click', () => {
+          this.stopVoiceRecording();
+        });
+      }
+    }
+
+    async initializeCamera() {
+      try {
+        const constraints = {
+          video: { 
+            width: { ideal: 640 },
+            height: { ideal: 480 },
+            facingMode: 'user'
+          },
+          audio: false
+        };
+
+        this.stream = await navigator.mediaDevices.getUserMedia(constraints);
+        const video = document.getElementById('faceVideo');
+        video.srcObject = this.stream;
+        
+        this.isCameraActive = true;
+        document.getElementById('startCamera').disabled = true;
+        document.getElementById('captureFace').disabled = false;
+        
+        this.showFaceMessage('Cámara activada. Posiciona tu rostro en el marco.', 'info');
+        
+      } catch (error) {
+        console.error('Error accediendo a la cámara:', error);
+        this.showError('No se pudo acceder a la cámara. Verifica los permisos.');
+      }
+    }
+
+    async captureAndVerifyFace() {
+      if (!this.isCameraActive) {
+        this.showError('Activa primero la cámara.');
+        return;
+      }
+
+      this.recognitionAttempts++;
+      const video = document.getElementById('faceVideo');
+      const canvas = document.getElementById('faceCanvas');
+      const context = canvas.getContext('2d');
+
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      this.showFaceMessage('Analizando características faciales...', 'info');
+      document.getElementById('captureFace').disabled = true;
+      
+      const confidenceMeter = document.querySelector('.login-confidence-meter');
+      if (confidenceMeter) {
+        confidenceMeter.style.display = 'block';
+      }
+
+      // Simulación de procesamiento biométrico
+      await this.simulateFaceRecognition();
+    }
+
+    async simulateFaceRecognition() {
+      // Simular tiempo de procesamiento
+      for (let i = 0; i <= 100; i += 10) {
+        await new Promise(resolve => setTimeout(resolve, 200));
+        this.updateConfidenceMeter(i);
+      }
+
+      const confidence = Math.random() * 100;
+      this.updateConfidenceMeter(confidence);
+
+      if (confidence > 85) {
+        this.handleBiometricSuccess('facial');
+      } else if (this.recognitionAttempts < this.maxAttempts) {
+        this.handleBiometricRetry(confidence);
+      } else {
+        this.handleBiometricFailure();
+      }
+    }
+
+    updateConfidenceMeter(confidence) {
+      const progressBar = document.getElementById('confidenceProgress');
+      const confidenceValue = document.getElementById('confidenceValue');
+      
+      if (progressBar) {
+        progressBar.style.width = `${confidence}%`;
+      }
+      
+      if (confidenceValue) {
+        confidenceValue.textContent = `${Math.round(confidence)}%`;
+      }
+
+      if (progressBar) {
+        if (confidence > 85) {
+          progressBar.style.background = 'linear-gradient(90deg, #00b894, #00cec9)';
+        } else if (confidence > 60) {
+          progressBar.style.background = 'linear-gradient(90deg, #f39c12, #e67e22)';
+        } else {
+          progressBar.style.background = 'linear-gradient(90deg, #e74c3c, #e67e22)';
+        }
+      }
+    }
+
+    async startVoiceRecording() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        this.mediaRecorder = new MediaRecorder(stream);
+        this.audioChunks = [];
+        this.isRecording = true;
+
+        this.mediaRecorder.ondataavailable = (event) => {
+          this.audioChunks.push(event.data);
+        };
+
+        this.mediaRecorder.onstop = () => {
+          this.processVoiceRecording();
+        };
+
+        this.mediaRecorder.start();
+        document.getElementById('startRecording').disabled = true;
+        document.getElementById('stopRecording').disabled = false;
+        this.showVoiceMessage('Grabando... Habla ahora.', 'info');
+        
+      } catch (error) {
+        console.error('Error accediendo al micrófono:', error);
+        this.showError('No se pudo acceder al micrófono. Verifica los permisos.');
+      }
+    }
+
+    stopVoiceRecording() {
+      if (this.mediaRecorder && this.isRecording) {
+        this.mediaRecorder.stop();
+        this.isRecording = false;
+        this.mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        document.getElementById('stopRecording').disabled = true;
+        this.showVoiceMessage('Procesando muestra de voz...', 'info');
+      }
+    }
+
+    async processVoiceRecording() {
+      // Simular procesamiento de voz
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      const success = Math.random() > 0.3; // 70% de éxito
+      
+      if (success) {
+        this.handleBiometricSuccess('voice');
+      } else {
+        this.showVoiceMessage('Voz no reconocida. Intenta nuevamente.', 'error');
+        document.getElementById('startRecording').disabled = false;
+      }
+    }
+
+    handleBiometricSuccess(method) {
+      const methodName = method === 'facial' ? 'facial' : 'vocal';
+      this.showSuccessMessage(`✅ Identidad verificada por ${methodName}`);
+      
+      // Simular redirección después de éxito
+      setTimeout(() => {
+        Swal.fire({
+          title: '🔐 Acceso Autorizado',
+          text: 'Bienvenido de nuevo a Human System',
+          icon: 'success',
+          confirmButtonText: 'Continuar'
+        }).then(() => {
+          window.location.href = '/dashboard';
+        });
+      }, 1500);
+    }
+
+    handleBiometricRetry(confidence) {
+      this.showFaceMessage(`❌ Coincidencia baja (${Math.round(confidence)}%). Intenta nuevamente.`, 'warning');
+      const retryBtn = document.getElementById('retryCapture');
+      if (retryBtn) {
+        retryBtn.style.display = 'block';
+      }
+      document.getElementById('captureFace').disabled = false;
+    }
+
+    handleBiometricFailure() {
+      this.showFaceMessage('❌ No se pudo verificar tu identidad. Usa otro método.', 'error');
+      const retryBtn = document.getElementById('retryCapture');
+      if (retryBtn) {
+        retryBtn.style.display = 'none';
+      }
+      document.getElementById('captureFace').disabled = true;
+    }
+
+    retryCapture() {
+      const retryBtn = document.getElementById('retryCapture');
+      if (retryBtn) {
+        retryBtn.style.display = 'none';
+      }
+      document.getElementById('captureFace').disabled = false;
+      const confidenceMeter = document.querySelector('.login-confidence-meter');
+      if (confidenceMeter) {
+        confidenceMeter.style.display = 'none';
+      }
+      this.showFaceMessage('Preparado para nuevo intento...', 'info');
+    }
+
+    showFaceMessage(message, type = 'info') {
+      const alert = document.getElementById('faceMatchResult');
+      const status = document.getElementById('matchStatus');
+      
+      if (alert && status) {
+        status.textContent = message;
+        alert.style.display = 'block';
+        
+        // Actualizar clases según tipo
+        if (type === 'info') {
+          alert.style.background = 'rgba(31, 78, 103, 0.3)';
+          alert.style.borderColor = 'rgba(76, 161, 175, 0.4)';
+        } else if (type === 'warning') {
+          alert.style.background = 'rgba(243, 156, 18, 0.3)';
+          alert.style.borderColor = 'rgba(243, 156, 18, 0.4)';
+        } else if (type === 'error') {
+          alert.style.background = 'rgba(231, 76, 60, 0.3)';
+          alert.style.borderColor = 'rgba(231, 76, 60, 0.4)';
+        }
+      }
+    }
+
+    showVoiceMessage(message, type = 'info') {
+      const alert = document.getElementById('voiceMatchResult');
+      const status = document.getElementById('voiceStatus');
+      
+      if (alert && status) {
+        status.textContent = message;
+        alert.style.display = 'block';
+        
+        // Actualizar estilos según tipo
+        if (type === 'info') {
+          alert.style.background = 'rgba(31, 78, 103, 0.3)';
+          alert.style.borderColor = 'rgba(76, 161, 175, 0.4)';
+        } else if (type === 'error') {
+          alert.style.background = 'rgba(215, 29, 0, 0.3)';
+          alert.style.borderColor = 'rgba(215, 29, 0, 0.4)';
+        }
+      }
+    }
+
+    showSuccessMessage(message) {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          title: message,
+          icon: 'success',
+          timer: 2000,
+          showConfirmButton: false
+        });
+      }
+    }
+
+    showError(message) {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          title: 'Error',
+          text: message,
+          icon: 'error',
+          confirmButtonText: 'Entendido'
+        });
+      }
+    }
+
+    stopCamera() {
+      if (this.stream) {
+        this.stream.getTracks().forEach(track => track.stop());
+        this.stream = null;
+      }
+      this.isCameraActive = false;
+      const startCameraBtn = document.getElementById('startCamera');
+      const captureFaceBtn = document.getElementById('captureFace');
+      
+      if (startCameraBtn) startCameraBtn.disabled = false;
+      if (captureFaceBtn) captureFaceBtn.disabled = true;
+      
+      const confidenceMeter = document.querySelector('.login-confidence-meter');
+      if (confidenceMeter) {
+        confidenceMeter.style.display = 'none';
+      }
+    }
+
+    stopVoice() {
+      if (this.mediaRecorder && this.isRecording) {
+        this.mediaRecorder.stop();
+        this.isRecording = false;
+      }
+      const startRecordingBtn = document.getElementById('startRecording');
+      const stopRecordingBtn = document.getElementById('stopRecording');
+      
+      if (startRecordingBtn) startRecordingBtn.disabled = false;
+      if (stopRecordingBtn) stopRecordingBtn.disabled = true;
+    }
+  }
+
+  // --- INICIALIZACIÓN CUANDO EL DOM ESTÉ LISTO ---
+  document.addEventListener('DOMContentLoaded', function () {
+    let biometricAuth = null;
+
+    // Toggle password visibility
+    const passwordInput = document.getElementById('passwordInput');
+    const togglePasswordIcon = document.getElementById('togglePassword');
+    if (passwordInput && togglePasswordIcon) {
+      togglePasswordIcon.addEventListener('click', function () {
+        const isPassword = passwordInput.type === 'password';
+        passwordInput.type = isPassword ? 'text' : 'password';
+        const icon = this.querySelector('i');
+        if (icon) {
+          icon.classList.toggle('fa-eye');
+          icon.classList.toggle('fa-eye-slash');
+        }
+      });
+    }
+
+    // Cambiar método de autenticación
+    const tabButtons = document.querySelectorAll('.login-tab-btn');
+    const formSections = {
+      'traditional': document.getElementById('traditionalSection'),
+      'facial': document.getElementById('facialSection'),
+      'voice': document.getElementById('voiceSection')
+    };
+
+    function switchAuthMethod(method) {
+      // Detener cualquier proceso biométrico activo
+      if (biometricAuth) {
+        if (method !== 'facial') {
+          biometricAuth.stopCamera();
+        }
+        if (method !== 'voice') {
+          biometricAuth.stopVoice();
+        }
+      }
+
+      // Oculta todas las secciones
+      Object.values(formSections).forEach(section => {
+        if (section) {
+          section.classList.remove('active');
+        }
+      });
+
+      // Muestra la sección seleccionada
+      const selectedSection = formSections[method];
+      if (selectedSection) {
+        selectedSection.classList.add('active');
+      }
+
+      // Actualizar estado de pestañas
+      tabButtons.forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      const activeTab = document.querySelector(`[data-method="${method}"]`);
+      if (activeTab) {
+        activeTab.classList.add('active');
+      }
+
+      // Inicializar sistema biométrico si es necesario
+      if ((method === 'facial' || method === 'voice') && !biometricAuth) {
+        biometricAuth = new BiometricAuth();
+      }
+
+      // Manejar envío del formulario
+      const loginForm = document.getElementById('loginForm');
+      if (loginForm) {
+        if (method === 'traditional') {
+          loginForm.onsubmit = handleTraditionalLogin;
+        } else {
+          loginForm.onsubmit = function(event) { 
+            event.preventDefault(); 
+            if (typeof Swal !== 'undefined') {
+              Swal.fire({
+                title: 'Método Biométrico',
+                text: 'Usa los botones dentro de la sección para autenticarte.',
+                icon: 'info',
+                confirmButtonText: 'Entendido'
+              });
+            }
+          };
+        }
+      }
+    }
+
+
+function handleTraditionalLogin(event) {
+    event.preventDefault();
+    const humanoInput = document.getElementById('humanoInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const loader = document.getElementById('loader-wrapper');
+    const loaderText = document.getElementById('loader-text');
+
+    if (!humanoInput.value || !passwordInput.value) {
+        Swal.fire({ title: 'Error', text: 'Ingresa tus credenciales', icon: 'error' });
+        return;
+    }
+    
+    // 1. Reset limpio del estado
+    loader.classList.remove('loader-hidden', 'loading-success', 'loading-active');
+    // Forzar reflow para reiniciar animaciones
+    void loader.offsetHeight;
+    
+    // 2. Mostrar loader (visible inmediatamente)
+    loader.classList.add('loader-visible');
+    
+    // 3. Iniciar animación después de un micro delay
+    
+    setTimeout(() => {
+        loader.classList.add('loading-active');
+        loaderText.innerText = "AUTHENTICATING_USER";
+        loaderText.style.color = "#4ca1af";
+    }, 50);
+
+    // 4. Promesa artificial para UX: asegura que el loader se vea por lo menos 2s
+    const minWait = new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Promesa real de autenticación al servidor
+    const authRequest = fetch('/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            humano: humanoInput.value.toUpperCase(), 
+            contraseña: passwordInput.value 
+        })
+    }).then(async response => {
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.alertMessage || 'Credenciales incorrectas');
+        return data;
+    });
+
+    // 5. Esperamos a que AMBAS promesas terminen
+    Promise.all([authRequest, minWait])
+    .then(results => {
+        const data = results[0];
+        
+        // ÉXITO: Cambiamos estilos al verde
+        loaderText.innerText = "ACCESS_GRANTED";
+        loaderText.style.color = "#00b894";
+        loader.classList.remove('loading-active'); 
+        loader.classList.add('loading-success'); 
+        
+        // Esperamos 1 segundo para mostrar el éxito y redirigir DIRECTAMENTE
+        // SIN ocultar el loader primero (así no se ve el contenido de atrás)
+        setTimeout(() => {
+            // Redirigir directamente - el loader desaparece con la página
+            window.location.href = data.ruta || '/';
+        }, 500);
+    })
+    .catch(error => {
+        // ERROR: Ocultar loader suavemente
+        loader.classList.remove('loading-active', 'loader-visible');
+        loader.classList.add('loader-hidden');
+        
+        Swal.fire({
+            title: 'Acceso Denegado',
+            text: error.message,
+            icon: 'error',
+            background: 'rgba(10, 17, 32, 0.95)',
+            color: 'white',
+            confirmButtonColor: '#1F4E67'
+        });
+    });
+}
+
+
+    // Inicializar con método tradicional
+    document.getElementById('loginForm').onsubmit = handleTraditionalLogin;
+
+    // Escucha clics en las pestañas
+    tabButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const method = this.getAttribute('data-method');
+        switchAuthMethod(method);
+      });
+    });
+
+    // --- RECUPERAR CONTRASEÑA ---
+    const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+    if (forgotPasswordLink) {
+      forgotPasswordLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            title: 'Recuperar Contraseña',
+            input: 'text',
+            inputLabel: 'Introduce tu correo electrónico o teléfono',
+            inputPlaceholder: 'Correo electrónico o teléfono',
+            showCancelButton: true,
+            confirmButtonText: 'Enviar',
+            cancelButtonText: 'Cancelar',
+            background: 'rgba(10, 17, 32, 0.95)',
+            backdrop: 'rgba(0, 0, 0, 0.6)',
+            color: 'white',
+            inputValidator: (value) => { 
+              if (!value) return '¡Este campo es obligatorio!'; 
+            }
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire({
+                title: '¡Enviado!',
+                text: 'Te hemos enviado un enlace para recuperar tu contraseña.',
+                icon: 'success',
+                background: 'rgba(10, 17, 32, 0.95)',
+                backdrop: 'rgba(0, 0, 0, 0.6)',
+                color: 'white'
+              });
+            }
+          });
+        }
+      });
+    }
+
+    // --- LOGIN CON GOOGLE ---
+    const googleLoginBtn = document.getElementById('googleLoginBtn');
+    if (googleLoginBtn) {
+      googleLoginBtn.addEventListener('click', function() {
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            title: 'Servicio aún no disponible',
+            text: 'Esta funcionalidad está en desarrollo.',
+            icon: 'warning',
+            background: 'rgba(10, 17, 32, 0.95)',
+            backdrop: 'rgba(0, 0, 0, 0.6)',
+            color: 'white',
+            confirmButtonText: 'OK'
+          });
+        }
+      });
+    }
+
+   // --- CAMBIAR LOGO POR FOTO DE PERFIL ---
+const humanoInputField = document.getElementById('humanoInput');
+const brandLogo = document.querySelector('.login-logo-glass');
+
+if (brandLogo && humanoInputField) {
+  const defaultLogoSrc = brandLogo.src;
+  let debounceTimeout;
+  
+  humanoInputField.addEventListener('input', function() {
+    clearTimeout(debounceTimeout);
+    const identifier = this.value.trim();
+    
+    console.log('[FRONTEND] Input detectado:', identifier);
+    console.log('[FRONTEND] Longitud:', identifier.length);
+    
+    if (identifier.length < 3) {
+      console.log('[FRONTEND] Menos de 3 caracteres, restaurando logo default');
+      brandLogo.src = defaultLogoSrc;
+      return;
+    }
+    
+    debounceTimeout = setTimeout(async () => {
+      console.log('[FRONTEND] Haciendo fetch a /api/get-user-profile-pic con:', identifier);
+      try {
+        const response = await fetch('/api/get-user-profile-pic', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identifier: identifier })
+        });
+        
+        console.log('[FRONTEND] Response status:', response.status);
+        
+        if (!response.ok) {
+          console.log('[FRONTEND] Response no OK, restaurando default');
+          brandLogo.src = defaultLogoSrc;
+          return;
+        }
+        
+        const data = await response.json();
+        console.log('[FRONTEND] Data recibida:', data);
+        
+        if (data.success && data.fotoPerfilUrl) {
+          console.log('[FRONTEND] ✅ Foto encontrada, cargando imagen:', data.fotoPerfilUrl);
+          const tempImage = new Image();
+          tempImage.onload = () => {
+            console.log('[FRONTEND] ✅ Imagen cargada exitosamente');
+            brandLogo.src = data.fotoPerfilUrl;
+          };
+          tempImage.onerror = (err) => {
+            console.error('[FRONTEND] ❌ Error cargando imagen:', err);
+            brandLogo.src = defaultLogoSrc;
+          };
+          tempImage.src = data.fotoPerfilUrl;
+        } else {
+          console.log('[FRONTEND] ❌ No success o no fotoPerfilUrl:', data.message);
+          brandLogo.src = defaultLogoSrc;
+        }
+      } catch (error) {
+        console.error('[FRONTEND] ❌ Error en fetch:', error);
+        brandLogo.src = defaultLogoSrc;
+      }
+     }, 500);
+      });
+    }
+  });
+</script>
+
+<%- include('partials/footer', { login: false }) %>

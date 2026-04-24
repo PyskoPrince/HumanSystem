@@ -1,0 +1,1137 @@
+<%- include('partials/header', { title: 'Validación Digital', pageClass: 'page-validation-secure' }) %>
+<%- include('partials/navbar', { login: false }) %>
+
+<style>
+  /* ========== PALETA DE COLORES HUMAN SYSTEM - VERSIÓN SEGURA ========== */
+  :root {
+    --hs-dark: #0a1120;
+    --hs-blue: #1F4E67;
+    --hs-blue-light: #2c6b8a;
+    --hs-cyan: #4ca1af;
+    --hs-accent: #d71d00;
+    --hs-red: #f10821;
+    --hs-green: #00b894;
+    --hs-gold: #d4af37;
+    --hs-light: rgba(255, 255, 255, 0.95);
+    --hs-glass-bg: rgba(255, 255, 255, 0.05);
+    --hs-glass-border: rgba(255, 255, 255, 0.12);
+    
+    --secure-gradient: linear-gradient(135deg, var(--hs-blue) 0%, var(--hs-dark) 100%);
+    --success-gradient: linear-gradient(135deg, var(--hs-green) 0%, #00cec9 100%);
+    --warning-gradient: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    --danger-gradient: linear-gradient(135deg, var(--hs-red) 0%, #c0392b 100%);
+  }
+
+  /* ========== FONDO SEGURO CON PATRÓN DE SEGURIDAD ========== */
+  .page-validation-secure {
+    background: linear-gradient(135deg, #0a1120 0%, #0f1a2e 50%, #1a2538 100%);
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+    position: relative;
+    font-family: 'Play', sans-serif !important;
+  }
+
+  /* Patrón de seguridad de fondo */
+  .page-validation-secure::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(circle at 25% 25%, rgba(31, 78, 103, 0.05) 1px, transparent 2px),
+      radial-gradient(circle at 75% 75%, rgba(31, 78, 103, 0.05) 1px, transparent 2px),
+      radial-gradient(circle at 25% 75%, rgba(31, 78, 103, 0.05) 1px, transparent 2px),
+      radial-gradient(circle at 75% 25%, rgba(31, 78, 103, 0.05) 1px, transparent 2px);
+    background-size: 60px 60px;
+    z-index: 0;
+    animation: patternShift 30s infinite linear;
+  }
+
+  @keyframes patternShift {
+    0% { background-position: 0 0; }
+    100% { background-position: 60px 60px; }
+  }
+
+  /* ========== ANIMACIONES DE SEGURIDAD ========== */
+  .security-scan {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, 
+      transparent, 
+      var(--hs-cyan), 
+      transparent);
+    box-shadow: 0 0 20px var(--hs-cyan);
+    animation: verticalScan 4s ease-in-out infinite;
+  }
+
+  @keyframes verticalScan {
+    0% { top: 0; opacity: 0; }
+    50% { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+  }
+
+  .data-flow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: 
+      repeating-linear-gradient(0deg, 
+        transparent 0px, 
+        transparent 1px, 
+        rgba(76, 161, 175, 0.1) 2px,
+        transparent 3px);
+    animation: dataFlow 20s linear infinite;
+  }
+
+  @keyframes dataFlow {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100px; }
+  }
+
+  /* ========== BURBUJAS DE SEGURIDAD ========== */
+  .security-bubbles {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .security-bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, 
+      rgba(31, 78, 103, 0.1), 
+      transparent 70%);
+    animation: floatBubble 15s infinite ease-in-out;
+    filter: blur(5px);
+  }
+
+  .security-bubble:nth-child(1) { width: 120px; height: 120px; top: 10%; left: 5%; animation-delay: 0s; }
+  .security-bubble:nth-child(2) { width: 80px; height: 80px; top: 20%; right: 10%; animation-delay: -2s; }
+  .security-bubble:nth-child(3) { width: 150px; height: 150px; bottom: 30%; left: 15%; animation-delay: -4s; background: radial-gradient(circle at 30% 30%, rgba(215, 29, 0, 0.08), transparent 70%); }
+  .security-bubble:nth-child(4) { width: 100px; height: 100px; bottom: 15%; right: 20%; animation-delay: -6s; }
+  .security-bubble:nth-child(5) { width: 200px; height: 200px; top: 40%; left: 60%; animation-delay: -8s; background: radial-gradient(circle at 30% 30%, rgba(76, 161, 175, 0.1), transparent 70%); }
+
+  @keyframes floatBubble {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(30px, -30px) scale(1.1); }
+    50% { transform: translate(-20px, 20px) scale(0.9); }
+    75% { transform: translate(15px, -15px) scale(1.05); }
+  }
+
+  /* ========== CONTENEDOR PRINCIPAL SEGURO ========== */
+  .secure-validation-container {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    z-index: 2;
+  }
+
+  /* ========== TARJETA DE VALIDACIÓN SEGURA ========== */
+  .secure-validation-card {
+    background: linear-gradient(
+      135deg,
+      rgba(31, 78, 103, 0.15) 0%,
+      rgba(10, 17, 32, 0.3) 100%
+    ) !important;
+    backdrop-filter: blur(40px) saturate(200%) !important;
+    -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
+    border: 2px solid rgba(76, 161, 175, 0.3) !important;
+    border-radius: 30px !important;
+    box-shadow: 
+      0 25px 50px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 0 40px rgba(76, 161, 175, 0.15),
+      0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+    padding: 50px 40px;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  }
+
+  .secure-validation-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+      linear-gradient(45deg, 
+        transparent 45%, 
+        rgba(76, 161, 175, 0.1) 50%, 
+        transparent 55%),
+      radial-gradient(circle at 30% 40%, 
+        rgba(215, 29, 0, 0.05), 
+        transparent 50%);
+    transform: rotate(30deg);
+    animation: circuitFlow 12s infinite linear;
+    pointer-events: none;
+  }
+
+  @keyframes circuitFlow {
+    0% { transform: rotate(30deg) translateX(-100%); }
+    100% { transform: rotate(30deg) translateX(100%); }
+  }
+
+  .secure-validation-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid transparent;
+    border-radius: 30px;
+    background: linear-gradient(45deg, 
+      var(--hs-cyan), 
+      var(--hs-blue), 
+      var(--hs-accent), 
+      var(--hs-cyan)) border-box;
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) padding-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    animation: borderRotate 8s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes borderRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .secure-validation-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 
+      0 35px 70px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25),
+      inset 0 0 60px rgba(76, 161, 175, 0.25),
+      0 0 0 1px rgba(255, 255, 255, 0.15) !important;
+    border: 2px solid var(--hs-cyan) !important;
+  }
+
+  /* ========== HEADER DE VALIDACIÓN ========== */
+  .secure-validation-header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .secure-logo-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 25px;
+  }
+
+  .secure-logo-shield {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: relative;
+    z-index: 3;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 50%;
+    border: 3px solid rgba(76, 161, 175, 0.4);
+    padding: 15px;
+    box-shadow: 
+      0 10px 30px rgba(31, 78, 103, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    animation: pulseShield 4s ease-in-out infinite;
+  }
+
+  @keyframes pulseShield {
+    0%, 100% { transform: scale(1); box-shadow: 0 10px 30px rgba(31, 78, 103, 0.3); }
+    50% { transform: scale(1.05); box-shadow: 0 15px 40px rgba(31, 78, 103, 0.4); }
+  }
+
+  .shield-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, 
+      rgba(76, 161, 175, 0.3), 
+      rgba(31, 78, 103, 0.2), 
+      transparent 70%);
+    border-radius: 50%;
+    filter: blur(20px);
+    animation: glowPulse 3s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  @keyframes glowPulse {
+    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
+  }
+
+  .security-ring {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    border: 2px solid transparent;
+    border-top: 2px solid var(--hs-cyan);
+    border-bottom: 2px solid var(--hs-cyan);
+    border-radius: 50%;
+    animation: rotateRing 3s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+    z-index: 1;
+    box-shadow: inset 0 0 15px rgba(76, 161, 175, 0.2), 0 0 15px rgba(76, 161, 175, 0.2);
+  }
+
+  @keyframes rotateRing {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.05); box-shadow: inset 0 0 25px rgba(76, 161, 175, 0.4), 0 0 25px rgba(76, 161, 175, 0.4); border-top-color: var(--hs-blue); border-bottom-color: var(--hs-blue); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+
+  /* ========== ESTILOS GLOBALES PARA MODALES SWAL ========== */
+  /* Backdrop unificado con blur y el mismo fondo de la página */
+  .swal2-container.swal2-center.swal2-backdrop-show {
+    background: linear-gradient(135deg, rgba(10, 17, 32, 0.85), rgba(15, 26, 46, 0.95)) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+  }
+  
+  /* Popup con el mismo estilo glassmorphism */
+  .secure-result-popup, .swal2-popup {
+    background: linear-gradient(135deg, rgba(31, 78, 103, 0.95), rgba(10, 17, 32, 0.98)) !important;
+    backdrop-filter: blur(30px) !important;
+    -webkit-backdrop-filter: blur(30px) !important;
+    border-radius: 25px !important;
+    border: 1px solid rgba(76, 161, 175, 0.4) !important;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(76, 161, 175, 0.2) !important;
+    color: white !important;
+    padding: 20px !important;
+  }
+
+  /* Ajustes responsive para móviles */
+  @media (max-width: 576px) {
+    .swal2-popup {
+      width: 90% !important;
+      padding: 15px !important;
+      border-radius: 20px !important;
+    }
+    .swal2-html-container {
+      font-size: 0.9rem !important;
+    }
+    .swal2-title {
+      font-size: 1.5rem !important;
+    }
+    .secure-validate-btn {
+      padding: 12px 20px !important;
+      font-size: 0.9rem !important;
+    }
+  }
+  
+  .secure-validation-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff, var(--hs-cyan)) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    text-shadow: 0 4px 20px rgba(76, 161, 175, 0.3) !important;
+    letter-spacing: 1px !important;
+    font-family: 'Iceland', cursive !important;
+    margin: 0 0 10px 0;
+    position: relative;
+    display: inline-block;
+  }
+
+  .secure-validation-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--hs-cyan), transparent);
+    border-radius: 2px;
+  }
+
+  .secure-validation-subtitle {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 1.1rem;
+    margin: 15px 0 0 0;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* ========== FORMULARIO DE VALIDACIÓN ========== */
+  .secure-validation-form {
+    position: relative;
+    z-index: 3;
+  }
+
+  .secure-input-group {
+    position: relative;
+    margin-bottom: 35px;
+  }
+
+  .secure-input-icon {
+    position: absolute;
+    left: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(76, 161, 175, 0.8);
+    font-size: 22px;
+    z-index: 2;
+    transition: all 0.3s ease;
+  }
+
+  .secure-token-input {
+    width: 100%;
+    padding: 20px 25px 20px 70px;
+    background: rgba(10, 17, 32, 0.4) !important;
+    border: 2px solid rgba(76, 161, 175, 0.25) !important;
+    color: white !important;
+    border-radius: 20px !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    font-size: 1.2rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 1px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+      inset 0 4px 15px rgba(0, 0, 0, 0.3),
+      0 2px 0 rgba(255, 255, 255, 0.05) !important;
+    font-family: 'Courier New', monospace !important;
+    text-align: center;
+  }
+
+  .secure-token-input:focus {
+    background: rgba(10, 17, 32, 0.5) !important;
+    border: 2px solid var(--hs-cyan) !important;
+    box-shadow: 
+      0 0 0 5px rgba(76, 161, 175, 0.2),
+      inset 0 4px 20px rgba(0, 0, 0, 0.4),
+      0 2px 0 rgba(255, 255, 255, 0.1) !important;
+    outline: none !important;
+    transform: translateY(-3px);
+  }
+
+  .secure-token-input:focus + .secure-input-icon {
+    color: var(--hs-cyan);
+    transform: translateY(-50%) scale(1.2);
+    text-shadow: 0 0 15px rgba(76, 161, 175, 0.7);
+  }
+
+  .secure-token-input::placeholder {
+    color: rgba(255, 255, 255, 0.3) !important;
+    letter-spacing: normal;
+    font-family: 'Play', sans-serif !important;
+  }
+
+  .secure-token-input.formatted {
+    letter-spacing: 3px;
+    background: rgba(10, 17, 32, 0.5) !important;
+    border-color: rgba(76, 161, 175, 0.4) !important;
+    box-shadow: 
+      inset 0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(76, 161, 175, 0.2) !important;
+  }
+
+  /* ========== BOTÓN DE VALIDACIÓN ========== */
+  .secure-validate-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 22px;
+    background: linear-gradient(135deg, var(--hs-blue), var(--hs-cyan)) !important;
+    border: none !important;
+    color: white !important;
+    border-radius: 20px !important;
+    font-size: 1.2rem;
+    font-weight: 700 !important;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    font-family: 'Iceland', cursive !important;
+    text-transform: uppercase;
+    box-shadow: 
+      0 15px 35px rgba(31, 78, 103, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.3) !important;
+  }
+
+  .secure-validate-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.25),
+      transparent
+    );
+    transition: left 0.8s ease;
+  }
+
+  .secure-validate-btn:hover {
+    background: linear-gradient(135deg, var(--hs-cyan), var(--hs-blue)) !important;
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 
+      0 25px 50px rgba(76, 161, 175, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.3) !important;
+    letter-spacing: 2px;
+  }
+
+  .secure-validate-btn:hover::before {
+    left: 100%;
+  }
+
+  .secure-validate-btn:active {
+    transform: translateY(-2px) scale(0.99);
+    box-shadow: 
+      0 10px 30px rgba(76, 161, 175, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  }
+
+  .secure-validate-btn i {
+    font-size: 1.3rem;
+    transition: transform 0.3s ease;
+  }
+
+  .secure-validate-btn:hover i {
+    transform: rotate(15deg) scale(1.2);
+  }
+
+  /* ========== INDICADOR DE SEGURIDAD ========== */
+  .security-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(10, 17, 32, 0.3);
+    border-radius: 15px;
+    border: 1px solid rgba(76, 161, 175, 0.2);
+  }
+
+  .security-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+  }
+
+  .security-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--hs-green);
+    box-shadow: 0 0 10px var(--hs-green);
+    animation: pulseDot 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.2); }
+  }
+
+  /* ========== FOOTER DE SEGURIDAD ========== */
+  .secure-validation-footer {
+    margin-top: 60px;
+    text-align: center;
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .secure-footer-logo {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 25px;
+    position: relative;
+  }
+
+  .secure-footer-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .secure-footer-img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .secure-copyright {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    font-weight: 300;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .secure-copyright strong {
+    color: white;
+    font-weight: 600;
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 768px) {
+    .secure-validation-card {
+      padding: 35px 25px;
+      border-radius: 25px !important;
+      max-width: 90%;
+    }
+    
+    .secure-validation-title {
+      font-size: 2rem;
+    }
+    
+    .secure-validation-subtitle {
+      font-size: 1rem;
+    }
+    
+    .secure-token-input {
+      padding: 18px 20px 18px 60px;
+      font-size: 1.1rem !important;
+    }
+    
+    .secure-validate-btn {
+      padding: 20px;
+      font-size: 1.1rem;
+    }
+    
+    .secure-logo-container {
+      width: 100px;
+      height: 100px;
+    }
+    
+    .secure-footer-logo {
+      width: 80px;
+      height: 80px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .secure-validation-container {
+      padding: 20px 15px;
+    }
+    
+    .secure-validation-card {
+      padding: 30px 20px;
+      max-width: 95%;
+    }
+    
+    .secure-validation-title {
+      font-size: 1.8rem;
+    }
+    
+    .secure-token-input {
+      padding: 16px 15px 16px 50px;
+      font-size: 1rem !important;
+    }
+    
+    .secure-validate-btn {
+      padding: 18px;
+      font-size: 1rem;
+    }
+    
+    .security-indicator {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+    /* ========== SPINNER DE SEGURIDAD ========== */
+  .spinner-secure {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(76, 161, 175, 0.2);
+    border-top: 3px solid var(--hs-cyan);
+    border-right: 3px solid rgba(76, 161, 175, 0.4);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 20px auto;
+    box-shadow: 0 0 15px rgba(76, 161, 175, 0.3);
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Efecto de pulso en el spinner */
+  @keyframes pulseSpinner {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+</style>
+
+<!-- Elementos de seguridad en el fondo -->
+<div class="security-scan">
+  <div class="scan-line"></div>
+  <div class="data-flow"></div>
+</div>
+
+<div class="security-bubbles">
+  <div class="security-bubble"></div>
+  <div class="security-bubble"></div>
+  <div class="security-bubble"></div>
+  <div class="security-bubble"></div>
+  <div class="security-bubble"></div>
+</div>
+
+<div class="secure-validation-container">
+  <!-- Tarjeta de validación -->
+  <div class="secure-validation-card">
+    <!-- Header -->
+    <div class="secure-validation-header">
+      <div class="secure-logo-container">
+        <img src="https://storage.googleapis.com/humansystem/LogoHS.png" alt="Human System" 
+             class="secure-logo-shield">
+        <div class="shield-glow"></div>
+        <div class="security-ring"></div>
+      </div>
+      
+      <h1 class="secure-validation-title">
+        Validación Digital
+      </h1>
+      <p class="secure-validation-subtitle">
+        Ingresa el identificador para autenticar la validez y estado de su documento de identidad.
+      </p>
+    </div>
+
+    <!-- Formulario -->
+    <form id="validacionForm" class="secure-validation-form">
+      <div class="secure-input-group">
+        <i class="secure-input-icon fas fa-fingerprint"></i>
+        <input class="secure-token-input" 
+               id="tokenInput" 
+               name="token" 
+               placeholder="XXXX-XXXX-XXXX-XXXX" 
+               type="text"
+               readonly>
+      </div>
+      
+      <button class="secure-validate-btn" id="validarBtn" type="submit">
+        <i class="fas fa-shield-check"></i>
+        <span>Verificar Autenticidad</span>
+      </button>
+    </form>
+
+    <!-- Indicador de seguridad -->
+    <div class="security-indicator">
+      <div class="security-status">
+        <div class="security-dot"></div>
+        <span>Conexión Segura • TLS 1.3</span>
+      </div>
+      <div class="security-status">
+        <i class="fas fa-lock" style="color: var(--hs-green);"></i>
+        <span>Validación Cifrada</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="secure-validation-footer ">
+    <p class="secure-copyright mt-5">
+      <strong>Human Identification Technologies © 2026</strong><br>
+      Sistema de verificación de credenciales y certificados digitales v2.1<br>
+      Todos los derechos reservados.<br>
+    </p>
+  </footer>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    const tokenInput = document.getElementById('tokenInput');
+    const urlParams  = new URLSearchParams(window.location.search);
+    const encryptedToken = urlParams.get('token');
+
+    if (encryptedToken && tokenInput) {
+        tokenInput.value = encryptedToken;
+        tokenInput.classList.add('formatted');
+        await validarToken(encryptedToken);
+    } else if (!encryptedToken) {
+        mostrarErrorSeguro(
+            "Token no encontrado",
+            "La URL no contiene un identificador válido para la validación."
+        );
+    }
+
+    document.getElementById('validacionForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const token = tokenInput.value.trim();
+        if (!token) {
+            mostrarErrorSeguro("Identificador vacío", "Por favor ingresa un identificador.");
+            return;
+        }
+        if (!token.includes(':')) {
+            mostrarErrorSeguro("Estructura inválida", "El token no tiene el formato de seguridad correcto.");
+            return;
+        }
+        await validarToken(token);
+    });
+});
+
+/* ══════════════════════════════════════════════════════════
+   LLAMADA AL SERVIDOR
+══════════════════════════════════════════════════════════ */
+async function validarToken(token) {
+    const loadingSwal = Swal.fire({
+        title: '<div class="secure-validation-title" style="font-size:1.5rem;">Validando Seguridad</div>',
+        html: `
+          <div style="text-align:center;padding:10px;">
+            <div class="spinner-secure"></div>
+            <p style="color:rgba(255,255,255,0.9);margin:20px 0;font-size:1rem;letter-spacing:1px;">
+              <i class="fas fa-shield-alt" style="margin-right:8px;"></i>
+              Verificando autenticidad y estado...
+            </p>
+          </div>`,
+        background: 'linear-gradient(135deg,rgba(31,78,103,0.95),rgba(10,17,32,0.98))',
+        color: 'white',
+        backdrop: 'linear-gradient(135deg,rgba(10,17,32,0.85),rgba(15,26,46,0.95))',
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        allowEscapeKey: false
+    });
+
+    const startTime = Date.now();
+    let data;
+
+    try {
+        const response = await fetch('/validar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token })
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        data = await response.json();
+    } catch (err) {
+        await new Promise(r => setTimeout(r, Math.max(0, 2000 - (Date.now() - startTime))));
+        loadingSwal.close();
+        mostrarErrorSeguro("Error de conexión", "No se pudo conectar con el servidor de validación.");
+        return;
+    }
+
+    await new Promise(r => setTimeout(r, Math.max(0, 2000 - (Date.now() - startTime))));
+    loadingSwal.close();
+    mostrarResultadoSeguro(data);
+}
+
+/* ══════════════════════════════════════════════════════════
+   RENDERIZADOR DE RESULTADOS — cada tipo es independiente
+══════════════════════════════════════════════════════════ */
+function mostrarResultadoSeguro(data) {
+
+    // ── HUMANO ───────────────────────────────────────────────────────
+    if (data.tipo === 'humano') {
+        const cfg = {
+            activado: {
+                icon: '✅', color: 'var(--hs-green)',
+                title: 'Humano Registrado',
+                text: null // se construye con imagen + nombre
+            },
+            reportado: {
+                icon: '⚠️', color: 'var(--hs-accent)',
+                title: 'Identidad Reportada',
+                text: `El identificador <code>${data.humanoID}</code> ha sido marcado como reportado. Los datos personales no están disponibles por seguridad.`
+            },
+            eliminado: {
+                icon: '🗑️', color: '#888',
+                title: 'Perfil Eliminado',
+                text: 'Este perfil ha sido eliminado del sistema. Los datos personales ya no están disponibles.'
+            },
+            'no-encontrado': {
+                icon: '🔍', color: 'var(--hs-red)',
+                title: 'Humano No Encontrado',
+                text: 'El identificador proporcionado no existe en el sistema de validación.'
+            }
+        }[data.estado] || {
+            icon: '❓', color: 'gray',
+            title: 'Estado Desconocido',
+            text: 'No se puede determinar el estado de este perfil.'
+        };
+
+        let htmlBody;
+
+        if (data.estado === 'activado') {
+            const imgTag = data.fotoPerfilUrl
+                ? `<img src="${data.fotoPerfilUrl}" alt="Foto de perfil"
+                        style="width:110px;height:110px;border-radius:50%;object-fit:cover;
+                               border:4px solid var(--hs-green);margin-bottom:16px;
+                               box-shadow:0 0 20px rgba(0,184,148,0.4);">`
+                : `<div style="width:110px;height:110px;border-radius:50%;
+                               background:rgba(255,255,255,0.1);border:4px solid var(--hs-green);
+                               display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+                     <i class="fas fa-user" style="font-size:2.5rem;color:rgba(255,255,255,0.4);"></i>
+                   </div>`;
+
+            htmlBody = `
+              <div style="text-align:center;padding:10px;">
+                ${imgTag}
+                <div style="font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:26px;
+                            font-family:'Iceland',cursive;letter-spacing:1px;">
+                  ${data.nombre || 'Nombre no disponible'}
+                </div>
+                <div style="background:rgba(0,184,148,0.15);border:1px solid rgba(0,184,148,0.4);
+                            border-radius:10px;padding:10px 18px;display:inline-block;margin-bottom:16px;">
+                  <span style="color:rgba(255,255,255,0.6);font-size:0.8rem;">ID HUMANO</span><br>
+                  <code style="color:var(--hs-green);font-size:1rem;">${data.humanoID}</code>
+                </div>
+                <p style="color:rgba(255,255,255,0.7);font-size:0.9rem;">
+                  Identidad verificada y activa en el sistema.
+                </p>
+              </div>`;
+        } else {
+            htmlBody = `
+              <div style="text-align:center;padding:10px;">
+                <div style="font-size:4rem;margin-bottom:16px;">${cfg.icon}</div>
+                <p style="color:rgba(255,255,255,0.9);font-size:1.1rem;line-height:1.6;">
+                  ${cfg.text}
+                </p>
+                ${data.humanoID && data.estado === 'reportado'
+                    ? `<div style="background:rgba(215,29,0,0.1);border:1px solid rgba(215,29,0,0.3);
+                                   border-radius:10px;padding:12px;margin-top:14px;">
+                         <span style="color:rgba(255,255,255,0.6);font-size:0.8rem;">ID HUMANO</span><br>
+                         <code style="color:var(--hs-accent);">${data.humanoID}</code>
+                       </div>`
+                    : ''}
+              </div>`;
+        }
+
+        return mostrarPopup(cfg.title, htmlBody, cfg.color);
+    }
+
+    // ── TARJETA ──────────────────────────────────────────────────────
+    if (data.tipo === 'tarjeta') {
+        const estados = {
+            activado: {
+                icon: '💳', color: 'var(--hs-green)',
+                title: 'Tarjeta Activa',
+                desc: 'La tarjeta de identidad digital está activa y es completamente válida.'
+            },
+            comprado: {
+                icon: '📦', color: 'var(--hs-cyan)',
+                title: 'En Manufactura',
+                desc: 'La tarjeta ha sido adquirida y se encuentra en proceso de manufactura.'
+            },
+            enviado: {
+                icon: '🚚', color: '#3498db',
+                title: 'En Tránsito',
+                desc: 'La tarjeta física ha sido enviada por paquetería y está en camino al titular.'
+            },
+            pendiente_activacion: {
+                icon: '🔐', color: '#f39c12',
+                title: 'Pendiente de Activación',
+                desc: 'La tarjeta fue entregada pero el titular aún debe activarla desde su aplicación.'
+            },
+            inactivo: {
+                icon: '⚠️', color: 'var(--hs-accent)',
+                title: 'Tarjeta Reportada',
+                desc: 'Esta tarjeta ha sido reportada como perdida o robada por su titular.'
+            },
+            reportado: {
+                icon: '🚫', color: 'var(--hs-red)',
+                title: 'Tarjeta Bloqueada',
+                desc: 'Esta tarjeta ha sido bloqueada por el sistema de seguridad.'
+            },
+            'no-encontrado': {
+                icon: '🔍', color: 'var(--hs-red)',
+                title: 'Tarjeta No Encontrada',
+                desc: 'El identificador de tarjeta no existe en el sistema de validación.'
+            }
+        };
+
+        const cfg = estados[data.estado] || {
+            icon: '❓', color: 'gray',
+            title: 'Estado Desconocido',
+            desc: 'No se puede determinar el estado de esta tarjeta.'
+        };
+
+        const titularHtml = data.titular
+            ? `<div style="margin-top:14px;background:rgba(255,255,255,0.08);
+                           border-radius:10px;padding:10px 18px;">
+                 <span style="color:rgba(255,255,255,0.5);font-size:0.75rem;">TITULAR</span><br>
+                 <span style="color:#fff;font-weight:600;">${data.titular}</span>
+               </div>` : '';
+
+        const redHtml = data.red
+            ? `<div style="margin-top:8px;display:inline-block;background:rgba(255,255,255,0.05);
+                           border-radius:20px;padding:4px 14px;">
+                 <span style="color:rgba(255,255,255,0.5);font-size:0.75rem;">RED: </span>
+                 <span style="color:rgba(255,255,255,0.8);font-size:0.8rem;text-transform:uppercase;">
+                   ${data.red}
+                 </span>
+               </div>` : '';
+
+        const htmlBody = `
+          <div style="text-align:center;padding:10px;">
+            <div style="font-size:4rem;margin-bottom:12px;">${cfg.icon}</div>
+            <p style="color:rgba(255,255,255,0.9);font-size:1.1rem;line-height:1.6;">${cfg.desc}</p>
+            ${titularHtml}${redHtml}
+          </div>`;
+
+        return mostrarPopup(cfg.title, htmlBody, cfg.color);
+    }
+
+    // ── CERTIFICADO ──────────────────────────────────────────────────
+    if (data.tipo === 'certificado') {
+        const estados = {
+            activo: {
+                icon: '📜', color: 'var(--hs-green)',
+                title: 'Certificado Válido',
+                desc: 'El certificado digital está activo y es completamente válido.'
+            },
+            reportado: {
+                icon: '🚫', color: 'var(--hs-red)',
+                title: 'Certificado Reportado',
+                desc: 'Este certificado ha sido reportado y bloqueado por su titular o el sistema.'
+            },
+            invalido: {
+                icon: '❌', color: 'var(--hs-accent)',
+                title: 'Certificado Inválido',
+                desc: 'Este certificado no es válido o ha sido revocado del sistema.'
+            },
+            'no-encontrado': {
+                icon: '🔍', color: 'var(--hs-red)',
+                title: 'Certificado No Encontrado',
+                desc: 'El identificador de certificado no existe en el sistema de validación.'
+            }
+        };
+
+        const cfg = estados[data.estado] || {
+            icon: '❓', color: 'gray',
+            title: 'Estado Desconocido',
+            desc: 'No se puede determinar el estado de este certificado.'
+        };
+
+        const metaHtml = (data.titular || data.version)
+            ? `<div style="margin-top:14px;background:rgba(255,255,255,0.08);
+                           border-radius:10px;padding:10px 18px;text-align:left;">
+                 ${data.titular
+                    ? `<div style="margin-bottom:6px;">
+                         <span style="color:rgba(255,255,255,0.5);font-size:0.75rem;">TITULAR</span><br>
+                         <span style="color:#fff;font-weight:600;">${data.titular}</span>
+                       </div>` : ''}
+                 ${data.version
+                    ? `<div>
+                         <span style="color:rgba(255,255,255,0.5);font-size:0.75rem;">VERSIÓN</span><br>
+                         <span style="color:rgba(255,255,255,0.8);">Certificado v${data.version}</span>
+                       </div>` : ''}
+               </div>` : '';
+
+        const htmlBody = `
+          <div style="text-align:center;padding:10px;">
+            <div style="font-size:4rem;margin-bottom:12px;">${cfg.icon}</div>
+            <p style="color:rgba(255,255,255,0.9);font-size:1.1rem;line-height:1.6;">${cfg.desc}</p>
+            ${metaHtml}
+          </div>`;
+
+        return mostrarPopup(cfg.title, htmlBody, cfg.color);
+    }
+
+    // ── ERROR GENÉRICO ───────────────────────────────────────────────
+    mostrarErrorSeguro("No identificado", "El token no corresponde a ningún tipo de credencial reconocida.");
+}
+
+/* ══════════════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════════════ */
+function mostrarPopup(titulo, htmlBody, color) {
+    Swal.fire({
+        title: `<div style="color:${color};font-family:'Iceland',cursive;font-size:1.8rem;margin-bottom:8px;">${titulo}</div>`,
+        html: htmlBody + `
+          <div style="margin-top:16px;background:rgba(255,255,255,0.06);border-radius:8px;
+                      padding:10px 14px;font-size:0.8rem;color:rgba(255,255,255,0.5);
+                      display:flex;justify-content:space-between;">
+            <span><i class="fas fa-clock"></i> ${new Date().toLocaleString()}</span>
+            <code style="background:rgba(0,0,0,0.3);padding:2px 8px;border-radius:4px;
+                          color:var(--hs-cyan);">${Date.now().toString(36).toUpperCase()}</code>
+          </div>`,
+        background: 'linear-gradient(135deg,rgba(31,78,103,0.95),rgba(10,17,32,0.98))',
+        color: 'white',
+        backdrop: 'linear-gradient(135deg,rgba(10,17,32,0.85),rgba(15,26,46,0.95))',
+        showConfirmButton: true,
+        confirmButtonText: '<i class="fas fa-check-circle"></i> Entendido',
+        confirmButtonColor: color,
+        customClass: { confirmButton: 'secure-validate-btn', popup: 'secure-result-popup' },
+        width: '540px'
+    });
+}
+
+function mostrarErrorSeguro(titulo, mensaje) {
+    Swal.fire({
+        title: `<div style="color:var(--hs-red);font-family:'Iceland',cursive;font-size:1.8rem;">${titulo}</div>`,
+        html: `
+          <div style="text-align:center;padding:10px;">
+            <div style="font-size:3.5rem;color:var(--hs-red);margin-bottom:12px;">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <p style="color:rgba(255,255,255,0.9);font-size:1.05rem;line-height:1.6;">${mensaje}</p>
+            <div style="margin-top:16px;background:rgba(76,161,175,0.1);border:1px solid rgba(76,161,175,0.3);
+                        border-radius:10px;padding:12px;">
+              <span style="color:rgba(255,255,255,0.6);font-size:0.85rem;">
+                ¿Problemas? escribenos a: <br> &nbsp;
+                <a href="mailto:info@humansystem.mx"
+                   style="color:var(--hs-cyan);text-decoration:none;font-weight:600;">
+                  info@humansystem.mx
+                </a
+              </span>
+            </div>
+          </div>`,
+        background: 'linear-gradient(135deg,rgba(31,78,103,0.95),rgba(10,17,32,0.98))',
+        color: 'white',
+        backdrop: 'linear-gradient(135deg,rgba(10,17,32,0.85),rgba(15,26,46,0.95))',
+        showConfirmButton: true,
+        confirmButtonText: '<i class="fas fa-redo"></i> Reintentar',
+        confirmButtonColor: 'var(--hs-red)',
+        customClass: { confirmButton: 'secure-validate-btn', popup: 'secure-result-popup' },
+        width: '480px'
+    });
+}
+</script>
+
+<%- include('partials/footer', { login: false }) %>

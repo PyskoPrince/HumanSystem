@@ -1,0 +1,21 @@
+# Dependencias
+node_modules/
+dist/
+npm-debug.log*
+
+# Configuración y Secretos (CRÍTICO)
+.env
+config/key.json
+config/google-credentials.json
+*.pem
+*.key
+
+# Archivos de Sistema / IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Datos locales / Temporales
+public/uploads/*
+!public/uploads/.gitkeep
+temp/

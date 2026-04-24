@@ -1,0 +1,13 @@
+services:
+  app:
+    build: . 
+    container_name: human-system-app
+    restart: always
+    ports:
+      - "7777:7777"
+    volumes:
+      - ./src:/app/src         
+      - ./.env:/app/.env        
+      - /app/node_modules       
+    environment:
+      - NODE_ENV=development

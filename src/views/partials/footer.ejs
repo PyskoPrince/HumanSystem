@@ -1,0 +1,1266 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+
+
+<% if (login) { %>
+
+  <script>
+       // --- 1. LÓGICA DEL MENÚ DE GADGETS (CORREGIDO) ---
+    const gadgetToggler = document.getElementById('gadgetToggler'); // ID CORRECTO
+    const gadgetsMenu = document.getElementById('gadgetsMenu');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+
+    if (gadgetToggler && gadgetsMenu && mobileOverlay) {
+        gadgetToggler.addEventListener('click', function(e) {
+            e.preventDefault();
+            gadgetsMenu.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+        });
+
+        mobileOverlay.addEventListener('click', function() {
+            gadgetsMenu.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+        });
+
+        // Cierra el menú si se hace clic fuera de él
+        document.addEventListener('click', function (e) {
+            if (!gadgetsMenu.contains(e.target) && !gadgetToggler.contains(e.target)) {
+                gadgetsMenu.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+            }
+        });
+    }
+    // -
+
+
+    // --- 2. LÓGICA DE NAVEGACIÓN ENTRE SECCIONES ---
+    const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+    const contentSections = document.querySelectorAll('.content-section');
+    
+    function switchSection(targetId) {
+        contentSections.forEach(section => section.classList.remove('active'));
+        navLinks.forEach(link => link.classList.remove('active'));
+
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) targetSection.classList.add('active');
+
+        const targetLink = document.querySelector(`.nav-link[href="#${targetId}"]`);
+        if (targetLink) targetLink.classList.add('active');
+    }
+
+    navLinks.forEach(link => {
+        const targetId = link.getAttribute('href');
+        if (targetId && targetId.startsWith('#')) {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchSection(targetId.substring(1));
+                // Opcional: cierra el menú de bootstrap en móvil
+                const navbarCollapse = document.getElementById('navbarNav');
+                if (window.getComputedStyle(document.querySelector('.navbar-toggler')).display !== 'none') {
+                    $(navbarCollapse).collapse('hide');
+                }
+            });
+        }
+    });
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Search Button Handler
+        document.getElementById('searchButton').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Ingresa el folio de la solicitud',
+                input: 'text',
+                inputPlaceholder: 'Folio',
+                showCancelButton: true,
+                confirmButtonText: 'Buscar',
+                cancelButtonText: 'Cancelar',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return '¡Debes ingresar un folio!';
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const folio = result.value;
+                    // AQUÍ CAMBIAMOS LA LÓGICA PARA LLAMAR AL BACKEND
+                    fetch('/search-folio', { // Nuevo endpoint para buscar folio
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ folio: folio })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Éxito',
+                                html: `Solicitud con folio <strong>${folio}</strong> encontrada correctamente.<br><pre>${JSON.stringify(data.solicitud, null, 2)}</pre>` // Muestra los datos de la solicitud
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Fallo',
+                                text: data.message || `No se encontró ninguna solicitud con el folio ${folio}.`
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error en búsqueda:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error de conexión',
+                            text: 'Hubo un problema al buscar el folio.'
+                        });
+                    });
+                }
+            });
+        });
+
+        // Contact Form Handler
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const nombre = formData.get('nombre');
+            const correo = formData.get('correo');
+            const mensaje = formData.get('mensaje');
+
+            if (!nombre || !correo || !mensaje) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Campos incompletos',
+                    text: 'Por favor, completa todos los campos.'
+                });
+                return;
+            }
+
+            // El endpoint es /contact y el método POST ya está configurado
+            fetch('/contact', {
+                method: 'POST',
+                body: formData // FormData será procesado por multer en el backend
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Contacto exitoso',
+                        text: `Tu mensaje ha sido enviado correctamente. Tu folio es: ${data.folio}` // Mostrar el folio
+                    });
+                    this.reset();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message || 'Hubo un error al enviar el mensaje.'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de conexión',
+                    text: 'Hubo un error al procesar tu solicitud.'
+                });
+            });
+        });
+    });
+    </script>
+
+    <!-- GIF Handler Script -->
+    <script>
+        window.onload = function() {
+            showGIFFirst();
+        };
+
+        function showGIFFirst() {
+            document.getElementById('gif').style.display = 'block';
+            document.getElementById('image').style.display = 'none';
+            setTimeout(function() {
+                document.getElementById('gif').style.display = 'none';
+                document.getElementById('image').style.display = 'block';
+            }, 6000);
+        }
+
+        function restartGIF() {
+            document.getElementById('gif').style.display = 'block';
+            document.getElementById('image').style.display = 'none';
+            setTimeout(function() {
+                document.getElementById('gif').style.display = 'none';
+                document.getElementById('image').style.display = 'block';
+            }, 6000);
+        }
+    </script>
+  <!-- Scripts para usuarios autenticados -->
+  <script>
+    // --- LÓGICA PRINCIPAL DE NAVEGACIÓN Y SECCIONES ---
+    document.addEventListener('DOMContentLoaded', function() {
+      const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+      const contentSections = document.querySelectorAll('.content-section');
+      const navbarToggler = document.querySelector('.navbar-toggler');
+      const navbarCollapse = document.getElementById('navbarNav');
+      let activeLink = null;
+
+      function setupSections() {
+        const isDesktop = window.innerWidth >= 992;
+        const perfilNavLink = document.querySelector('.nav-item a[href="#seccionPerfil"]');
+        const configNavLink = document.querySelector('.nav-item a[href="#seccionConfiguracion"]');
+
+        if (perfilNavLink) perfilNavLink.parentElement.style.display = isDesktop ? 'none' : 'list-item';
+        if (configNavLink) configNavLink.parentElement.style.display = isDesktop ? 'none' : 'list-item';
+
+        const defaultSectionId = isDesktop ? 'seccionConfiguracion' : 'seccionPerfil';
+        if (!document.querySelector('.content-section.active')) {
+          switchSection(defaultSectionId);
+        }
+      }
+
+      function switchSection(targetId) {
+        contentSections.forEach(section => section.classList.remove('active'));
+        navLinks.forEach(link => link.classList.remove('active'));
+
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) targetSection.classList.add('active');
+
+        const targetLink = document.querySelector(`.nav-link[href="#${targetId}"]`);
+        if (targetLink) {
+          targetLink.classList.add('active');
+          activeLink = targetLink;
+        }
+      }
+
+      navLinks.forEach(link => {
+        const targetId = link.getAttribute('href');
+        if (targetId && targetId.startsWith('#')) {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchSection(targetId.substring(1));
+            if (navbarToggler.offsetParent !== null) {
+              $(navbarCollapse).collapse('hide');
+            }
+          });
+        }
+      });
+
+     /*  window.addEventListener('resize', setupSections);
+      setupSections();
+  // V E R I F I C A R  S I  L A S  V A R I A B L E S  E X I S T E N
+      const tarjetaDebito = "<%= typeof Tarjetadebito !== 'undefined' ? Tarjetadebito : '' %>";
+      const billeteraCripto = "<%= typeof BilleteraCripto !== 'undefined' ? BilleteraCripto : '' %>";
+      actualizarVistaTarjeta(tarjetaDebito);
+      actualizarVistaBilletera(billeteraCripto);
+    }); */
+      window.addEventListener('resize', setupSections);
+      setupSections();
+    });
+const styledSwal = (title, html, iconClass, gadgetClass) => { // Eliminamos el parámetro showSection que no se usa
+    return Swal.fire({
+        title: title,
+        html: html,
+        iconHtml: `<i class="${iconClass}"></i>`,
+        width: '600px',
+        background: '#ffffff',
+        color: '#1F4E67',
+        confirmButtonText: '<i class="fa-solid fa-circle-xmark"></i>',
+        confirmButtonColor: '#d71d00',
+        showDenyButton: true,
+        denyButtonText: `<i class="${iconClass}"></i>`,
+        denyButtonColor: '#1F4E67',
+        customClass: {
+            container: 'custom-swal-container',
+            popup: 'custom-swal-popup',
+            header: 'custom-swal-header',
+            title: 'custom-swal-title',
+            closeButton: 'custom-swal-close',
+            icon: 'custom-swal-icon',
+            content: 'custom-swal-content',
+            confirmButton: 'custom-swal-confirm',
+            footer: 'custom-swal-footer'
+        },
+        didOpen: () => {
+            const iconContainer = Swal.getIcon();
+            if (iconContainer && iconClass) {
+                iconContainer.innerHTML = `<i class="${iconClass} fa-3x" style="color: #1F4E67;"></i>`;
+                iconContainer.style.border = 'none';
+                iconContainer.style.background = 'none';
+            }
+        }
+    }).then((result) => {
+        if (result.isDenied) {
+            // **LA CORRECCIÓN CLAVE ESTÁ AQUÍ**
+            // Llamamos a la función que ya controla la navegación
+            if (gadgetClass) {
+                switchSection(gadgetClass); // Usamos la función existente
+            }
+        }
+    });
+};
+    const imagenOriginal = document.getElementById('imagenOriginal1')?.src;
+    const imagenFrente = document.getElementById('imagenFrente1')?.src;
+    
+    const humanoID = '<%= typeof humanoID !== "undefined" ? humanoID : "" %>';
+const nombreUsuario = '<%= typeof nombre !== "undefined" ? nombre : "" %>';
+
+  </script>
+
+
+  <script>
+    // --- CAMBIAR IMAGEN PERFIL/QR ---
+    const perfilImg = document.getElementById('perfilImg');
+   const fotoPerfilUrl = '<%= typeof fotoPerfilUrl !== "undefined" ? fotoPerfilUrl : "" %>';
+const qrCodeUrl = '<%= typeof qrCodeTarjeta !== "undefined" ? qrCodeTarjeta : "" %>';
+    let isPerfil = true;
+    let tarjetaActivada = false;
+
+    perfilImg?.addEventListener('click', function() {
+      if (tarjetaActivada) {
+        if (isPerfil) perfilImg.src = qrCodeUrl;
+        else perfilImg.src = fotoPerfilUrl;
+        isPerfil = !isPerfil;
+      } else {
+        Swal.fire({
+          title: 'Verificando QR de tarjeta...',
+          text: 'Por favor, espera mientras verificamos el estado QR de tu tarjeta.',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          didOpen: () => Swal.showLoading()
+        });
+
+        fetch('/verificarEstado', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ humanoID: '<%= typeof humanoID !== "undefined" ? humanoID : "" %>' })
+        })
+        .then(response => response.json())
+        .then(data => {
+          Swal.close();
+          if (data.estado === 'comprado') {
+            Swal.fire({
+              title: 'Tarjeta comprada',
+              text: 'Debes activar tu tarjeta primero antes de ver el QR.',
+              icon: 'info',
+              confirmButtonText: 'OK',
+              confirmButtonColor: '#1F4E67'
+            });
+          } else if (data.estado === 'inactivo') {
+            Swal.fire({
+              title: 'Tarjeta inactiva',
+              text: 'Debes comprar una nueva tarjeta antes de ver el QR.',
+              icon: 'info',
+              confirmButtonText: 'OK',
+              confirmButtonColor: '#1F4E67'
+            });
+          } else if (data.estado === 'activado') {
+            tarjetaActivada = true;
+            perfilImg.src = qrCodeUrl;
+            isPerfil = false;
+          } else {
+            Swal.fire({
+              title: 'Error',
+              text: 'Estado de tarjeta desconocido.',
+              icon: 'error',
+              confirmButtonText: 'OK'
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error al verificar el estado de la tarjeta:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Ocurrió un error al verificar el estado de la tarjeta.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        });
+      }
+    });
+  </script>
+
+  <script>
+    // --- GENERAR QR PARA REDES SOCIALES ---
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('a.social-link').forEach((link) => {
+        if (link.href.endsWith('#')) {
+          link.style.display = 'none';
+        } else {
+          link.addEventListener('click', async function(event) {
+            event.preventDefault();
+            const url = this.href;
+            const seleccion = this.getAttribute('data-social');
+            const iconClass = this.getAttribute('data-icon');
+
+            Swal.fire({
+              title: 'Generando QR <i class="fas fa-qrcode ml-2"></i>',
+              text: 'Por favor, espera mientras generamos tu código QR.',
+              allowOutsideClick: false,
+              showConfirmButton: false,
+              willOpen: () => Swal.showLoading()
+            });
+
+            try {
+              const response = await fetch('/generateQRCode', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url })
+              });
+
+              const data = await response.json();
+              if (data.success && data.qrCodeUrl) {
+                Swal.close();
+                Swal.fire({
+                  title: `Código QR: ${seleccion} <i class="${iconClass}"></i>`,
+                  text: `Puedes escanear este QR para acceder al perfil del humano en: ${seleccion}`,
+                  imageUrl: data.qrCodeUrl,
+                  imageWidth: 200,
+                  imageHeight: 200,
+                  imageAlt: 'Código QR',
+                  showConfirmButton: true,
+                  confirmButtonText: `<i class="${iconClass}"></i>`,
+                  confirmButtonColor: '#1F4E67',
+                  cancelButtonColor: '#d33',
+                  showCancelButton: true,
+                  cancelButtonText: 'Cerrar'
+                }).then((result) => {
+                  if (result.isConfirmed) window.open(url, '_blank');
+                });
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: 'No se pudo generar el código QR.',
+                  showConfirmButton: false,
+                  timer: 3000
+                });
+              }
+            } catch (error) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Ocurrió un problema al generar el código QR.',
+                showConfirmButton: false,
+                timer: 3000
+              });
+            }
+          });
+        }
+      });
+    });
+  </script>
+
+  <script>
+    // --- MODIFICAR TELÉFONO ---
+    function enviarCodigo() {
+      const nuevoTelefono = document.getElementById('telefono')?.value;
+      if (!nuevoTelefono?.trim()) {
+        Swal.fire({ title: 'Error', text: 'El teléfono no puede estar vacío.', icon: 'error' });
+        return;
+      }
+
+      if (!/^\d{10}$/.test(nuevoTelefono)) {
+        Swal.fire({ title: 'Error', text: 'El teléfono debe tener exactamente 10 dígitos.', icon: 'error' });
+        return;
+      }
+
+      Swal.fire({
+        title: `¿Estás seguro de que quieres cambiar el teléfono a "${nuevoTelefono}"?`,
+        showCancelButton: true,
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No',
+        icon: 'question'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch('/updateTelefono', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ telefono: nuevoTelefono })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              Swal.fire({
+                title: 'Código de verificación enviado',
+                text: 'Por favor, ingrese el código de verificación que hemos enviado a su teléfono.',
+                icon: 'info'
+              }).then(() => {
+                document.getElementById('verificacionContainer').style.display = 'block';
+              });
+            } else {
+              Swal.fire({
+                title: 'Error',
+                text: data.error || 'No se pudo enviar el código de verificación.',
+                icon: 'error'
+              });
+            }
+          });
+        }
+      });
+    }
+
+    function verificarCodigo() {
+      const codigo = document.getElementById('codigo')?.value;
+      if (!codigo?.trim()) {
+        Swal.fire({ title: 'Error', text: 'El código de verificación no puede estar vacío.', icon: 'error' });
+        return;
+      }
+
+      fetch('/verifyCode', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: codigo })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          Swal.fire({
+            title: 'Teléfono actualizado',
+            text: data.message,
+            icon: 'success'
+          }).then(() => location.reload());
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: data.error || 'Código de verificación incorrecto.',
+            icon: 'error'
+          });
+        }
+      });
+    }
+  </script>
+
+  <script>
+    // --- MODIFICAR CORREO ---
+    function modificarCorreo() {
+      const nuevoCorreo = document.getElementById('correo')?.value;
+      if (!nuevoCorreo?.trim()) {
+        Swal.fire({
+          title: 'Error',
+          text: 'El correo electrónico no puede estar vacío.',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2000
+        });
+        return;
+      }
+
+      if (!/\S+@\S+\.\S+/.test(nuevoCorreo)) {
+        Swal.fire({
+          title: 'Error',
+          text: 'El correo electrónico no es válido.',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2000
+        });
+        return;
+      }
+
+      Swal.fire({
+        title: `¿Estás seguro de que quieres cambiar el correo electrónico a "${nuevoCorreo}"?`,
+        showCancelButton: true,
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No',
+        confirmButtonColor: '#1F4E67',
+        cancelButtonColor: '#d33',
+        icon: 'question'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch('/updateCorreo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ correo: nuevoCorreo })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              Swal.fire({
+                title: 'Correo electrónico actualizado',
+                text: `Nuevo correo electrónico: ${nuevoCorreo}`,
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 2000
+              }).then(() => location.reload());
+            } else {
+              Swal.fire({
+                title: 'Error',
+                text: data.error || 'No se pudo actualizar el correo electrónico',
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 2000
+              });
+            }
+          });
+        }
+      });
+    }
+  </script>
+
+  <script>
+    // --- MODIFICAR DIRECCIÓN ---
+    function modificarDireccion() {
+      const nuevaDireccion = document.getElementById('direccion')?.value;
+      const direccionActualElement = document.getElementById('direccionLabel');
+
+      if (!direccionActualElement) {
+        console.error('Elemento con id "direccionLabel" no encontrado en el DOM.');
+        return;
+      }
+
+      const direccionActual = direccionActualElement.innerText.trim();
+
+      if (direccionActual === "" && !nuevaDireccion?.trim()) {
+        Swal.fire({
+          title: 'La dirección ya está eliminada',
+          text: 'El campo de dirección ya está vacío.',
+          icon: 'info',
+          showConfirmButton: false,
+          timer: 2000
+        });
+        return;
+      }
+
+      if (!nuevaDireccion?.trim() && direccionActual) {
+        Swal.fire({
+          title: 'Eliminará su dato personal: <br><i class="fas fa-map-marker-alt mr-2"></i>Dirección',
+          text: '¿Desea confirmar la eliminación de su dato personal?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Sí, eliminar',
+          cancelButtonText: 'No',
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#1F4E67'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: 'Confirma contraseña',
+              text: 'Ingresa tu contraseña para eliminar tu dirección.',
+              input: 'password',
+              inputPlaceholder: 'Ingrese su contraseña',
+              inputAttributes: { autocapitalize: 'off', autocorrect: 'off' },
+              showCancelButton: true,
+              confirmButtonText: 'Confirmar',
+              cancelButtonText: 'Cancelar',
+              confirmButtonColor: '#1F4E67',
+              cancelButtonColor: '#d33',
+              preConfirm: (password) => {
+                if (!password) Swal.showValidationMessage('Debe ingresar su contraseña para confirmar');
+                return password;
+              }
+            }).then((result) => {
+              if (result.isConfirmed) {
+                Swal.fire({
+                  title: 'Eliminando dirección...',
+                  text: 'Por favor, espere mientras eliminamos su dirección.',
+                  allowOutsideClick: false,
+                  didOpen: () => Swal.showLoading()
+                });
+
+                fetch('/updateDireccion', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ direccion: nuevaDireccion, contrasena: result.value })
+                })
+                .then(response => response.json())
+                .then(data => {
+                  if (data.success) {
+                    Swal.fire({
+                      title: 'Dirección eliminada',
+                      text: 'Su dirección ha sido eliminada correctamente.',
+                      icon: 'success',
+                      showConfirmButton: false,
+                      timer: 2000
+                    }).then(() => location.reload());
+                  } else {
+                    Swal.fire({
+                      title: 'Error',
+                      text: data.error || 'No se pudo eliminar la dirección',
+                      icon: 'error',
+                      showConfirmButton: false,
+                      timer: 2000
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
+        return;
+      }
+
+      if (nuevaDireccion === direccionActual) {
+        Swal.fire({
+          title: 'Sin cambios',
+          text: 'La dirección es la misma.',
+          icon: 'info',
+          showConfirmButton: false,
+          timer: 2000
+        });
+        return;
+      }
+
+      Swal.fire({
+        title: `Modificarás tu dirección <i class="fas fa-map-marker-alt "></i>`,
+        text: `¿Estás seguro de que quieres cambiar la dirección a: ${nuevaDireccion}?`,
+        showCancelButton: true,
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No',
+        confirmButtonColor: '#1F4E67',
+        cancelButtonColor: '#d33',
+        icon: 'question'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: 'Actualizando dirección...',
+            text: 'Por favor, espere mientras actualizamos su dirección.',
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+          });
+
+          fetch('/updateDireccion', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ direccion: nuevaDireccion })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              Swal.fire({
+                title: '<i class="fas fa-map-marker-alt mr-2 "></i>Dirección actualizada',
+                text: `Nueva dirección: ${nuevaDireccion}`,
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 2000
+              }).then(() => location.reload());
+            } else {
+              Swal.fire({
+                title: 'Error',
+                text: data.error || 'No se pudo actualizar la dirección',
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 2000
+              });
+            }
+          });
+        }
+      });
+    }
+  </script>
+
+  <script>
+    // --- MODIFICAR CONTRASEÑA ---
+    function modificarContrasena() {
+      const contrasenaActual = document.getElementById('contrasena-actual')?.value;
+      const nuevaContrasena = document.getElementById('nueva-contrasena')?.value;
+      const confirmarContrasena = document.getElementById('confirmar-contrasena')?.value;
+
+      if (!nuevaContrasena?.trim() || !confirmarContrasena?.trim()) {
+        Swal.fire({
+          title: 'Error',
+          text: 'La nueva contraseña no puede estar vacía.',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2000
+        });
+        return;
+      }
+
+      if (nuevaContrasena !== confirmarContrasena) {
+        Swal.fire({
+          title: 'Error',
+          text: 'Las nuevas contraseñas no coinciden.',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2000
+        });
+        return;
+      }
+
+      if (nuevaContrasena.length < 8 || nuevaContrasena.length > 20) {
+        Swal.fire({
+          title: 'Error',
+          text: 'La contraseña debe tener entre 8 y 20 caracteres.',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2000
+        });
+        return;
+      }
+
+      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
+      if (!regex.test(nuevaContrasena)) {
+        Swal.fire({
+          title: 'Error',
+          text: 'La contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número.',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2000
+        });
+        return;
+      }
+
+      Swal.fire({
+        title: '¿Estás seguro de que quieres cambiar la contraseña?',
+        showCancelButton: true,
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No',
+        confirmButtonColor: '#1F4E67',
+        cancelButtonColor: '#d33',
+        icon: 'question'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch('/updatePassword', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contrasenaActual, nuevaContrasena })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              Swal.fire({
+                title: 'Contraseña actualizada',
+                text: 'Su contraseña ha sido actualizada con éxito.',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 2000
+              }).then(() => location.reload());
+            } else {
+              Swal.fire({
+                title: 'Error',
+                text: data.error || 'No se pudo actualizar la contraseña',
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 2000
+              });
+            }
+          });
+        }
+      });
+    }
+  </script>
+
+  <script>
+/*     // --- MANEJAR TARJETA Y BILLETERA ---
+    document.addEventListener('DOMContentLoaded', function() {
+ const tarjetaDebito = "<%= typeof Tarjetadebito !== 'undefined' ? Tarjetadebito : '' %>";
+const billeteraCripto = "<%= typeof BilleteraCripto !== 'undefined' ? BilleteraCripto : '' %>";;
+      const tarjetaList = document.getElementById('tarjetaList');
+      const walletList = document.getElementById('walletList');
+      const btnTarjeta = document.getElementById('btnTarjeta');
+      const btnBilletera = document.getElementById('btnBilletera');
+
+      if (tarjetaList && btnTarjeta) actualizarVistaTarjeta(tarjetaDebito);
+      if (walletList && btnBilletera) actualizarVistaBilletera(billeteraCripto);
+    });
+
+    function formatearTarjeta(numero) {
+      return numero.replace(/(\d{4})(?=\d)/g, '$1-');
+    }
+
+    function validarTarjeta(numero) {
+      const num = numero.replace(/-/g, '');
+      if (num.length !== 16) return false;
+      return /^\d{16}$/.test(num);
+    }
+
+    function validarBilleteraCripto(direccion) {
+      if (direccion.length < 26 || direccion.length > 35) return false;
+      const caracteresValidos = /^[A-HJ-NP-Za-km-z1-9]+$/;
+      return caracteresValidos.test(direccion);
+    }
+
+    function manejarTarjeta() {
+      const btnTarjeta = document.getElementById('btnTarjeta');
+      const tarjetaList = document.getElementById('tarjetaList');
+    const tarjetaExistente = "<%= typeof Tarjetadebito !== 'undefined' ? Tarjetadebito : '' %>";
+      let esModificar = tarjetaExistente !== "";
+
+      Swal.fire({
+        title: esModificar ? '<i class="far fa-credit-card mr-2"></i>Modificar Tarjeta' : '<i class="far fa-credit-card mr-2"></i>Agregar Nueva Tarjeta',
+        input: 'text',
+        inputLabel: 'Número de Tarjeta',
+        inputValue: esModificar ? formatearTarjeta(tarjetaExistente) : '',
+        inputPlaceholder: 'XXXX-XXXX-XXXX-XXXX',
+        showCancelButton: true,
+        confirmButtonText: esModificar ? 'Modificar' : 'Agregar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#1F4E67',
+        cancelButtonColor: '#d33',
+        inputAttributes: { maxlength: 19, inputmode: 'numeric' },
+        inputValidator: (value) => {
+          if (!value) return 'El número de tarjeta es requerido';
+          if (!validarTarjeta(value)) return 'El número de tarjeta no es válido';
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (formatearTarjeta(tarjetaExistente) === result.value) {
+            Swal.fire({
+              title: 'Sin cambios',
+              text: 'El número de tarjeta es el mismo.',
+              icon: 'info',
+              showConfirmButton: false,
+              timer: 2000
+            });
+            return;
+          }
+
+          Swal.fire({
+            title: 'Actualizando tarjeta...',
+            text: 'Por favor, espere mientras actualizamos su tarjeta.',
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+          });
+
+          fetch('/updateTarjetaDebito', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ Tarjetadebito: result.value.replace(/\D/g, '') })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              actualizarVistaTarjeta(result.value);
+              Swal.fire({
+                title: 'Tarjeta Actualizada',
+                text: `Número de tarjeta ${formatearTarjeta(result.value)} actualizado con éxito.`,
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 2000
+              }).then(() => location.reload());
+            } else {
+              Swal.fire('Error', data.error || 'No se pudo procesar la solicitud', 'error');
+            }
+          })
+          .catch(error => {
+            Swal.fire('Error', 'Ocurrió un error al actualizar la tarjeta. Intente nuevamente.', 'error');
+          });
+        }
+      });
+    }
+
+    function manejarBilletera() {
+      const btnBilletera = document.getElementById('btnBilletera');
+      const walletList = document.getElementById('walletList');
+     const billeteraExistente = "<%= typeof BilleteraCripto !== 'undefined' ? BilleteraCripto : '' %>";
+      let esModificar = billeteraExistente !== "";
+
+      Swal.fire({
+        title: esModificar ? '<i class="fab fa-bitcoin mr-2"></i>Modificar Billetera' : '<i class="fab fa-bitcoin mr-2"></i>Agregar Nueva Billetera',
+        input: 'text',
+        inputLabel: 'Dirección de Billetera',
+        inputValue: esModificar ? billeteraExistente : '',
+        inputPlaceholder: 'Ingrese la dirección de billetera',
+        showCancelButton: true,
+        confirmButtonColor: '#1F4E67',
+        cancelButtonColor: '#d33',
+        confirmButtonText: esModificar ? 'Modificar' : 'Agregar',
+        cancelButtonText: 'Cancelar',
+        inputAttributes: { maxlength: 40 },
+        inputValidator: (value) => {
+          if (!value) return 'La dirección de billetera <i class="fab fa-bitcoin ml-2 mr-2"></i> es requerida';
+          if (!validarBilleteraCripto(value)) return 'La dirección de billetera <i class="fab fa-bitcoin ml-2 mr-2"></i> no es válida';
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (billeteraExistente === result.value) {
+            Swal.fire({
+              title: 'Sin cambios',
+              text: 'La dirección de billetera es la misma.',
+              icon: 'info',
+              showConfirmButton: false,
+              timer: 2000
+            });
+            return;
+          }
+
+          Swal.fire({
+            title: 'Actualizando billetera...',
+            text: 'Por favor, espere mientras actualizamos su billetera.',
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+          });
+
+          fetch('/updateBilleteraCripto', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ BilleteraCripto: result.value })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              actualizarVistaBilletera(result.value);
+              Swal.fire({
+                title: 'Billetera Actualizada',
+                text: `Dirección de billetera ${result.value} actualizada con éxito.`,
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 2000
+              }).then(() => location.reload());
+            } else {
+              Swal.fire('Error', data.error || 'No se pudo procesar la solicitud', 'error');
+            }
+          })
+          .catch(error => {
+            Swal.fire('Error', 'Ocurrió un error al actualizar la billetera. Intente nuevamente.', 'error');
+          });
+        }
+      });
+    }
+ */
+/*     function actualizarVistaTarjeta(tarjeta) {
+      const tarjetaList = document.getElementById('tarjetaList');
+      const btnTarjeta = document.getElementById('btnTarjeta');
+
+      if (tarjeta) {
+        tarjetaList.innerHTML = `
+          <div class="card-group">
+            <i class="far fa-credit-card"></i> ${formatearTarjeta(tarjeta)}
+            <button class="btn btn-danger btn-sm" onclick="confirmarEliminar(this, 'tarjeta')">Eliminar</button>
+          </div>
+        `;
+        btnTarjeta.innerHTML = '<i class="far fa-credit-card mr-2"></i> Modificar Tarjeta';
+      } else {
+        tarjetaList.innerHTML = '';
+        btnTarjeta.innerHTML = '<i class="far fa-credit-card mr-2"></i> Agregar Tarjeta';
+      }
+    }
+
+    function actualizarVistaBilletera(billetera) {
+      const walletList = document.getElementById('walletList');
+      const btnBilletera = document.getElementById('btnBilletera');
+
+      if (billetera) {
+        walletList.innerHTML = `
+          <div class="wallet-group">
+            <i class="fab fa-bitcoin"></i> ${billetera}
+            <button class="btn btn-danger btn-sm" onclick="confirmarEliminar(this, 'billetera')">Eliminar</button>
+          </div>
+        `;
+        btnBilletera.innerHTML = '<i class="fab fa-bitcoin mr-2"></i> Modificar Billetera';
+      } else {
+        walletList.innerHTML = '';
+        btnBilletera.innerHTML = '<i class="fab fa-bitcoin mr-2"></i> Agregar Billetera';
+      }
+    } */
+/* 
+    function confirmarEliminar(elemento, tipo) {
+      const mensaje = tipo === 'tarjeta' ? '<i class="far fa-credit-card mr-2"></i> Número de Tarjeta' : ' <i class="fab fa-bitcoin mr-2"></i> Billetera';
+      Swal.fire({
+        title: `Eliminará su dato personal: ${mensaje}`,
+        text: `¿Desea confirmar la eliminación de su dato personal?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'No',
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#1F4E67'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: 'Confirma contraseña',
+            text: 'Ingresa tu contraseña para eliminar tu dato personal.',
+            input: 'password',
+            inputPlaceholder: 'Ingrese su contraseña',
+            inputAttributes: { autocapitalize: 'off', autocorrect: 'off' },
+            showCancelButton: true,
+            confirmButtonText: 'Confirmar',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#1F4E67',
+            cancelButtonColor: '#d33',
+            preConfirm: (password) => {
+              if (!password) Swal.showValidationMessage('Debe ingresar su contraseña para confirmar');
+              return password;
+            }
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire({
+                title: 'Eliminando...',
+                text: 'Por favor, espere mientras eliminamos su dato personal.',
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+              });
+
+              const endpoint = tipo === 'tarjeta' ? '/deleteTarjetaDebito' : '/deleteBilleteraCripto';
+              fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contrasena: result.value })
+              })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  Swal.fire({
+                    title: 'Dato Personal eliminado',
+                    text: 'Su dato personal ha sido eliminado correctamente.',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 2000
+                  }).then(() => {
+                    elemento.parentElement.remove();
+                    if (tipo === 'tarjeta') actualizarVistaTarjeta('');
+                    else actualizarVistaBilletera('');
+                  });
+                } else {
+                  Swal.fire('Error', data.error || 'No se pudo eliminar el dato personal', 'error');
+                }
+              });
+            }
+          });
+        }
+      });
+    } */
+  </script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    if (window.location.hash === '#termsModal') {
+      $('#termsModal').modal('show');
+    }
+
+    // --- LÓGICA DE BOTONES DE AUTENTICACIÓN AÑADIDA ---
+    const authButtons = document.querySelectorAll('.btn-group-toggle .btn');
+    const formSections = {
+        'facial': document.getElementById('facialFormFields'),
+        'traditional': document.getElementById('traditionalFormFields'),
+        'voice': document.getElementById('voiceFormFields')
+    };
+
+    function switchAuthMethod(method) {
+        // Oculta todas las secciones
+        Object.values(formSections).forEach(section => {
+            if (section) {
+                section.style.display = 'none';
+            }
+        });
+
+        // Muestra la sección seleccionada
+        const selectedSection = formSections[method];
+        if (selectedSection) {
+            selectedSection.style.display = 'block';
+        }
+    }
+    
+    // El formulario tradicional ya está visible por defecto por el HTML.
+    // Escucha clics en los botones de grupo
+    authButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const method = this.getAttribute('data-auth-method');
+            // La clase 'active' la maneja Bootstrap con data-toggle="buttons"
+            switchAuthMethod(method);
+        });
+    });
+    // --- FIN LÓGICA DE BOTONES DE AUTENTICACIÓN ---
+});
+</script>
+  
+
+  <script>
+    // --- MANEJAR ESTADO DE PAGO ---
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const estadoPago = urlParams.get('estado_pago');
+
+      if (estadoPago === 'exitoso') {
+        Swal.fire({
+          title: 'Pago Exitoso',
+          text: 'Tu pago se ha completado con éxito. ¡Gracias por tu compra!',
+          icon: 'success',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#1F4E67'
+        }).then((result) => {
+          if (result.isConfirmed) window.location.href = '/';
+        });
+      } else if (estadoPago === 'cancelado') {
+        Swal.fire({
+          title: 'Pago Cancelado',
+          text: 'Tu pago ha sido cancelado. Puedes intentar nuevamente más tarde.',
+          icon: 'error',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#d33'
+        }).then((result) => {
+          if (result.isConfirmed) window.location.href = '/';
+        });
+      }
+    });
+  </script>
+
+  
+
+  <script>
+// Función para manejar la suscripción a un plan
+function subscribeToPlan(planName) {
+    const plan = planes.find(p => p.nombre === planName);
+    
+    if (plan) {
+        Swal.fire({
+            title: `Suscribirse a ${planName}`,
+            html: `
+                <div style="text-align: left;">
+                    <p>Estás a punto de suscribirte al plan <strong>${planName}</strong>.</p>
+                    ${plan.precio > 0 ? 
+                        `<p>Precio: <strong>${plan.precio}${plan.periodo}</strong></p>
+                         <p>Serás redirigido a nuestro procesador de pagos seguro.</p>` : 
+                        '<p>¡Puedes comenzar a usar las funciones básicas inmediatamente!</p>'}
+                </div>
+            `,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: plan.precio > 0 ? 'Proceder al pago' : 'Activar gratis',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: plan.color
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: '¡Suscripción exitosa!',
+                    html: `
+                        <div style="text-align: left;">
+                            <p>Ahora tienes acceso al plan <strong>${planName}</strong>.</p>
+                            ${plan.precio > 0 ? 
+                                `<p>Se ha cobrado exitosamente ${plan.precio}${plan.periodo}.</p>` : ''}
+                            <p>Disfruta de todas las funciones disponibles.</p>
+                        </div>
+                    `,
+                    icon: 'success',
+                    confirmButtonColor: plan.color
+                });
+            }
+        });
+    }
+}
+
+
+
+    // --- TOGGLE SIDEBAR ---
+    $(document).ready(function() {
+      $("#logo-sidebar-toggle").click(function() {
+        $("#sidebar").toggle();
+      });
+    });
+  </script>
+<% } %>
+
+<!-- Script para ocultar botones de navbar en páginas públicas -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const pageClass = document.body.className.trim();
+    const pageMap = {
+      'page-info': 'info',
+      'page-register': 'register',
+      'page-login': 'login',
+      'page-validation': 'validation'
+    };
+    const currentPage = pageMap[pageClass];
+    if (currentPage) {
+      const navItem = document.querySelector(`.nav-item[data-page="${currentPage}"]`);
+      if (navItem) navItem.classList.add('hidden');
+    }
+  });
+</script>

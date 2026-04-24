@@ -1,0 +1,1611 @@
+<%- include('partials/header', { title: 'Registro', pageClass: 'page-register' }) %>
+<%- include('partials/navbar', { login: false }) %>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+    
+    /* ========== BOTÓN VERDE DE CONFIRMACIÓN ========== */
+.btn-success-hs {
+    background: linear-gradient(135deg, #28a745, #1e7e34) !important;
+    color: white !important;
+    border: none !important;
+    padding: 14px 35px;
+    border-radius: 50px !important;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 20px rgba(40, 167, 69, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    font-family: var(--font-tech);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.btn-success-hs:hover {
+    background: linear-gradient(135deg, #2ecc71, #28a745) !important;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 25px rgba(40, 167, 69, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-success-hs:active {
+    transform: translateY(-1px);
+}
+
+/* ========== LIQUID GLASS SYSTEM - HUMAN SYSTEM ========== */
+:root {
+    --hs-dark: #0a1120;
+    --hs-blue: #1F4E67;
+    --hs-cyan: #4ca1af;
+    --hs-red: #df0000;
+    --hs-accent: #f10821;
+    --hs-glass-bg: linear-gradient(
+        135deg,
+        rgba(31, 78, 103, 0.1) 0%,
+        rgba(10, 17, 32, 0.2) 100%
+    );
+    --hs-glass-border: 1.5px solid rgba(76, 161, 175, 0.25);
+    --hs-glass-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        inset 0 0 30px rgba(76, 161, 175, 0.1);
+    --font-tech: 'Iceland', cursive;
+    --font-body: 'Iceland';
+}
+
+/* ========== FONDO PRINCIPAL ========== */
+body {
+    background: linear-gradient(135deg, #0a1120 0%, #1a1f2e 50%, #1F4E67 100%);
+    min-height: 100vh;
+    margin: 0;
+    font-family: var(--font-body);
+    overflow-x: hidden;
+}
+
+/* ========== CONTENEDOR PRINCIPAL ========== */
+.register-wrapper {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 15px;
+    z-index: 1;
+}
+
+/* ========== FONDO CON BURBUJAS ========== */
+.liquid-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.liquid-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    animation: floatBlob 25s infinite ease-in-out;
+    opacity: 0.15;
+}
+
+.blob-1 {
+    width: 400px;
+    height: 400px;
+    top: 10%;
+    left: 10%;
+    background: radial-gradient(circle at 30% 30%, var(--hs-cyan), transparent 70%);
+    animation-delay: 0s;
+}
+
+.blob-2 {
+    width: 300px;
+    height: 300px;
+    bottom: 20%;
+    right: 15%;
+    background: radial-gradient(circle at 30% 30%, var(--hs-red), transparent 70%);
+    animation-delay: -8s;
+}
+
+.blob-3 {
+    width: 250px;
+    height: 250px;
+    top: 50%;
+    left: 80%;
+    background: radial-gradient(circle at 30% 30%, var(--hs-blue), transparent 70%);
+    animation-delay: -16s;
+}
+
+@keyframes floatBlob {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(30px, -30px) scale(1.05); }
+    50% { transform: translate(-20px, 20px) scale(0.95); }
+    75% { transform: translate(15px, -15px) scale(1.02); }
+}
+
+/* ========== TARJETA LIQUID GLASS PRINCIPAL ========== */
+.liquid-glass-card {
+    background: linear-gradient(
+        135deg,
+        rgba(31, 78, 103, 0.1) 0%,
+        rgba(10, 17, 32, 0.2) 100%
+    ) !important;
+    backdrop-filter: blur(35px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(35px) saturate(180%) !important;
+    border: 1.5px solid rgba(76, 161, 175, 0.25) !important;
+    border-radius: 30px !important;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        inset 0 0 30px rgba(76, 161, 175, 0.1) !important;
+    width: 100%;
+    max-width: 800px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+}
+
+.liquid-glass-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(76, 161, 175, 0.08) 50%,
+        transparent 70%
+    );
+    transform: rotate(30deg);
+    animation: liquidShine 8s infinite linear;
+    pointer-events: none;
+}
+
+@keyframes liquidShine {
+    0% { transform: rotate(30deg) translateX(-100%); }
+    100% { transform: rotate(30deg) translateX(100%); }
+}
+
+.liquid-glass-card:hover {
+    background: linear-gradient(
+        135deg,
+        rgba(31, 78, 103, 0.15) 0%,
+        rgba(10, 17, 32, 0.25) 100%
+    ) !important;
+    border: 1.5px solid var(--hs-cyan) !important;
+    box-shadow: 
+        0 30px 60px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 0 40px rgba(76, 161, 175, 0.2) !important;
+    transform: translateY(-5px);
+}
+
+.liquid-glass-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--hs-blue), var(--hs-cyan), var(--hs-red));
+}
+
+/* ========== HEADER DEL FORMULARIO ========== */
+.register-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.register-logo-circle {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 20px;
+}
+
+.register-logo-glass {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(76, 161, 175, 0.3);
+    padding: 12px;
+    box-shadow: 0 4px 20px rgba(31, 78, 103, 0.2);
+}
+
+.register-logo-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, var(--hs-cyan), transparent 70%);
+    border-radius: 50%;
+    filter: blur(20px);
+    opacity: 0.4;
+    animation: pulseGlow 4s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.05); }
+}
+
+.register-title {
+    font-family: var(--font-tech);
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #fff, var(--hs-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 2px 10px rgba(76, 161, 175, 0.3);
+    margin-bottom: 5px;
+}
+
+.register-title span {
+    background: linear-gradient(135deg, var(--hs-red), #ff4d4d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.register-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+/* ========== STEPPER ========== */
+.stepper-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    position: relative;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.stepper-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(76, 161, 175, 0.3), transparent);
+    z-index: 0;
+    transform: translateY(-50%);
+}
+
+.step-dot {
+    width: 45px;
+    height: 45px;
+    background: rgba(10, 17, 32, 0.3);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(76, 161, 175, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    z-index: 1;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: white;
+    font-family: var(--font-tech);
+    font-size: 1.2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.step-dot.active {
+    background: linear-gradient(135deg, var(--hs-blue), var(--hs-cyan));
+    border-color: var(--hs-cyan);
+    box-shadow: 0 0 15px rgba(76, 161, 175, 0.6); /* Brillo externo */
+    transform: scale(1.1);
+}
+
+.step-dot.completed {
+    background: linear-gradient(135deg, var(--hs-red), #ff4d4d);
+    border-color: transparent;
+    color: white;
+}
+
+/* ========== INPUTS GLASS ========== */
+.glass-field {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.glass-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+    font-family: var(--font-body);
+}
+
+.glass-input {
+    width: 100%;
+    padding: 15px 20px;
+    background: rgba(10, 17, 32, 0.3) !important;
+    border: 1.5px solid rgba(76, 161, 175, 0.2) !important;
+    border-radius: 16px !important;
+    font-size: 1rem;
+    color: white !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+    font-family: var(--font-body);
+}
+
+.glass-input:focus {
+    background: rgba(10, 17, 32, 0.4) !important;
+    border-color: var(--hs-cyan) !important;
+    box-shadow: 
+        0 0 0 4px rgba(76, 161, 175, 0.2),
+        inset 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+    outline: none;
+    transform: translateY(-2px);
+}
+
+.glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+
+textarea.glass-input {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* ========== BOTONES ========== */
+.btn-brand {
+    background: linear-gradient(135deg, var(--hs-blue), var(--hs-cyan)) !important;
+    color: white !important;
+    border: none !important;
+    padding: 14px 35px;
+    border-radius: 50px !important;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+        0 10px 20px rgba(31, 78, 103, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+    font-family: var(--font-tech);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.btn-brand:hover {
+    background: linear-gradient(135deg, var(--hs-cyan), var(--hs-blue)) !important;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 
+        0 20px 30px rgba(76, 161, 175, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-accent {
+    background: linear-gradient(135deg, var(--hs-red), #ff4d4d) !important;
+    color: white !important;
+    border: none !important;
+    padding: 14px 40px;
+    border-radius: 50px !important;
+    font-weight: 700;
+    box-shadow: 
+        0 10px 20px rgba(223, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: var(--font-tech);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-accent:hover {
+    background: linear-gradient(135deg, #ff4d4d, var(--hs-red)) !important;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 
+        0 20px 30px rgba(223, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-outline {
+    background: transparent !important;
+    border: 2px solid var(--hs-cyan) !important;
+    color: var(--hs-cyan) !important;
+    padding: 12px 30px;
+    border-radius: 50px !important;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-family: var(--font-tech);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    backdrop-filter: blur(10px);
+}
+
+.btn-outline:hover {
+    background: rgba(76, 161, 175, 0.1) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(76, 161, 175, 0.3) !important;
+    color: white !important;
+}
+
+/* ========== ÁREA DE FOTO ========== */
+.photo-area {
+    border: 2px dashed rgba(76, 161, 175, 0.3);
+    border-radius: 20px;
+    padding: 30px;
+    background: rgba(10, 17, 32, 0.2);
+    backdrop-filter: blur(20px);
+    text-align: center;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.photo-area:hover {
+    border-color: var(--hs-cyan);
+    background: rgba(10, 17, 32, 0.3);
+    box-shadow: 0 0 30px rgba(76, 161, 175, 0.1);
+}
+
+#image-preview-container {
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#image-preview-container img {
+    border: 4px solid var(--hs-cyan);
+    box-shadow: 0 0 30px rgba(76, 161, 175, 0.3);
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* ========== FIRMA DIGITAL ========== */
+#signature-container {
+    background: rgba(10, 17, 32, 0.3);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 20px;
+    border: 1.5px solid rgba(76, 161, 175, 0.2);
+    margin-bottom: 20px;
+}
+
+#signature-canvas {
+    background: white;
+    border-radius: 15px;
+    border: 1.5px solid rgba(76, 161, 175, 0.3);
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 200px;
+    cursor: crosshair;
+}
+
+#signature-preview {
+    text-align: center;
+    margin: 20px 0;
+}
+
+#signature-preview img {
+    max-width: 300px;
+    border: 2px solid var(--hs-cyan);
+    border-radius: 10px;
+    padding: 5px;
+    background: white;
+}
+
+/* ========== CHECKBOX ========== */
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 25px 0;
+}
+
+.form-check-input {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--hs-red);
+    border: 1px solid rgba(255,255,255,0.5);
+}
+
+.form-check-label {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+}
+
+.form-check-label a {
+    color: var(--hs-cyan);
+    font-weight: bold;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.form-check-label a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+
+.form-check-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+}
+
+/* Ajuste opcional para móviles */
+@media (max-width: 480px) {
+    .form-check-label {
+        font-size: 0.85rem;
+    }
+}
+
+/* ========== MODALES GLASS ========== */
+.modal-content {
+    background: linear-gradient(
+        135deg,
+        rgba(31, 78, 103, 0.2) 0%,
+        rgba(10, 17, 32, 0.3) 100%
+    ) !important;
+    backdrop-filter: blur(35px) saturate(180%) !important;
+    border: 1.5px solid rgba(76, 161, 175, 0.25) !important;
+    border-radius: 25px !important;
+    color: white;
+}
+
+.modal-header {
+    background: rgba(10, 17, 32, 0.4) !important;
+    border-bottom: 1px solid rgba(76, 161, 175, 0.2) !important;
+    border-radius: 25px 25px 0 0 !important;
+}
+
+.modal-body {
+    padding: 30px;
+}
+
+.modal-footer {
+    border-top: 1px solid rgba(76, 161, 175, 0.2) !important;
+    padding: 20px;
+}
+
+.close {
+    color: white !important;
+    text-shadow: 0 1px 0 var(--hs-blue);
+    opacity: 0.8;
+}
+
+.close:hover {
+    opacity: 1;
+}
+
+/* ========== ANIMACIONES DE PASOS ========== */
+.form-step {
+    display: none;
+    animation: fadeInUp 0.5s ease;
+}
+
+.form-step.active {
+    display: block;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .liquid-glass-card {
+        padding: 25px;
+    }
+
+    .register-title {
+        font-size: 2rem;
+    }
+
+    .stepper-container {
+        max-width: 100%;
+        padding: 0 10px;
+    }
+
+    .step-dot {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+
+    .btn-brand, .btn-accent, .btn-outline {
+        padding: 12px 25px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .liquid-glass-card {
+        padding: 20px;
+        border-radius: 20px !important;
+    }
+
+    .register-title {
+        font-size: 1.8rem;
+    }
+
+    .register-logo-circle {
+        width: 80px;
+        height: 80px;
+    }
+
+    .photo-area {
+        padding: 20px;
+    }
+
+    .d-flex {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .d-flex .btn {
+        width: 100%;
+    }
+
+    .row {
+        margin: 0;
+    }
+
+    .col-md-6 {
+        padding: 0;
+    }
+
+    #signature-canvas {
+        height: 150px;
+    }
+}
+
+/* ========== UTILIDADES ========== */
+.uppercase-field {
+    text-transform: uppercase;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, #fff, var(--hs-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ========== EFECTOS ESPECIALES ========== */
+.glass-shine {
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-shine::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 70%
+    );
+    transform: rotate(30deg);
+    animation: shine 8s infinite linear;
+    pointer-events: none;
+}
+
+@keyframes shine {
+    0% { transform: rotate(30deg) translateX(-100%); }
+    100% { transform: rotate(30deg) translateX(100%); }
+}
+
+/* ========== SCROLLBAR PERSONALIZADO ========== */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(10, 17, 32, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--hs-blue), var(--hs-cyan));
+    border-radius: 5px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--hs-cyan), var(--hs-blue));
+}
+</style>
+
+<div class="register-wrapper">
+    <!-- Fondo con burbujas -->
+    <div class="liquid-bg">
+        <div class="liquid-blob blob-1"></div>
+        <div class="liquid-blob blob-2"></div>
+        <div class="liquid-blob blob-3"></div>
+    </div>
+
+    <div class="liquid-glass-card">
+     
+        <!-- Stepper de progreso -->
+        <div class="stepper-container">
+            <div class="stepper-line"></div>
+            <div class="step-dot active">1</div>
+            <div class="step-dot">2</div>
+            <div class="step-dot">3</div>
+            <div class="step-dot">4</div>
+            <div class="step-dot">5</div>
+        </div>
+
+        <!-- Formulario de registro -->
+       <form id="registerForm" enctype="multipart/form-data" novalidate>
+            <!-- PASO 1: CAPTURA BIOMÉTRICA -->
+            <div class="form-step active" id="step1">
+                <h2 class="text-center text font-weight-bold mb-4"><em>FASE 1: CAPTURA BIOMÉTRICA</em></h2>
+                
+                <!-- Vista previa de la imagen -->
+                <div class="photo-area">
+                    <div id="image-preview-container" class="mb-3">
+                        <i class="fas fa-user-circle fa-6x" style="color: rgba(14,54,72,0.2);"></i>
+                    </div>
+                    
+                    <!-- Contenedor para Croppie -->
+                    <div id="croppie-container" style="display:none; height:300px;"></div>
+                    
+                    <!-- Input oculto para la imagen -->
+                    <input type="file" id="inputFoto" class="d-none" accept="image/*">
+                    <input type="hidden" id="croppedImage64" name="croppedImage64">
+                    
+                    <!-- Botones de control -->
+                    <div class="mt-3">
+    <button type="button" class="btn-brand" id="cameraButton">
+        <i class="fas fa-camera mr-2"></i> SUBIR FOTO
+    </button>
+    
+    <button type="button" class="btn-success-hs" id="cropButton" style="display:none;">
+        <i class="fas fa-check mr-2"></i> CONFIRMAR FOTO
+    </button>
+
+    </div>
+                </div>
+                
+                <!-- Botón de siguiente paso -->
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="button" class="btn-brand" id="nextStep1">SIGUIENTE ></button>
+                </div>
+            </div>
+
+            <!-- PASO 2: DATOS DE IDENTIDAD -->
+            <div class="form-step" id="step2">
+                <h4 class="text-center mb-4">FASE 2: DATOS DE IDENTIDAD</h4>
+                
+                <div class="glass-field">
+                    <label class="glass-label">Nombre Completo</label>
+                    <input type="text" class="glass-input uppercase-field" name="nombre" required placeholder="Nombre(s) y Apellidos">
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="glass-field">
+                            <label class="glass-label">CURP</label>
+                            <input type="text" class="glass-input uppercase-field" name="curp" maxlength="18" required placeholder="18 Caracteres">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="glass-field">
+                            <label class="glass-label">RFC</label>
+                            <input type="text" class="glass-input uppercase-field" name="rfc" maxlength="13" required placeholder="13 Caracteres">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-field">
+                    <label class="glass-label">Fecha de Nacimiento</label>
+                    <input type="date" class="glass-input" name="fechaNacimiento" required>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn-outline prev-step">ANTERIOR</button>
+                    <button type="button" class="btn-brand next-step" id="nextStep2">SIGUIENTE ></button>
+                </div>
+            </div>
+
+            <!-- PASO 3: ENLACE DE CONTACTO -->
+            <div class="form-step" id="step3">
+                <h4 class="text-center mb-4">FASE 3: ENLACE DE CONTACTO</h4>
+                
+                <div class="glass-field">
+                    <label class="glass-label">Correo Electrónico</label>
+                    <input type="email" class="glass-input" name="correo" required placeholder="ejemplo@empresa.com">
+                </div>
+
+                <div class="glass-field">
+                    <label class="glass-label">Celular (10 Dígitos)</label>
+                    <input type="tel" class="glass-input" name="telefono" maxlength="10" required pattern="[0-9]{10}" placeholder="55 1234 5678">
+                </div>
+
+                <div class="glass-field">
+                    <label class="glass-label">Dirección de Entrega</label>
+                    <textarea class="glass-input" name="direccion" rows="3" required placeholder="Calle, Número, Colonia, Código Postal, Ciudad, Estado"></textarea>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn-outline prev-step">ANTERIOR</button>
+                 <button type="button" class="btn-brand" id="nextStep3">SIGUIENTE ></button>
+                </div>
+            </div>
+
+            <!-- PASO 4: SEGURIDAD DE ACCESO -->
+            <div class="form-step" id="step4">
+                <h4 class="text-center mb-4">FASE 4: SEGURIDAD DE ACCESO</h4>
+                
+                <div class="glass-field">
+                    <label class="glass-label">Contraseña Maestra</label>
+                    <input type="password" class="glass-input" id="pass1" name="contrasena1" required minlength="8">
+                </div>
+
+                <div class="glass-field">
+                    <label class="glass-label">Confirmar Contraseña</label>
+                    <input type="password" class="glass-input" id="pass2" name="contrasena2" required minlength="8">
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn-outline prev-step">ANTERIOR</button>
+                    <button type="button" class="btn-brand" id="validatePassword">SIGUIENTE ></button>
+                </div>
+            </div>
+
+            <!-- PASO 5: PROTOCOLO FINAL -->
+            <div class="form-step" id="step5">
+                <h4 class="text-center mb-4">FASE 5: PROTOCOLO FINAL</h4>
+                
+                <!-- Área de firma digital -->
+                <div id="signature-container">
+                    <label class="glass-label text-center d-block mb-3">FIRMA DIGITAL DE CONFORMIDAD</label>
+                    <canvas id="signature-canvas" width="600" height="200"></canvas>
+                    
+                    <div class="d-flex justify-content-center gap-2 mt-3">
+                        <button type="button" class="btn-outline" id="undo-signature">
+                            <i class="fas fa-undo"></i> Deshacer
+                        </button>
+                        <button type="button" class="btn-outline" id="clear-signature">
+                            <i class="fas fa-eraser"></i> Borrar
+                        </button>
+                        <button type="button" class="btn-brand" id="confirm-signature">
+                            <i class="fas fa-check"></i> Confirmar Firma
+                        </button>
+                    </div>
+                    
+                    <!-- Vista previa de la firma confirmada -->
+                    <div id="signature-preview" class="mt-3" style="display: none;"></div>
+                    <input type="hidden" name="firmaDigital" id="firmaInput">
+                </div>
+
+                <!-- Checkbox de aceptación -->
+<div class="d-flex justify-content-center w-100 mb-4 mt-4">
+    <div class="form-check d-flex align-items-start" style="max-width: 350px; cursor: pointer;">
+        <input type="checkbox" class="form-check-input" id="termsCheck" required 
+               style="width: 20px; height: 20px; cursor: pointer; margin-top: 0px; flex-shrink: 0; margin-bottom: 3px; ">
+        <label class="form-check-label mb-0 ml-2" for="termsCheck" style="color: white; font-size: 0.9rem; cursor: pointer; text-align: left; line-height: 1.4;">
+            He leído y acepto el 
+            <a href="#" id="openPrivacyModal" style="color: var(--hs-red); font-weight: bold; text-decoration: underline;">
+                Aviso de Privacidad
+            </a>
+        </label>
+    </div>
+</div>
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn-outline prev-step">ANTERIOR</button>
+                    <button type="submit" class="btn-accent btn-lg" id="finalSubmitBtn">
+                        PAGAR Y FINALIZAR ($500)
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal de Aviso de Privacidad -->
+<div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold"><i class="fas fa-file-contract mr-2"></i> Aviso de Privacidad</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+           <div class="modal-body" style="text-align: justify; font-size: 0.9rem; color: #fff; padding: 30px; background: rgba(0,0,0,0.2);">
+                <!-- Contenido del aviso de privacidad (igual que antes) -->
+                <p><strong>Fecha de última actualización:</strong> 19 de agosto de 2025</p>
+                <p>De conformidad con lo dispuesto en la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (en adelante, la "Ley") y su Reglamento, se emite el presente Aviso de Privacidad en los siguientes términos:</p>
+                
+                <h5 class="text-primary mt-4"><strong>I. IDENTIDAD Y DOMICILIO DEL RESPONSABLE</strong></h5>
+                <p><strong>Human Identification Technologies, S.A. de C.V.</strong> (en adelante, "EL RESPONSABLE"), con nombre comercial <strong>Human System</strong>, con domicilio para oír y recibir notificaciones en <strong>Ayuntamiento #143 Miguel Hidalgo 1ra Secc, Tlalpan, 14250 Ciudad de México, CDMX</strong>, es el responsable del uso, protección y tratamiento de sus datos personales.</p>
+                
+                <h5 class="text-primary mt-4"><strong>II. DATOS PERSONALES QUE SERÁN SOMETIDOS A TRATAMIENTO</strong></h5>
+                <p>Para llevar a cabo las finalidades descritas en el presente aviso de privacidad, "EL RESPONSABLE" recabará y tratará los siguientes datos personales:</p>
+                <ol>
+                  <li><strong>Datos de Identificación:</strong> Nombre completo, domicilio, fotografía de rostro (dato biométrico), Clave Única de Registro de Población (CURP), Registro Federal de Contribuyentes (RFC), firma autógrafa y firma electrónica.</li>
+                  <li><strong>Datos de Contacto:</strong> Correo electrónico y número de teléfono celular.</li>
+                  <li><strong>Datos de Autenticación:</strong> Contraseña de acceso a la plataforma.</li>
+                </ol>
+                <p class="text-danger">Se le informa que la fotografía de su rostro, su firma autógrafa y su firma electrónica son considerados <strong>datos personales sensibles</strong> que requieren de su consentimiento expreso y por escrito para su tratamiento.</p>
+
+                <h5 class="text-primary mt-4"><strong>III. FINALIDADES DEL TRATAMIENTO DE DATOS</strong></h5>
+                <p>Los datos personales que recabamos de usted serán utilizados para las siguientes finalidades, las cuales son necesarias para el servicio que solicita (finalidades primarias):</p>
+                <p><strong>A. Finalidades Primarias:</strong></p>
+                <ul>
+                  <li>Crear, gestionar y mantener su perfil de usuario en la plataforma <a href="https://www.humansystem.mx" target="_blank">www.humansystem.mx</a>.</li>
+                  <li>Prestar el servicio de identificación física con validación digital.</li>
+                  <li>Generar y administrar su tarjeta humana y certificado de registro humano digitales.</li>
+                  <li>Verificar y validar su identidad y la titularidad de los datos de contacto proporcionados.</li>
+                  <li>Permitirle el acceso seguro a su cuenta y a las funcionalidades de la plataforma.</li>
+                  <li>Contactarlo para dar seguimiento y soporte técnico relacionado con los servicios contratados.</li>
+                  <li>Cumplir con las obligaciones legales y requerimientos de autoridades competentes.</li>
+                </ul>
+                <p>De manera adicional, no utilizaremos su información personal para finalidades secundarias.</p>
+
+                <h5 class="text-primary mt-4"><strong>IV. TRANSFERENCIA DE DATOS PERSONALES</strong></h5>
+                <p>Para cumplir con las finalidades primarias, "EL RESPONSABLE" podrá realizar transferencias de sus datos personales a terceros sin necesidad de su consentimiento, en los casos previstos por el artículo 37 de la Ley. Específicamente, sus datos de contacto (correo electrónico y número de celular) podrán ser compartidos con proveedores de servicios de verificación de identidad para confirmar que la información de contacto proporcionada es válida y le pertenece, garantizando así la integridad y seguridad de su cuenta.</p>
+                <p>Cualquier transferencia de sus datos personales que requiera su consentimiento será notificada previamente para que usted manifieste su autorización.</p>
+
+                <h5 class="text-primary mt-4"><strong>V. MEDIOS Y PROCEDIMIENTO PARA EJERCER LOS DERECHOS ARCO</strong></h5>
+                <p>Usted tiene derecho a conocer qué datos personales tenemos de usted, para qué los utilizamos y las condiciones del uso que les damos (<strong>Acceso</strong>). Asimismo, es su derecho solicitar la corrección de su información personal en caso de que esté desactualizada, sea inexacta o incompleta (<strong>Rectificación</strong>); que la eliminemos de nuestros registros o bases de datos cuando considere que la misma no está siendo utilizada conforme a los principios, deberes y obligaciones previstas en la normativa (<strong>Cancelación</strong>); así como oponerse al uso de sus datos personales para fines específicos (<strong>Oposición</strong>). Estos derechos se conocen como derechos ARCO.</p>
+                <p>Para el ejercicio de cualquiera de los derechos ARCO, usted deberá presentar la solicitud respectiva a través de la siguiente dirección de correo electrónico: <strong>info@humansystem.mx</strong>.</p>
+                <p>Su solicitud deberá contener y acompañar lo siguiente:</p>
+                <ol>
+                  <li>Su nombre completo y domicilio u otro medio para comunicarle la respuesta a su solicitud.</li>
+                  <li>Los documentos que acrediten su identidad (copia de identificación oficial) o, en su caso, la representación legal del titular.</li>
+                  <li>La descripción clara y precisa de los datos personales respecto de los que se busca ejercer alguno de los derechos antes mencionados.</li>
+                  <li>Cualquier otro elemento o documento que facilite la localización de los datos personales.</li>
+                </ol>
+                <p>"EL RESPONSABLE" le comunicará, en un plazo máximo de veinte (20) días hábiles contados desde la fecha en que se recibió la solicitud, la determinación adoptada, a efecto de que, si resulta procedente, se haga efectiva la misma dentro de los quince (15) días hábiles siguientes a la fecha en que se comunica la respuesta.</p>
+
+                <h5 class="text-primary mt-4"><strong>VI. REVOCACIÓN DEL CONSENTIMIENTO</strong></h5>
+                <p>Usted puede revocar el consentimiento que, en su caso, nos haya otorgado para el tratamiento de sus datos personales. Sin embargo, es importante que tenga en cuenta que no en todos los casos podremos atender su solicitud o concluir el uso de forma inmediata, ya que es posible que por alguna obligación legal requiramos seguir tratando sus datos personales.</p>
+                <p>Para revocar su consentimiento, usted puede eliminar su perfil de manera definitiva desde la sección de configuración de su cuenta en la plataforma, o bien, enviar una solicitud en los mismos términos que para el ejercicio de los derechos ARCO al correo electrónico: <strong>info@humansystem.mx</strong>.</p>
+                <p>La revocación de su consentimiento implicará la cancelación de su cuenta y que no le podamos seguir prestando el servicio que nos solicitó, concluyendo su relación con nosotros.</p>
+
+                <h5 class="text-primary mt-4"><strong>VII. OPCIONES PARA LIMITAR EL USO O DIVULGÁCIÓN DE SUS DATOS</strong></h5>
+                <p>Con objeto de que usted pueda limitar el uso y divulgación de su información personal, además del procedimiento de revocación y ejercicio de derechos ARCO, le ofrecemos la opción de ocultar sus datos personales en la plataforma a través de la funcionalidad dispuesta para tal efecto en la configuración de su cuenta. Adicionalmente, puede inscribirse en el Registro Público para Evitar Publicidad (REPEP) de la PROFECO.</p>
+
+                <h5 class="text-primary mt-4"><strong>VIII. USO DE COOKIES, WEB BEACONS Y OTRAS TECNOLOGÍAS</strong></h5>
+                <p>Le informamos que en nuestra página de internet utilizamos cookies, web beacons y otras tecnologías a través de las cuales es posible monitorear su comportamiento como usuario de internet, así como brindarle un mejor servicio y experiencia al navegar en nuestra página. Los datos personales que se obtienen de estas tecnologías de rastreo son [identificadores de sesión, tipo de navegador, preferencias de usuario] y los utilizamos para [mantener la sesión activa, personalizar la experiencia de usuario].</p>
+                <p>Estas tecnologías podrán deshabilitarse siguiendo los procedimientos del navegador de internet que utiliza.</p>
+
+                <h5 class="text-primary mt-4"><strong>IX. MODIFICACIONES AL AVISO DE PRIVACIDAD</strong></h5>
+                <p>El presente aviso de privacidad puede sufrir modificaciones, cambios o actualizaciones derivadas de nuevos requerimientos legales, de nuestras propias necesidades por los productos o servicios que ofrecemos, de nuestras prácticas de privacidad, o por otras causas.</p>
+                <p>"EL RESPONSABLE" se compromete a mantenerlo informado sobre los cambios que pueda sufrir el presente aviso de privacidad a través de nuestra plataforma <a href="https://www.humansystem.mx" target="_blank">www.humansystem.mx</a> y/o mediante una notificación enviada al correo electrónico que nos haya proporcionado.</p>
+
+                <h5 class="text-primary mt-4"><strong>X. CONSENTIMIENTO</strong></h5>
+                <p>Al marcar la casilla de aceptación, proporcionarnos sus datos personales y firmar el formulario de registro, usted manifiesta que ha leído, entendido y aceptado los términos expuestos en el presente Aviso de Privacidad y otorga su consentimiento expreso para el tratamiento de sus datos personales, incluyendo sus datos personales sensibles, para las finalidades aquí establecidas.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-pill" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Pago con Stripe -->
+<div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title"><i class="fas fa-credit-card mr-2"></i> Pasarela de Pago Segura</h5>
+                <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="text-center mb-4">
+                    <h3 class="text-primary font-weight-bold">$500.00 MXN</h3>
+                    <p class="text-muted">Registro de Identidad Digital Vitalicia</p>
+                </div>
+                <div id="card-element" class="form-control p-3 mb-3"></div>
+                <div id="card-errors" role="alert" class="text-danger small mt-2"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="payButton">Confirmar Pago</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Verificar hash para abrir modal de términos
+    if (window.location.hash === '#termsModal') {
+        $('#termsModal').modal('show');
+    }
+
+    // ===== CONFIGURACIÓN DE STRIPE =====
+    const stripe = Stripe('pk_test_51RzULWPzFVL2ubLUEK6vHTCzHmw5ZKR7fIxywToZU62Hh6iG11Hok9sxeLPQDaMe75mlD5kQMrQarJSMw0LhYlAY00fkNYY5y7');
+    const elements = stripe.elements();
+    const cardElement = elements.create('card');
+    let isCardMounted = false;
+    $('#paymentModal').on('shown.bs.modal', function () {
+        if (!isCardMounted) {
+            cardElement.mount('#card-element');
+            isCardMounted = true;
+        }
+    });
+    
+    // ===== VARIABLES GLOBALES =====
+    let croppieInstance = null;
+    let signaturePad = null;
+    let formData = null;
+
+    // ===== ELEMENTOS DEL DOM =====
+    const inputFoto = document.getElementById('inputFoto');
+    const croppieContainer = document.getElementById('croppie-container');
+    const cameraButton = document.getElementById('cameraButton');
+    const cropButton = document.getElementById('cropButton');
+    const croppedImage64Input = document.getElementById('croppedImage64');
+    const imagePreviewContainer = document.getElementById('image-preview-container');
+    const firmaInput = document.getElementById('firmaInput');
+    const registerForm = document.getElementById('registerForm');
+    const openPrivacyModal = document.getElementById('openPrivacyModal');
+    const signatureCanvas = document.getElementById('signature-canvas');
+
+    // ===== PREVENIR ENVÍO DEL FORMULARIO CON ENTER =====
+    // Esto evita que Enter dispare el submit desde cualquier paso
+    registerForm.addEventListener('keypress', function(e) {
+        // Si presionas Enter y NO estamos en el paso 5, evitar el submit
+        if (e.key === 'Enter' && currentStep !== 4) { // Paso 5 es index 4
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // También prevenir el submit nativo del formulario (ya lo haces con e.preventDefault)
+    // Pero asegurarnos que ningún input dentro del formulario dispare submit con Enter
+    document.querySelectorAll('#registerForm input, #registerForm textarea').forEach(input => {
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && currentStep !== 4) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    });
+
+    // ===== CONFIGURACIÓN DE PASOS =====
+    const steps = document.querySelectorAll('.form-step');
+    const stepDots = document.querySelectorAll('.step-dot');
+    let currentStep = 0;
+
+    function updateStepUI() {
+        steps.forEach((step, index) => {
+            step.classList.toggle('active', index === currentStep);
+        });
+        stepDots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentStep);
+            dot.classList.toggle('completed', index < currentStep);
+            dot.innerHTML = index < currentStep ? '✓' : index + 1;
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ===== CONVERTIR BASE64 A BLOB =====
+    function base64ToBlob(base64) {
+        try {
+            let base64Data = base64;
+            if (base64.includes(',')) base64Data = base64.split(',')[1];
+            const byteCharacters = atob(base64Data);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            return new Blob([new Uint8Array(byteNumbers)], { type: 'image/png' });
+        } catch (error) {
+            throw new Error('Error al procesar la imagen');
+        }
+    }
+
+    // ===== VALIDACIÓN DE CONTRASEÑAS =====
+    function validarContraseñas(contrasena1, contrasena2) {
+        if (contrasena1 !== contrasena2) return { success: false, message: 'Las contraseñas no coinciden.' };
+        if (contrasena1.length < 8) return { success: false, message: 'La contraseña debe tener al menos 8 caracteres.' };
+        if (contrasena1.length > 20) return { success: false, message: 'La contraseña no debe exceder los 20 caracteres.' };
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
+        if (!regex.test(contrasena1)) return { success: false, message: 'La contraseña debe contener al menos una letra mayúscula, una minúscula y un número.' };
+        return { success: true };
+    }
+
+    // ===== VERIFICAR DUPLICADOS EN BD =====
+    async function verificarDuplicados(curp, rfc, correo, telefono) {
+        try {
+            const response = await fetch('/verificarDuplicados', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ curp, rfc, correo, telefono })
+            });
+            const data = await response.json();
+            if (!data.success) {
+                Swal.fire('Error de Validación', data.message || 'No se pudo verificar la información', 'error');
+                return false;
+            }
+            return true;
+        } catch (error) {
+            Swal.fire('Error de Conexión', 'Hubo un problema al verificar los datos. Inténtalo de nuevo.', 'error');
+            return false;
+        }
+    }
+
+    // ========== VALIDACIONES DEL PASO 2 (SECUENCIAL) ==========
+    
+    function validarNombreCompleto(nombre) {
+        nombre = nombre.trim().toUpperCase();
+        if (!nombre) return { valid: false, message: 'El nombre completo es obligatorio' };
+        if (nombre.length < 5) return { valid: false, message: 'Ingresa nombre(s) y apellidos completos' };
+        if (nombre.length > 100) return { valid: false, message: 'El nombre no debe exceder 100 caracteres' };
+        const nombreRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s\.]+$/;
+        if (!nombreRegex.test(nombre)) return { valid: false, message: 'El nombre solo debe contener letras y espacios' };
+        const palabras = nombre.split(/\s+/);
+        if (palabras.length < 2) return { valid: false, message: 'Ingresa nombre(s) y apellidos completos' };
+        return { valid: true, message: '', nombreLimpio: nombre };
+    }
+function validarCURP(curp) {
+    curp = curp.trim().toUpperCase();
+    if (curp.length !== 18) return { valid: false, message: 'La CURP debe tener exactamente 18 caracteres' };
+    
+    // REGEX CORREGIDO: Los últimos 2 caracteres pueden ser números o letras
+    // Formato: 4 letras + 6 números + 6 letras + 2 caracteres (letra o número)
+    const curpRegex = /^[A-Z]{4}[0-9]{6}[A-Z]{6}[A-Z0-9]{2}$/;
+    if (!curpRegex.test(curp)) return { valid: false, message: 'Formato de CURP inválido (4 letras + 6 números + 6 letras + 2 caracteres alfanuméricos)' };
+    
+    const anio = parseInt(curp.substring(4, 6));
+    const mes = parseInt(curp.substring(6, 8));
+    const dia = parseInt(curp.substring(8, 10));
+    
+    if (anio < 0 || anio > 99) return { valid: false, message: 'Año inválido en CURP' };
+    if (mes < 1 || mes > 12) return { valid: false, message: 'Mes inválido en CURP' };
+    if (dia < 1 || dia > 31) return { valid: false, message: 'Día inválido en CURP' };
+    
+    const diasPorMes = [31, (anio % 4 === 0 ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    if (dia > diasPorMes[mes - 1]) return { valid: false, message: 'La fecha en CURP no es válida' };
+    
+    return { valid: true, message: '', curpLimpia: curp };
+}
+
+    function validarRFC(rfc) {
+        rfc = rfc.trim().toUpperCase();
+        if (rfc.length !== 13) return { valid: false, message: 'El RFC debe tener 13 caracteres para persona física' };
+        const rfcRegex = /^[A-Z]{4}[0-9]{6}[A-Z0-9]{3}$/;
+        if (!rfcRegex.test(rfc)) return { valid: false, message: 'Formato de RFC inválido (4 letras + 6 números + 3 caracteres)' };
+        const anio = parseInt(rfc.substring(4, 6));
+        const mes = parseInt(rfc.substring(6, 8));
+        const dia = parseInt(rfc.substring(8, 10));
+        if (anio < 0 || anio > 99) return { valid: false, message: 'Año inválido en RFC' };
+        if (mes < 1 || mes > 12) return { valid: false, message: 'Mes inválido en RFC' };
+        if (dia < 1 || dia > 31) return { valid: false, message: 'Día inválido en RFC' };
+        const diasPorMes = [31, (anio % 4 === 0 ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        if (dia > diasPorMes[mes - 1]) return { valid: false, message: 'La fecha en RFC no es válida' };
+        return { valid: true, message: '', rfcLimpio: rfc };
+    }
+
+    function validarFechaNacimiento(fecha, curp = null) {
+        if (!fecha) return { valid: false, message: 'La fecha de nacimiento es obligatoria' };
+        const fechaNac = new Date(fecha);
+        const hoy = new Date();
+        if (isNaN(fechaNac.getTime())) return { valid: false, message: 'Fecha de nacimiento inválida' };
+        if (fechaNac > hoy) return { valid: false, message: 'La fecha no puede ser futura' };
+        let edad = hoy.getFullYear() - fechaNac.getFullYear();
+        const mesDiff = hoy.getMonth() - fechaNac.getMonth();
+        const diaDiff = hoy.getDate() - fechaNac.getDate();
+        if (mesDiff < 0 || (mesDiff === 0 && diaDiff < 0)) edad--;
+        if (edad < 18) return { valid: false, message: 'Debes ser mayor de 18 años para registrarte' };
+        if (edad > 100) return { valid: false, message: 'La edad debe ser coherente (menor de 100 años)' };
+        if (curp && curp.length === 18) {
+            const anioCurp = parseInt(curp.substring(4, 6));
+            const mesCurp = parseInt(curp.substring(6, 8));
+            const diaCurp = parseInt(curp.substring(8, 10));
+            const anioCompletoCurp = anioCurp <= (hoy.getFullYear() % 100) ? 2000 + anioCurp : 1900 + anioCurp;
+            const fechaCurp = new Date(anioCompletoCurp, mesCurp - 1, diaCurp);
+            if (fechaCurp.toDateString() !== fechaNac.toDateString()) {
+                return { valid: false, message: 'La fecha no coincide con la CURP proporcionada' };
+            }
+        }
+        return { valid: true, message: '', edad: edad };
+    }
+
+    function marcarCampoInvalido(selector, mensaje) {
+        const campo = document.querySelector(selector);
+        if (campo) {
+            campo.style.borderColor = '#df0000';
+            campo.style.boxShadow = '0 0 0 4px rgba(223, 0, 0, 0.1)';
+            campo.style.backgroundColor = 'rgba(223, 0, 0, 0.1)';
+            let hint = campo.parentElement.querySelector('.validation-hint');
+            if (!hint) {
+                hint = document.createElement('small');
+                hint.className = 'validation-hint error';
+                campo.parentElement.appendChild(hint);
+            }
+            hint.textContent = mensaje;
+            hint.style.display = 'block';
+        }
+    }
+
+    function marcarCampoValido(selector) {
+        const campo = document.querySelector(selector);
+        if (campo) {
+            campo.style.borderColor = '#28a745';
+            campo.style.boxShadow = '0 0 0 4px rgba(40, 167, 69, 0.1)';
+            campo.style.backgroundColor = 'rgba(40, 167, 69, 0.05)';
+            const hint = campo.parentElement.querySelector('.validation-hint');
+            if (hint) hint.style.display = 'none';
+        }
+    }
+
+    function limpiarMarcasPaso2() {
+        ['nombre', 'curp', 'rfc', 'fechaNacimiento'].forEach(campo => {
+            const elemento = document.querySelector(`input[name="${campo}"]`);
+            if (elemento) {
+                elemento.style.borderColor = 'rgba(76, 161, 175, 0.2)';
+                elemento.style.backgroundColor = 'rgba(10, 17, 32, 0.3)';
+                const hint = elemento.parentElement.querySelector('.validation-hint');
+                if (hint) hint.remove();
+            }
+        });
+    }
+
+    function validarPaso2Secuencial() {
+        const nombre = document.querySelector('input[name="nombre"]').value;
+        const curp = document.querySelector('input[name="curp"]').value;
+        const rfc = document.querySelector('input[name="rfc"]').value;
+        const fecha = document.querySelector('input[name="fechaNacimiento"]').value;
+        
+        limpiarMarcasPaso2();
+        
+        const nombreVal = validarNombreCompleto(nombre);
+        if (!nombreVal.valid) {
+            marcarCampoInvalido('input[name="nombre"]', nombreVal.message);
+            Swal.fire({ title: '⚠️ Verifica tu nombre', text: nombreVal.message, icon: 'warning', confirmButtonColor: '#1F4E67' });
+            return false;
+        }
+        marcarCampoValido('input[name="nombre"]');
+        
+        const curpVal = validarCURP(curp);
+        if (!curpVal.valid) {
+            marcarCampoInvalido('input[name="curp"]', curpVal.message);
+            Swal.fire({ title: '⚠️ CURP inválida', text: curpVal.message, icon: 'warning', confirmButtonColor: '#1F4E67' });
+            return false;
+        }
+        marcarCampoValido('input[name="curp"]');
+        
+        const rfcVal = validarRFC(rfc);
+        if (!rfcVal.valid) {
+            marcarCampoInvalido('input[name="rfc"]', rfcVal.message);
+            Swal.fire({ title: '⚠️ RFC inválido', text: rfcVal.message, icon: 'warning', confirmButtonColor: '#1F4E67' });
+            return false;
+        }
+        marcarCampoValido('input[name="rfc"]');
+        
+        const fechaVal = validarFechaNacimiento(fecha, curp);
+        if (!fechaVal.valid) {
+            marcarCampoInvalido('input[name="fechaNacimiento"]', fechaVal.message);
+            Swal.fire({ title: '⚠️ Fecha inválida', text: fechaVal.message, icon: 'warning', confirmButtonColor: '#1F4E67' });
+            return false;
+        }
+        marcarCampoValido('input[name="fechaNacimiento"]');
+        
+        Swal.fire({ title: '✅ Datos correctos', text: `Bienvenido ${nombreVal.nombreLimpio}`, icon: 'success', timer: 1500, showConfirmButton: false, toast: true, position: 'top-end' });
+        return true;
+    }
+
+    // ===== MANEJO DE CROPPIE (FOTO DE PERFIL) =====
+    cameraButton.addEventListener('click', () => inputFoto.click());
+
+    inputFoto.addEventListener('change', function(e) {
+        if (this.files && this.files[0]) {
+            const file = this.files[0];
+            if (!file.type.startsWith('image/')) {
+                Swal.fire({ icon: 'error', title: 'Formato inválido', text: 'Selecciona un archivo de imagen (JPG o PNG)', confirmButtonColor: '#1F4E67' });
+                this.value = '';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                imagePreviewContainer.style.display = 'none';
+                cameraButton.style.display = 'none';
+                croppieContainer.style.display = 'block';
+                if (croppieInstance) croppieInstance.destroy();
+                croppieInstance = new Croppie(croppieContainer, {
+                    viewport: { width: 200, height: 200, type: 'circle' },
+                    boundary: { width: 250, height: 250 },
+                    showZoomer: true,
+                    enableOrientation: true
+                });
+                croppieInstance.bind({ url: evt.target.result });
+                cropButton.style.display = 'inline-block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    cropButton.addEventListener('click', function() {
+        croppieInstance.result({ type: 'base64', size: 'viewport', format: 'png', quality: 1 }).then(function(base64) {
+            croppedImage64Input.value = base64;
+            imagePreviewContainer.innerHTML = `<img src="${base64}" style="width:150px; height:150px; object-fit:cover; border-radius:50%; border:4px solid var(--hs-cyan);">`;
+            imagePreviewContainer.style.display = 'block';
+            croppieContainer.style.display = 'none';
+            cropButton.style.display = 'none';
+            cameraButton.innerHTML = '<i class="fas fa-redo mr-2"></i> CAMBIAR FOTO';
+            cameraButton.style.display = 'inline-block';
+            Swal.fire({ icon: 'success', title: 'Foto confirmada', text: 'Tu foto ha sido procesada correctamente', timer: 1500, showConfirmButton: false });
+        });
+    });
+
+    // ===== MANEJO DE LA FIRMA DIGITAL =====
+    function initSignaturePad() {
+        const container = signatureCanvas.parentElement;
+        const containerWidth = container.clientWidth - 40;
+        if (containerWidth > 0) {
+            signatureCanvas.width = Math.min(containerWidth, 600);
+            signatureCanvas.height = 200;
+        }
+        signaturePad = new SignaturePad(signatureCanvas, {
+            backgroundColor: 'rgb(255, 255, 255)',
+            penColor: 'rgb(0, 0, 0)',
+            velocityFilterWeight: 0.7,
+            minWidth: 0.5,
+            maxWidth: 2.5
+        });
+        
+        const undoButton = document.getElementById('undo-signature');
+        const clearButton = document.getElementById('clear-signature');
+        const confirmButton = document.getElementById('confirm-signature');
+        
+        undoButton.addEventListener('click', () => {
+            const data = signaturePad.toData();
+            if (data && data.length > 0) {
+                data.pop();
+                signaturePad.fromData(data);
+            }
+        });
+        clearButton.addEventListener('click', () => signaturePad.clear());
+        confirmButton.addEventListener('click', function() {
+            if (signaturePad.isEmpty()) {
+                Swal.fire({ icon: 'info', title: 'Firma vacía', text: 'Dibuja tu firma antes de confirmar.' });
+                return;
+            }
+            const dataURL = signaturePad.toDataURL('image/png');
+            firmaInput.value = dataURL;
+            signatureCanvas.style.display = 'none';
+            undoButton.style.display = 'none';
+            clearButton.style.display = 'none';
+            confirmButton.style.display = 'none';
+            const preview = document.getElementById('signature-preview');
+            preview.innerHTML = `<div class="text-center p-3" style="background: rgba(255,255,255,0.05); border-radius: 15px; border: 1px dashed var(--hs-cyan);">
+                <p class="small mb-2" style="color: var(--hs-cyan); letter-spacing: 2px;">FIRMA REGISTRADA</p>
+                <img src="${dataURL}" class="img-fluid mb-3" style="max-width: 200px; filter: invert(1) brightness(2);">
+                <br><button type="button" class="btn btn-outline-sm" id="re-do-signature" style="font-size: 0.7rem; color: var(--hs-red); border: 1px solid var(--hs-red); background: transparent; border-radius: 20px; padding: 5px 15px;"><i class="fas fa-redo mr-1"></i> REHACER FIRMA</button></div>`;
+            preview.style.display = 'block';
+            document.getElementById('re-do-signature').addEventListener('click', function() {
+                preview.style.display = 'none';
+                signatureCanvas.style.display = 'block';
+                undoButton.style.display = 'inline-block';
+                clearButton.style.display = 'inline-block';
+                confirmButton.style.display = 'inline-block';
+                signaturePad.clear();
+                firmaInput.value = '';
+            });
+            Swal.fire({ icon: 'success', title: 'Protocolo Confirmado', timer: 1000, showConfirmButton: false });
+        });
+    }
+
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.target.id === 'step5' && mutation.target.classList.contains('active')) {
+                setTimeout(initSignaturePad, 100);
+            }
+        });
+    });
+    observer.observe(document.getElementById('step5'), { attributes: true, attributeFilter: ['class'] });
+
+    // ===== BOTÓN SIGUIENTE PASO 1 =====
+    document.getElementById('nextStep1').addEventListener('click', function() {
+        if (!croppedImage64Input.value) {
+            Swal.fire({ title: 'Atención', text: 'Debes subir y confirmar tu foto para continuar.', icon: 'warning', confirmButtonColor: '#1F4E67' });
+            return;
+        }
+        if (currentStep < steps.length - 1) { currentStep++; updateStepUI(); }
+    });
+
+    // ===== BOTÓN SIGUIENTE PASO 2 (VALIDACIÓN SECUENCIAL) =====
+    const nextStep2Btn = document.getElementById('nextStep2');
+    if (nextStep2Btn) {
+        const newNextStep2Btn = nextStep2Btn.cloneNode(true);
+        nextStep2Btn.parentNode.replaceChild(newNextStep2Btn, nextStep2Btn);
+        newNextStep2Btn.addEventListener('click', function() {
+            if (validarPaso2Secuencial()) {
+                if (currentStep < steps.length - 1) { currentStep++; updateStepUI(); }
+            }
+        });
+    }
+
+    // ===== BOTÓN SIGUIENTE PASO 3 =====
+    const nextStep3Btn = document.getElementById('nextStep3');
+    if (nextStep3Btn) {
+        nextStep3Btn.addEventListener('click', async function() {
+            const correo = document.querySelector('input[name="correo"]').value.trim();
+            const telefono = document.querySelector('input[name="telefono"]').value.trim();
+            const direccion = document.querySelector('textarea[name="direccion"]').value.trim();
+            const curp = document.querySelector('input[name="curp"]').value.trim();
+            const rfc = document.querySelector('input[name="rfc"]').value.trim();
+
+            if (!correo || !telefono || !direccion) {
+                Swal.fire('Campos incompletos', 'Por favor, llena tu correo, celular y dirección.', 'warning');
+                return;
+            }
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(correo)) {
+                Swal.fire('Correo inválido', 'El formato del correo electrónico no es correcto.', 'warning');
+                return;
+            }
+            const telRegex = /^\d{10}$/;
+            if (!telRegex.test(telefono)) {
+                Swal.fire('Celular inválido', 'El celular debe contener exactamente 10 dígitos numéricos.', 'warning');
+                return;
+            }
+            Swal.fire({ title: 'Verificando datos...', text: 'Comprobando disponibilidad en Human System...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            const duplicadosOk = await verificarDuplicados(curp, rfc, correo, telefono);
+            if (duplicadosOk) {
+                Swal.close();
+                if (currentStep < steps.length - 1) { currentStep++; updateStepUI(); }
+            }
+        });
+    }
+
+    // ===== VALIDACIÓN DE CONTRASEÑAS PASO 4 =====
+    document.getElementById('validatePassword').addEventListener('click', function() {
+        const pass1 = document.getElementById('pass1').value;
+        const pass2 = document.getElementById('pass2').value;
+        if (!pass1 || !pass2) {
+            Swal.fire('Error', 'Completa los campos de contraseña', 'warning');
+            return;
+        }
+        const validation = validarContraseñas(pass1, pass2);
+        if (!validation.success) {
+            Swal.fire('Contraseña Inválida', validation.message, 'error');
+            return;
+        }
+        if (currentStep < steps.length - 1) { currentStep++; updateStepUI(); }
+    });
+
+    // ===== BOTONES ANTERIOR =====
+    document.querySelectorAll('.prev-step').forEach(btn => {
+        btn.addEventListener('click', () => { if (currentStep > 0) { currentStep--; updateStepUI(); } });
+    });
+
+    // ===== MANEJO DEL MODAL DE PRIVACIDAD =====
+    openPrivacyModal.addEventListener('click', (e) => { e.preventDefault(); $('#termsModal').modal('show'); });
+
+    // ===== ENVÍO DEL FORMULARIO =====
+    registerForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        if (!firmaInput.value) { Swal.fire('Firma requerida', 'Debes confirmar tu firma digital.', 'warning'); return; }
+        if (!document.getElementById('termsCheck').checked) { Swal.fire('Aceptación requerida', 'Debes aceptar el Aviso de Privacidad.', 'warning'); return; }
+        if (!croppedImage64Input.value) { Swal.fire('Foto requerida', 'Debes subir y confirmar tu foto de perfil.', 'warning'); return; }
+        
+        formData = new FormData(registerForm);
+        try {
+            const fotoPerfilBlob = base64ToBlob(croppedImage64Input.value);
+            formData.append('fotoPerfil', fotoPerfilBlob, 'fotoPerfil.png');
+            const firmaDigitalBlob = base64ToBlob(firmaInput.value);
+            formData.append('firmaDigital', firmaDigitalBlob, 'firmaDigital.png');
+        } catch (error) {
+            Swal.fire('Error de Imagen', 'Hubo un problema al procesar las imágenes.', 'error');
+            return;
+        }
+        
+        Swal.fire({ title: 'Validando datos...', text: 'Por favor espera.', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        
+        const curp = formData.get('curp');
+        const rfc = formData.get('rfc');
+        const correo = formData.get('correo');
+        const telefono = formData.get('telefono');
+        const duplicadosOk = await verificarDuplicados(curp, rfc, correo, telefono);
+        
+        if (!duplicadosOk) { Swal.close(); return; }
+        Swal.close();
+        $('#paymentModal').modal('show');
+    });
+
+    // ===== PROCESAR PAGO =====
+    document.getElementById('payButton').addEventListener('click', async function() {
+        $('#paymentModal').modal('hide');
+        Swal.fire({ title: 'Procesando pago...', text: 'Por favor espera.', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        try {
+            const { paymentMethod, error } = await stripe.createPaymentMethod({ type: 'card', card: cardElement });
+            if (error) throw new Error(error.message);
+            const paymentResponse = await fetch('/procesarPago', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ paymentMethodId: paymentMethod.id })
+            });
+            const paymentResult = await paymentResponse.json();
+            if (!paymentResult.success) throw new Error(paymentResult.message || 'Error en el pago');
+            const registerResponse = await fetch('/register', { method: 'POST', body: formData });
+            const registerResult = await registerResponse.json();
+            if (registerResult.success) {
+                Swal.fire({ title: '¡Registro exitoso!', text: 'Tu identidad ha sido registrada en Human System.', icon: 'success', confirmButtonText: 'Iniciar Sesión' }).then(() => window.location.href = '/login');
+            } else {
+                throw new Error(registerResult.message || 'Error en el registro');
+            }
+        } catch (error) {
+            Swal.fire({ title: 'Error', text: error.message || 'Ocurrió un error al procesar tu solicitud.', icon: 'error', confirmButtonText: 'Cerrar' });
+        }
+    });
+
+    cardElement.on('change', function(event) {
+        document.getElementById('card-errors').textContent = event.error ? event.error.message : '';
+    });
+
+    window.addEventListener('resize', function() {
+        if (signaturePad && document.getElementById('step5').classList.contains('active')) {
+            const container = signatureCanvas.parentElement;
+            const containerWidth = container.clientWidth - 40;
+            if (containerWidth > 0) {
+                const oldData = signaturePad.toData();
+                signatureCanvas.width = Math.min(containerWidth, 600);
+                signatureCanvas.height = 200;
+                signaturePad.clear();
+                if (oldData && oldData.length > 0) signaturePad.fromData(oldData);
+            }
+        }
+    });
+
+    // Configurar fecha máxima (18 años atrás)
+    const fechaInputElem = document.querySelector('input[name="fechaNacimiento"]');
+    if (fechaInputElem) {
+        const hoy = new Date();
+        const fechaMax = new Date();
+        fechaMax.setFullYear(hoy.getFullYear() - 18);
+        fechaInputElem.max = fechaMax.toISOString().split('T')[0];
+        const fechaMin = new Date();
+        fechaMin.setFullYear(hoy.getFullYear() - 100);
+        fechaInputElem.min = fechaMin.toISOString().split('T')[0];
+    }
+});
+</script>
+
+<%- include('partials/footer', { login: false }) %>
