@@ -94,18 +94,24 @@
 
         /* ========== MEJORAS RESPONSIVAS ========== */
 
-        /* Imagen de perfil - responsiva y nunca demasiado pequeña */
-        #perfilImg {
-            width: min(200px, 35vw);
-            height: min(200px, 35vw);
-            min-width: 180px;
-            min-height: 180px;
-            max-width: 200px;
-            max-height: 200px;
-            object-fit: cover;
-            transition: all 0.3s ease;
-        }
+    /* Busca este bloque y déjalo así */
+#perfilImg {
+    width: min(200px, 35vw);
+    height: min(200px, 35vw);
+    min-width: 180px;
+    min-height: 180px;
+    max-width: 200px;
+    max-height: 200px;
+    object-fit: cover;
+    transition: all 0.3s ease;
+    /* Quitamos border y border-radius de aquí */
+}
 
+/* Agrega esta nueva clase justo debajo */
+.img-circular {
+    border-radius: 50%;
+    border: 3px solid #1F4E67;
+}
         /* Contenedor principal - mejor padding en móvil */
         #contenedorPrincipal {
             padding: 16px !important;
@@ -272,7 +278,7 @@
             <div class="row justify-content-center align-items-start">
                 <div id="colPerfilContainer" class="col-md-3 d-flex justify-content-center">
                     <div id="seccionPerfil" class="hidden-section w-100 p-3 text-center sticky-top" style="box-shadow: 4px 4px 8px 8px rgba(0, 0, 0, 0.1); background-color: white; border-radius: 20px;">
-                        <img id="perfilImg" class="mt-3" src="<%= fotoPerfilUrl %>" style="cursor: pointer;">
+<img id="perfilImg" class="mt-3 img-circular" src="<%= fotoPerfilUrl %>" style="cursor: pointer;">
                         <div>
                             <h2 class="mt-3 font-weight-bold" style="color:#15566a;"><em>Nombre:</em></h2>
                             <h4 class="font-weight-bold" style="color:RED" id="nombreID"><em><%= nombre %></em></h4>
@@ -851,7 +857,7 @@
     </div>
     
     <div id="loading" style="display: none;">Cargando...</div>
-    <img id="imagenOriginal1" src="https://storage.googleapis.com/humansystem/HUMAN%20IDS%20(5.4%20x%208.56%20cm).png" style="display: none;">
+    <img id="imagenOriginal1" src="https://storage.googleapis.com/humansystem/HUMAN%20ID%20FRENTE.png" style="display: none;">
     <img id="imagenFrente1" src="<%= fotoPerfilUrl %>" style="display: none;">
 
 <script>
@@ -1505,7 +1511,7 @@
         imgUser.src = srcFotoPerfilUsuario;
         imgUser.style.position = 'absolute';
         imgUser.style.width = '42%';
-        imgUser.style.top = '16%';
+        imgUser.style.top = '19%';
         imgUser.style.left = '50%';
         imgUser.style.transform = 'translateX(-50%)';
         imgUser.style.borderRadius = '50%';
@@ -1517,7 +1523,7 @@
         const nameElem = document.createElement('div');
         nameElem.textContent = nombreHumanoGlobal;
         nameElem.style.position = 'absolute';
-        nameElem.style.top = '58%';
+        nameElem.style.top = '60%';
         nameElem.style.left = '0';
         nameElem.style.width = '100%';
         nameElem.style.textAlign = 'center';
@@ -1531,7 +1537,7 @@
         const idElem = document.createElement('div');
         idElem.textContent = idHumanoGlobal;
         idElem.style.position = 'absolute';
-        idElem.style.top = '70%';
+        idElem.style.top = '69%';
         idElem.style.left = '0';
         idElem.style.width = '100%';
         idElem.style.textAlign = 'center';
@@ -1559,7 +1565,7 @@
         cardBack.style.transform = 'rotateY(180deg)';
         cardBack.style.borderRadius = '16px';
         cardBack.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
-        cardBack.style.backgroundImage = 'url("https://storage.googleapis.com/humansystem/HUMAN%20ID%20BACK_page-0001.jpg")';
+        cardBack.style.backgroundImage = 'url("https://storage.googleapis.com/humansystem/HUMAN%20ID%20BACK.png")';
         cardBack.style.backgroundSize = '100% 100%';
         cardBack.style.display = 'flex';
         cardBack.style.flexDirection = 'column';
@@ -2210,9 +2216,11 @@
     perfilImg.addEventListener('click', function() {
         if (tarjetaActivada) {
             if (isPerfil) {
-                 perfilImg.src = qrCodeUrl;
+                perfilImg.src = qrCodeUrl;
+            perfilImg.classList.remove('img-circular');
             } else {
                 perfilImg.src = fotoPerfilUrl;
+            perfilImg.classList.add('img-circular');
             }
              isPerfil = !isPerfil;
         } else {
@@ -2256,9 +2264,10 @@
                              confirmButtonColor: '#1F4E67',
                         });
                     } else if (data.estado === 'activado') {
-                        tarjetaActivada = true;
-                        perfilImg.src = qrCodeUrl;
-                        isPerfil = false;
+                       tarjetaActivada = true;
+            perfilImg.src = qrCodeUrl;
+            perfilImg.classList.remove('img-circular'); // Quitar al mostrar QR
+            isPerfil = false;
                     } else {
                         Swal.fire({
                              title: 'Error',

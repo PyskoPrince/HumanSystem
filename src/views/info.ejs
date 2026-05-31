@@ -2,267 +2,15 @@
 <%- include('partials/navbar', { login: false }) %>
 
 <style>
-    /* Estilo específico para el nombre en la tarjeta */
-.brand-name-style {
-    color: #1F4E67;
-    font-family: var(--font-tech); /* Usa la misma fuente que tus títulos */
-    font-weight: 800;
-    text-transform: uppercase;
-    text-align: center;
-    letter-spacing: 1px;
-    font-size: 1.2rem;
-    margin: 0;
-    /* Sin fondos ni bordes, solo la letra limpia */
-    background: none;
-    border: none;
-    font-style: italic;
-    padding: 0 35px;
-    word-wrap: break-word;
-    line-height: 1.2;
-}
+    @import url('https://fonts.googleapis.com/css2?family=Iceland&display=swap');
 
-.user-info-clean {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 50px !important;
-    min-height: 50px;
-}
-/* --- VISUALIZADOR DE VIDEO PREMIUM --- */
-.video-modal-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(10, 17, 32, 0.9);
-    backdrop-filter: blur(15px);
-    display: none; /* Se activa con JS */
-    justify-content: center;
-    align-items: center;
-    z-index: 100001;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
-
-.video-modal-overlay.active {
-    display: flex;
-    opacity: 1;
-}
-
-.video-modal-content {
-    width: 90%;
-    max-width: 1000px;
-    background: var(--hs-dark);
-    border: 1px solid var(--hs-cyan);
-    border-radius: 20px;
-    padding: 10px;
-    position: relative;
-    box-shadow: 0 0 50px rgba(76, 161, 175, 0.3);
-}
-
-.video-modal-close {
-    position: absolute;
-    top: -50px;
-    right: 0;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 40px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.video-modal-close:hover {
-    color: var(--hs-red);
-    transform: rotate(90deg);
-}
-
-.video-responsive-container {
-    position: relative;
-    padding-bottom: 56.25%; /* Ratio 16:9 */
-    height: 0;
-    overflow: hidden;
-    border-radius: 15px;
-}
-
-.video-responsive-container iframe {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-}
-
-.video-footer-text {
-    padding: 15px;
-    text-align: center;
-    font-size: 10px;
-    color: var(--hs-cyan);
-    letter-spacing: 3px;
-}
-
-/* --- ARQUITECTURA DE LA CREDENCIAL 3D --- */
-.card-3d-container {
-    position: relative; 
-    width: 350px; 
-    height: 500px; 
-    perspective: 1200px; 
-    z-index: 10;
-}
-
-.card-3d {
-    width: 100%;
-    height: 100%;
-    background-image: url('https://storage.googleapis.com/humansystem/HUMAN%20IDS%20(5.4%20x%208.56%20cm).png');
-    background-size: contain;
-    background-position: center;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.1s ease-out;
-    will-change: transform;
-}
-
-/* --- CAPAS DINÁMICAS Y CIRCUITOS --- */
-.card-bg-animated {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 20px;
-    overflow: hidden;
-    z-index: 1;
-}
-
-.circuit-lines {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-image: 
-        linear-gradient(90deg, transparent 95%, rgba(76, 161, 175, 0.1) 100%),
-        linear-gradient(0deg, transparent 95%, rgba(76, 161, 175, 0.1) 100%);
-    background-size: 30px 30px;
-    animation: circuitMove 20s linear infinite;
-}
-
-.hologram-layer {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.03) 50%, transparent 55%);
-    animation: hologramMove 3s linear infinite;
-}
-
-/* --- FOTO DEL USUARIO Y FRAME --- */
-.user-photo-container {
-    position: relative;
-    width: 130px;
-    height: 130px;
-    margin: 70px auto 20px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 2px solid transparent;
-    background: linear-gradient(45deg, var(--hs-cyan), var(--hs-red)) border-box;
-}
-
-.user-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: grayscale(20%);
-}
-
-/* --- GRID DE DATOS HOLOGRÁFICOS --- */
-.data-grid {
-    display: grid;
-    gap: 8px;
-    margin-top: 15px;
-}
-
-.data-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px 10px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 5px;
-    border-left: 3px solid var(--hs-cyan);
-}
-
-.data-label, .data-value {
-    font-size: 0.7rem;
-    font-family: var(--font-tech);
-}
-
-.data-value.active {
-    color: #4CAF50;
-    animation: blinkActive 2s infinite;
-}
-
-/* --- SEGURIDAD Y CHIP --- */
-.security-elements {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: auto;
-    padding: 15px;
-}
-
-
-/* --- ANIMACIONES ADICIONALES --- */
-@keyframes circuitMove {
-    0% { background-position: 0 0; }
-    100% { background-position: 30px 30px; }
-}
-
-@keyframes hologramMove {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-}
-
-@keyframes blinkActive {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-}
-
-/* Ajuste responsivo para móviles */
-@media (max-width: 768px) {
-
-
-/* 1. Subir el contenedor del nombre en móvil */
-    .user-info-clean {
-        margin-top: 50px !important;
-        min-height: auto !important;
-    }
-
-    /* 2. Reducir el texto del nombre para que no choque con "Nombre:" */
-    .brand-name-style {
-        font-size: 0.95rem !important;
-        padding: 0 40px !important;
-        line-height: 1.1 !important;
-    }
-
-    /* 3. Subir el ID para alejarlo del chip dorado */
-    #user-id-key {
-        margin-top: 20px !important;
-        position: relative;
-        z-index: 2;
-    }
-    
-    /* 4. Subir la foto un poco más en móvil (opcional pero ayuda) */
-    .user-photo-container {
-        width: 120px !important;  
-        height: 120px !important;
-        margin: 60px auto 10px !important; 
-    }
-
-
-    .card-3d-container {
-        width: 300px;
-        height: 450px;
-    }
-}
-    /* --- VARIABLES GLOBALES --- */
     :root {
-        --hs-dark: #0a1120;
-        --hs-blue: #1f4e67;
+        --hs-dark: #0a0e14;
+        --hs-blue: #1F4E67;
         --hs-cyan: #4ca1af;
         --hs-red: #d71d00;
+        --hs-gold: #fcc404;
+        --hs-dark-blue: #0a1120;
         --hs-warning: #FFC107;
         --slate-700: #334155;
         --slate-500: #64748b;
@@ -272,434 +20,357 @@
         --easing-premium: cubic-bezier(0.23, 1, 0.32, 1);
     }
 
-    /* --- UTILIDADES DE TEXTO --- */
-    .text-justify-premium {
-        text-align: justify; text-justify: inter-word;
-        line-height: 1.7; hyphens: auto;
+    body { background: var(--hs-dark); color: white; }
+
+    .hs-landing-wrapper {
+        color: white;
+        font-family: 'Iceland', sans-serif !important;
+        overflow-x: hidden;
     }
-    .gradient-text {
-        background: linear-gradient(135deg, #ffffff 60%, rgba(255,255,255,0.4));
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+
+    .hs-landing-wrapper h1, .hs-landing-wrapper h2, .hs-landing-wrapper h3,
+    .hs-landing-wrapper h4, .hs-landing-wrapper h5, .hs-landing-wrapper h6,
+    .hs-landing-wrapper p, .hs-landing-wrapper span, .hs-landing-wrapper div,
+    .hs-landing-wrapper a, .hs-landing-wrapper li, .hs-landing-wrapper strong,
+    .hs-landing-wrapper em, .hs-landing-wrapper input, .hs-landing-wrapper textarea,
+    .hs-landing-wrapper button {
+        font-family: 'Iceland', sans-serif !important;
+        letter-spacing: 1px;
     }
-    .hs-heading-tech em { 
-        background: linear-gradient(90deg, var(--hs-blue) 0%, var(--hs-red) 100%);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        font-style: italic; padding-right: 5px; 
+
+    h1, h2, h3, h4, h5, h6 { font-weight: 700; }
+
+    .text-gradient {
+        background: linear-gradient(135deg, #fff, var(--hs-cyan));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
-    
-    /* Colores y Pesos */
+    .text-justify-premium { text-align: justify; text-justify: inter-word; line-height: 1.7; hyphens: auto; }
     .text-success { color: #28a745 !important; }
     .text-danger { color: #d71d00 !important; }
     .text-primary { color: #1F4E67 !important; }
-    .text-info { color: #17a2b8 !important; } 
+    .text-info { color: #17a2b8 !important; }
     .text-warning { color: #FFC107 !important; }
     .font-weight-bold { font-weight: 700 !important; }
-    .lead { font-size: 1.15rem; font-weight: 300; }
+    .lead { font-size: 1.15rem; font-weight: 300; opacity: 0.9; }
 
-    /* --- ANIMACIONES GENERALES --- */
-    @keyframes breathe {
-        0%, 100% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.02); opacity: 0.95; }
-    }
-    @keyframes pulseGreen {
-        0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
-        70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
-    }
-    @keyframes blinker { 50% { opacity: 0; } }
-    @keyframes wave-drift {
-        0% { transform: translateX(0) scaleY(1); }
-        50% { transform: translateX(-25%) scaleY(1.1); }
-        100% { transform: translateX(0) scaleY(1); }
-    }
-    @keyframes circuitMove { 0% { background-position: 0 0; } 100% { background-position: 30px 30px; } }
-/* Animación mejorada: alterna opacidad real */
-@keyframes tech-flicker {
-    0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
-    20%, 24%, 55% { opacity: 0.3; } /* El "glitch" ocurre en estos puntos */
-    54% { opacity: 0.7; }
-}
-
-.flicker-title {
-    animation: tech-flicker 5s infinite;
-    will-change: opacity;
-    /* Eliminamos el display: inline-block si causa problemas de centrado */
-}
-    /* --- SCROLL REVEAL (Animaciones de entrada) --- */
-    .ent-reveal, .ent-reveal-left, .ent-reveal-right {
-        opacity: 0;
-        transition: opacity 1.2s var(--easing-premium), transform 1.2s var(--easing-premium);
-        will-change: opacity, transform;
-    }
-    .ent-reveal { transform: translateY(30px); }
-    .ent-reveal-left { transform: translateX(-30px); }
-    .ent-reveal-right { transform: translateX(30px); }
-    
-    .ent-reveal.visible { opacity: 1; transform: translateY(0); }
-    .ent-reveal-left.visible { opacity: 1; transform: translateX(0); }
-    .ent-reveal-right.visible { opacity: 1; transform: translateX(0); }
-
-    /* --- LOADER PRINCIPAL (LIMPIO) --- */
-    #loader-wrapper {
-        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-        background: linear-gradient(135deg, var(--hs-dark) 0%, var(--hs-blue) 100%);
-        z-index: 100000; display: flex; justify-content: center; align-items: center;
-        transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.5s;
-    }
-    .loader-hidden {
-        transform: translateY(-100%) !important; opacity: 0 !important; pointer-events: none;
-    }
-    .biometric-fusion-container {
-        display: flex; flex-direction: column; align-items: center; gap: 30px;
-    }
-    /* Barra de carga */
-    .loading-track {
-        width: 240px; height: 2px; background: rgba(255, 255, 255, 0.05);
-        border-radius: 10px; overflow: hidden; position: relative;
-    }
-    .loading-fill {
-        position: absolute; top: 0; left: 0; width: 0%; height: 100%;
-        background: linear-gradient(90deg, var(--hs-cyan), var(--hs-red));
-        box-shadow: 0 0 10px var(--hs-red);
-    }
-    /* Texto de estado */
-    .loader-status {
-        font-family: var(--font-tech); font-size: 10px; color: var(--hs-cyan);
-        letter-spacing: 2px; text-transform: uppercase; display: flex; gap: 5px;
-    }
-    .status-dots { animation: dots-blink 1.5s infinite; }
-    @keyframes dots-blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
-
-    /* --- SECCIÓN HERO PRINCIPAL --- */
-    #mission-vision-trust { 
-        background: linear-gradient(135deg, #0a1120 0%, var(--hs-blue) 100%); 
-        color: white; position: relative; overflow: hidden;
-    }
-    
-    /* Configuración base de espaciado */
-    .py-custom {
-        padding-top: 20px !important;
-        padding-bottom: clamp(120px, 15vw, 200px) !important;
-        display: flex; align-items: center; min-height: 70vh;
-    }
-
-    /* ESTILOS ESPECÍFICOS SOLICITADOS (TÍTULO Y ESPACIO) */
-    .hero-content h1 {
-        text-transform: uppercase !important; /* Título en mayúsculas */
-        font-weight: 800;
-        letter-spacing: -2px;
-        line-height: 1;
-    }
-#mission-vision-trust .row.align-items-center.mb-5 {
-    margin-bottom: 120px !important; /* Espacio extra entre la Hero y los bloques de abajo */
-}/* Espaciado responsivo para móviles */
-@media (max-width: 768px) {
-    #mission-vision-trust .row.align-items-center.mb-5 {
-        margin-bottom: 80px !important;
-    }
-}
-    /* Media Query para Pantallas Grandes (Desktop) */
-    @media (min-width: 992px) {
-        .hero-content {
-        margin-bottom: 150px !important; 
-    }
-        /* Aumentar espacio arriba y abajo drásticamente */
-        #mission-vision-trust.py-custom {
-            padding-top: 100px !important;
-            padding-bottom: 100px !important;
-        }
-        
-        /* Título gigante en desktop */
-        .hero-content h1 {
-            font-size: 5rem !important; 
-        }
-    }
-
-    .hero-content {
-        display: flex; flex-direction: column; align-items: center; 
-        justify-content: center; padding-bottom: 50px;
-    }
-    .hero-desc {
-        margin-left: auto; margin-right: auto;
-        border-top: 2px solid var(--hs-red); padding-top: 20px;
-    }
-    
-    /* Botones y Elementos UI */
-    .btn-glow {
-        padding: 16px 40px; background: var(--hs-red); color: white; border: none; 
-        font-weight: 700; box-shadow: 0 0 30px rgba(241, 8, 33, 0.4); transition: 0.3s;
-    }
-    .btn-glow:hover {
-        box-shadow: 0 0 50px rgba(241, 8, 33, 0.8); transform: scale(1.05); color: white;
-    }
-    .icon-box-modern {
-        width: 60px; height: 60px; background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px;
-        display: flex; align-items: center; justify-content: center;
-        flex-shrink: 0; margin-right: 1.5rem !important;
-    }
-
-    /* Telemetría Card */
-    .heroCard {
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
-        border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 20px; padding: 25px;
-        position: relative; overflow: hidden;
-    }
-    .heroCard:before {
-        content: ""; position: absolute; inset: -2px;
-        background: radial-gradient(600px 360px at 90% 30%, rgba(241, 8, 33, 0.15), transparent 60%);
-        pointer-events: none;
-    }
-    .telemetry { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
-    .tile {
-        border-radius: 16px; padding: 15px; border: 1px solid rgba(255, 255, 255, 0.1);
-        background: rgba(0, 0, 0, 0.2);
-    }
-    .tile .tvalue { font-size: 24px; font-weight: 700; margin: 5px 0; }
-    .miniLine {
-        margin-top: 12px; height: 4px; border-radius: 10px;
-        background: rgba(255, 255, 255, 0.1); position: relative; overflow: hidden;
-    }
-    .miniLine i {
-        position: absolute; height: 100%;
-        background: linear-gradient(90deg, var(--hs-blue), var(--hs-red));
-        border-radius: 10px;
-    }
-    .blink { animation: blinker 1s linear infinite; color: var(--hs-cyan); }
-
-    /* Separador SVG */
-    .wave-separator {
-        position: absolute; bottom: 0; left: 0; width: 100%;
-        overflow: hidden; line-height: 0; transform: rotate(180deg);
-    }
-    .wave-separator svg {
-        position: relative; display: block; width: calc(200% + 1.3px);
-        height: 80px; animation: wave-drift 8s ease-in-out infinite;
-        transform-origin: center bottom;
-    }
-    .wave-separator .shape-fill { fill: #ffffff; }
-
-    /* --- SECCIÓN GRID CONVERGENTE --- */
-    .section-convergent-white { background: #ffffff; padding: 80px 0; position: relative; }
-    .bento-grid-white {
-        display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 60px;
-    }
-    .hs-card-clean {
-        text-align: center; display: flex; flex-direction: column; align-items: center;
-        padding: 40px 30px; width: 100%; height: 100%; box-sizing: border-box;
-        position: relative;
-    }
-    .hs-card-clean h3 {
-        font-size: 1.6rem; font-weight: 700; color: var(--hs-blue);
-        letter-spacing: -0.02em; margin-bottom: 15px; width: 100%;
-    }
-    .hs-card-clean p {
-        color: var(--slate-700); font-size: 1rem; line-height: 1.6;
-        margin-bottom: 25px; width: 100%; max-width: 320px;
-    }
-    .hs-card-clean::after {
-        content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-        width: 60px; height: 4px; border-radius: 0 0 10px 10px;
-        background: linear-gradient(90deg, var(--hs-blue), var(--hs-cyan));
-        opacity: 0.3; transition: all 0.3s ease;
-    }
-    .hs-card-clean:hover::after { opacity: 1; width: 80px; }
-    
-    .hs-icon-frame {
-        width: 80px; height: 80px; border-radius: 20px;
-        display: flex; align-items: center; justify-content: center;
-        margin-bottom: 25px; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        position: relative; overflow: hidden;
-    }
-    .hs-icon-frame::before {
-        content: ''; position: absolute; inset: 0;
-        background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%); z-index: 1;
-    }
-    .hs-icon-frame i {
-        font-size: 2rem; z-index: 2; position: relative; transition: transform 0.3s ease;
-    }
-    .hs-card-clean:hover .hs-icon-frame {
-        transform: translateY(-5px) scale(1.05);
-        box-shadow: 0 15px 35px rgba(31, 78, 103, 0.25);
-    }
-    .hs-card-clean:hover .hs-icon-frame i { transform: scale(1.1); }
-    
-    .frame-blue { background: linear-gradient(135deg, #1F4E67 0%, #2a6496 100%); color: white; box-shadow: 0 10px 25px rgba(31, 78, 103, 0.2); }
-    .frame-cyan { background: linear-gradient(135deg, #4ca1af 0%, #7dcfd9 100%); color: white; box-shadow: 0 10px 25px rgba(76, 161, 175, 0.2); }
-    .frame-red { background: linear-gradient(135deg, #d71d00 0%, #ff5a40 100%); color: white; box-shadow: 0 10px 25px rgba(215, 29, 0, 0.2); }
-
-    /* --- SECCIÓN IMPACTO --- */
-    .impact-showcase { background: #ffffff; padding: 100px 0; overflow: hidden; }
-    .impact-visual-card {
-        position: relative; border-radius: 25px; overflow: visible; margin-bottom: 60px;
-    }
-    .main-image-wrapper {
-        position: relative; border-radius: 25px; overflow: hidden;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.1); z-index: 1; height: 350px;
-    }
-    .main-image-wrapper img {
-        width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease;
-    }
-    .impact-visual-card:hover .main-image-wrapper img { transform: scale(1.05); }
-    .floating-data-card {
-        position: absolute; bottom: -25px; left: -20px; width: 200px;
-        background: white; border-radius: 18px; padding: 20px;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.15); z-index: 3;
-        border: 1px solid rgba(0,0,0,0.05); animation: breathe 4s infinite ease-in-out;
-    }
-    .floating-data-card.right { left: auto; right: -20px; }
-    .floating-data-card h3 {
-        font-size: 2.5rem; font-weight: 800; margin-bottom: 0; line-height: 1; letter-spacing: -1px;
-    }
-    .floating-data-card span {
-        font-size: 0.75rem; font-weight: bold; text-transform: uppercase; color: #6c757d; letter-spacing: 1px;
-    }
-    .impact-icon-box {
-        width: 60px; height: 60px; border-radius: 15px;
-        display: flex; align-items: center; justify-content: center; margin-bottom: 25px;
-    }
-    .text-container-impact { padding-left: 30px; }
-    .text-container-impact.left-align { padding-left: 0; padding-right: 30px; }
-
-    /* --- FORMULARIO Y HERO FINAL --- */
-    .hs-hero-main {
-        position: relative; background: linear-gradient(135deg, var(--hs-dark) 0%, var(--hs-blue) 100%);
-        overflow: hidden; padding: clamp(80px, 10vw, 120px) 0; color: white;
-    }
-    .hs-hero-blob {
-        position: absolute; width: 600px; height: 600px;
-        background: radial-gradient(circle, rgba(76, 161, 175, 0.2) 0%, transparent 70%);
-        filter: blur(80px); z-index: 0; pointer-events: none;
-    }
     .hs-badge-premium {
         background: linear-gradient(90deg, var(--hs-blue), var(--hs-cyan));
         color: white; padding: 8px 20px; border-radius: 50px;
-        font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;
+        font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px;
         font-weight: 700; display: inline-block; margin-bottom: 25px;
         box-shadow: 0 5px 15px rgba(31, 78, 103, 0.4);
     }
     .tpill {
-        background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);
-        padding: 6px 14px; border-radius: 50px; font-size: 0.75rem;
+        background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
+        padding: 6px 14px; border-radius: 50px; font-size: 0.85rem;
         display: flex; align-items: center; gap: 8px; backdrop-filter: blur(5px);
-        font-family: monospace; width: fit-content;
+        width: fit-content; font-family: monospace !important;
     }
     .tpill .dot-active {
         width: 8px; height: 8px; background: #28a745;
         border-radius: 50%; animation: pulseGreen 2s infinite;
     }
-    
-    /* Glass Form */
-    .glass-form-container {
-        background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px);
-        border: 1px solid var(--glass-border); border-radius: 24px;
-        padding: 40px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    .btn-hs {
+        padding: 16px 32px; border-radius: 12px; font-weight: 600;
+        font-size: 1.3rem; cursor: pointer; transition: all 0.3s ease;
+        text-decoration: none; display: inline-flex; align-items: center;
+        gap: 10px; text-transform: uppercase;
     }
-    .form-glass-input {
-        background: rgba(0, 0, 0, 0.2) !important;
-        border: 1px solid var(--glass-border) !important;
-        color: white !important; border-radius: 12px !important;
-        padding: 12px 15px !important; transition: all 0.3s ease;
+    .btn-primary { background: linear-gradient(135deg, var(--hs-blue), var(--hs-cyan)); color: white; border: none; }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(76,161,175,0.4); color: white; }
+    .btn-outline { background: transparent; border: 2px solid var(--hs-cyan); color: var(--hs-cyan); }
+    .btn-outline:hover { background: rgba(76,161,175,0.1); transform: translateY(-3px); color: white; }
+    .btn-glow {
+        padding: 16px 40px; background: var(--hs-red); color: white; border: none;
+        font-weight: 700; box-shadow: 0 0 30px rgba(241,8,33,0.4); transition: 0.3s;
+        text-transform: uppercase; text-decoration: none; display: inline-block; border-radius: 8px;
     }
-    .form-glass-input:focus {
-        border-color: var(--hs-cyan) !important;
-        box-shadow: 0 0 15px rgba(76, 161, 175, 0.2) !important;
-        background: rgba(0, 0, 0, 0.4) !important;
-    }
+    .btn-glow:hover { box-shadow: 0 0 50px rgba(241,8,33,0.8); transform: scale(1.05); color: white; }
     .btn-submit-premium {
         background: linear-gradient(90deg, var(--hs-blue), var(--hs-cyan));
-        border: none; color: white; font-weight: 700;
-        padding: 14px; border-radius: 12px; transition: all 0.3s ease;
-        text-transform: uppercase; letter-spacing: 1px;
+        border: none; color: white; font-weight: 700; padding: 14px;
+        border-radius: 12px; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
     }
-    .btn-submit-premium:hover {
-        transform: translateY(-2px); box-shadow: 0 10px 20px rgba(76, 161, 175, 0.4);
-        filter: brightness(1.1);
+    .btn-submit-premium:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(76,161,175,0.4); filter: brightness(1.1); }
+
+    .section-dark-premium {
+        background: linear-gradient(135deg, #0a1120 0%, var(--hs-blue) 100%);
+        position: relative; padding: 100px 0; color: white;
+    }
+    .section-dark-premium h2 { font-size: 3.5rem; font-weight: 700; text-transform: uppercase; }
+
+    .section-convergent-white { background: #ffffff; padding: 100px 0; position: relative; }
+    .impact-showcase { background: #ffffff; padding: 100px 0; overflow: hidden; }
+
+    .hs-hero-main {
+        position: relative; background: linear-gradient(135deg, var(--hs-dark) 0%, var(--hs-blue) 100%);
+        overflow: hidden; padding: clamp(80px,10vw,120px) 0; color: white;
+    }
+    .hs-hero-blob {
+        position: absolute; width: 600px; height: 600px;
+        background: radial-gradient(circle, rgba(76,161,175,0.2) 0%, transparent 70%);
+        filter: blur(80px); z-index: 0; pointer-events: none;
     }
 
-    /* --- FOOTER Y MODALES --- */
-    .footer { background-color: white; border-top: 5px solid var(--hs-blue); position: relative; z-index: 10; }
+    .hero-content { display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 50px; }
+    .hero-content h1 { font-size: clamp(3.5rem,6vw,6rem); font-weight: 800; margin-bottom: 20px; line-height: 1; text-transform: uppercase; }
+    .hero-content p { font-size: clamp(1.4rem,2vw,1.8rem); color: rgba(255,255,255,0.8); max-width: 800px; margin: 0 auto 40px auto; text-align: center; }
+    .hero-desc { margin-left: auto; margin-right: auto; border-top: 2px solid var(--hs-red); padding-top: 20px; }
+
+    .glass-form-style, .glass-form-container, .hs-glass-panel {
+        background: rgba(15,23,42,0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--hs-cyan); border-radius: 24px; padding: 35px 25px;
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); color: white; height: 100%; transition: all 0.3s ease;
+    }
+    .glass-form-style:hover, .hs-glass-panel:hover { transform: translateY(-5px); box-shadow: 0 30px 60px rgba(76,161,175,0.2); }
+    .glass-form-style h5 { color: white !important; }
+    .glass-form-style p { color: rgba(255,255,255,0.7) !important; }
+
+    .form-glass-input {
+        background: rgba(0,0,0,0.2) !important; border: 1px solid var(--glass-border) !important;
+        color: white !important; border-radius: 12px !important; padding: 12px 15px !important; transition: all 0.3s ease;
+    }
+    .form-glass-input:focus {
+        border-color: var(--hs-cyan) !important; box-shadow: 0 0 15px rgba(76,161,175,0.2) !important; background: rgba(0,0,0,0.4) !important;
+    }
+
+    .icon-box-modern {
+        width: 60px; height: 60px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 1.5rem !important;
+    }
+
+    .heroCard {
+        background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)); border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 20px; padding: 25px; position: relative; overflow: hidden;
+    }
+    .telemetry { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+    .tile { border-radius: 16px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); }
+    .tile .tvalue { font-size: 24px; font-weight: 700; margin: 5px 0; }
+    .miniLine { margin-top: 12px; height: 4px; border-radius: 10px; background: rgba(255,255,255,0.1); position: relative; overflow: hidden; }
+    .miniLine i { position: absolute; height: 100%; background: linear-gradient(90deg, var(--hs-blue), var(--hs-red)); border-radius: 10px; }
+
+    .bento-grid-premium { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 50px; }
+    .hs-card-clean {
+        text-align: center; display: flex; flex-direction: column; align-items: center; padding: 40px 30px;
+        background: #f8f9fa; border-radius: 24px; position: relative; transition: all 0.4s var(--easing-premium);
+        border: 1px solid rgba(0,0,0,0.05); height: 100%;
+    }
+    .hs-card-clean:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    .hs-card-clean h3 { font-size: 1.8rem; font-weight: 700; color: var(--hs-blue); margin-bottom: 15px; }
+    .hs-card-clean p { color: #555; font-size: 1.1rem; line-height: 1.4; margin-bottom: 25px; }
+    .hs-card-clean::after {
+        content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 4px;
+        border-radius: 0 0 10px 10px; background: linear-gradient(90deg, var(--hs-blue), var(--hs-cyan)); opacity: 0.3; transition: all 0.3s ease;
+    }
+    .hs-card-clean:hover::after { opacity: 1; width: 80px; }
+
+    .hs-icon-frame {
+        width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center;
+        margin-bottom: 25px; color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .hs-card-clean:hover .hs-icon-frame { transform: translateY(-5px) scale(1.05); }
+    .hs-card-clean:hover .hs-icon-frame i { transform: scale(1.1); }
+    .frame-cyan { background: linear-gradient(135deg, #4ca1af, #2c3e50); }
+    .frame-blue { background: linear-gradient(135deg, #1F4E67, #0a1120); }
+    .frame-red { background: linear-gradient(135deg, #d71d00, #8b0000); }
+    .frame-gold { background: linear-gradient(135deg, #fcc404, #b8860b); }
+    .frame-green { background: linear-gradient(135deg, #28a745, #1e7e34); }
+    .frame-purple { background: linear-gradient(135deg, #6f42c1, #4527a0); }
+
+    .impact-visual-card { position: relative; border-radius: 25px; overflow: visible; margin-bottom: 60px; }
+    .main-image-wrapper { position: relative; border-radius: 25px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1); z-index: 1; height: 350px; }
+    .main-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
+    .impact-visual-card:hover .main-image-wrapper img { transform: scale(1.05); }
+    .floating-data-card {
+        position: absolute; bottom: -25px; left: -20px; width: 200px; background: white; border-radius: 18px; padding: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15); z-index: 3; border: 1px solid rgba(0,0,0,0.05); animation: breathe 4s infinite ease-in-out;
+    }
+    .floating-data-card.right { left: auto; right: -20px; }
+    .floating-data-card h3 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0; line-height: 1; letter-spacing: -1px; }
+    .floating-data-card span { font-size: 0.75rem; font-weight: bold; text-transform: uppercase; color: #6c757d; letter-spacing: 1px; }
+    .impact-icon-box { width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; }
+    .text-container-impact { padding-left: 30px; }
+    .text-container-impact.left-align { padding-left: 0; padding-right: 30px; }
+
+    .hs-currency-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 20px; margin-top: 25px; }
+    .hs-currency-item {
+        background: rgba(10,14,20,0.5); border-radius: 20px; padding: 25px 15px; text-align: center;
+        border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s; position: relative;
+    }
+    .hs-currency-item:hover { border-color: var(--hs-cyan); background: rgba(10,14,20,0.7); transform: translateY(-5px); }
+    .hs-currency-item i { font-size: 2.5rem; margin-bottom: 12px; }
+    .hs-currency-item h5 { font-size: 1.6rem; color: var(--hs-blue); font-weight: bold; margin-bottom: 5px; }
+    .hs-currency-item.disabled { opacity: 0.55; }
+    .hs-currency-item.disabled:hover { transform: none; border-color: rgba(255,255,255,0.05); background: rgba(10,14,20,0.5); }
+    .pronto-badge {
+        display: inline-block; background: rgba(252,196,4,0.15); border: 1px solid rgba(252,196,4,0.4);
+        color: #fcc404; border-radius: 20px; padding: 2px 10px; font-size: 0.7rem;
+        font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px;
+    }
+
+    .card-3d-container { position: relative; width: 350px; height: 500px; perspective: 1200px; z-index: 10; margin: 0 auto; }
+    .card-3d {
+        width: 100%; height: 100%;
+        background-image: url('https://storage.googleapis.com/humansystem/HUMAN%20ID%20FRENTE.png');
+        background-size: 100% 100%; background-position: center; background-repeat: no-repeat;
+        border: 1px solid rgba(205,25,255,0.2); border-radius: 20px; position: relative;
+        transform-style: preserve-3d; transition: transform 0.1s ease-out; will-change: transform;
+    }
+    .card-bg-animated { position: absolute; width: 100%; height: 100%; border-radius: 20px; overflow: hidden; z-index: 1; }
+    .circuit-lines {
+        position: absolute; width: 100%; height: 100%;
+        background-image: linear-gradient(90deg, transparent 95%, rgba(76,161,175,0.1) 100%), linear-gradient(0deg, transparent 95%, rgba(76,161,175,0.1) 100%);
+        background-size: 30px 30px; animation: circuitMove 20s linear infinite;
+    }
+    .hologram-layer {
+        position: absolute; width: 100%; height: 100%;
+        background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.03) 50%, transparent 55%);
+        animation: hologramMove 3s linear infinite;
+    }
+    .user-photo-container {
+        position: relative; width: 150px; height: 150px; margin: 75px auto 20px; border-radius: 50%;
+        overflow: hidden; border: 2px solid transparent; background: linear-gradient(45deg, var(--hs-cyan), var(--hs-red)) border-box;
+    }
+    .user-photo { width: 100%; height: 100%; object-fit: cover; filter: grayscale(20%); }
+    .brand-name-style {
+        color: #1F4E67; font-weight: bold !important; font-style: italic; text-transform: uppercase;
+        text-align: center; font-size: 1rem; margin: 0; padding: 0 35px; word-wrap: break-word; line-height: 1.2;
+    }
+    .user-info-clean { width: 100%; display: flex; justify-content: center; align-items: center; margin-top: 35px !important; min-height: 50px; }
+    #user-id-key {
+        font-style: italic; font-weight: bold; color: #1F4E67 !important; font-size: 1.25rem !important; opacity: 0.9;
+        letter-spacing: 2px; text-transform: uppercase; margin-top: -10px !important; position: relative; z-index: 5; text-align: center;
+    }
+
+    #loader-wrapper {
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background: linear-gradient(135deg, var(--hs-dark) 0%, var(--hs-blue) 100%);
+        z-index: 100000; display: flex; justify-content: center; align-items: center;
+        transition: transform 0.8s cubic-bezier(0.77,0,0.175,1), opacity 0.5s;
+    }
+    .loader-hidden { transform: translateY(-100%) !important; opacity: 0 !important; pointer-events: none; }
+    .biometric-fusion-container { display: flex; flex-direction: column; align-items: center; gap: 30px; }
+    .loading-track { width: 240px; height: 2px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; position: relative; }
+    .loading-fill { position: absolute; top: 0; left: 0; width: 0%; height: 100%; background: linear-gradient(90deg, var(--hs-cyan), var(--hs-red)); box-shadow: 0 0 10px var(--hs-red); }
+    .loader-status { font-family: var(--font-tech); font-size: 10px; color: var(--hs-cyan); letter-spacing: 2px; text-transform: uppercase; display: flex; gap: 5px; }
+    .status-dots { animation: dots-blink 1.5s infinite; }
+
+    .video-modal-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,17,32,0.9);
+        backdrop-filter: blur(15px); display: none; justify-content: center; align-items: center;
+        z-index: 100001; opacity: 0; transition: opacity 0.4s ease;
+    }
+    .video-modal-overlay.active { display: flex; opacity: 1; }
+    .video-modal-content {
+        width: 90%; max-width: 1000px; background: var(--hs-dark); border: 1px solid var(--hs-cyan);
+        border-radius: 20px; padding: 10px; position: relative; box-shadow: 0 0 50px rgba(76,161,175,0.3);
+    }
+    .video-modal-close { position: absolute; top: -50px; right: 0; background: none; border: none; color: white; font-size: 40px; cursor: pointer; transition: transform 0.3s ease; }
+    .video-modal-close:hover { color: var(--hs-red); transform: rotate(90deg); }
+    .video-responsive-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 15px; }
+    .video-responsive-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    .video-footer-text { padding: 15px; text-align: center; font-size: 10px; color: var(--hs-cyan); letter-spacing: 3px; }
+
+    .footer { background-color: white; border-top: 5px solid var(--hs-blue); position: relative; z-index: 10; color: #333; }
     .footer hr { border-top: 1px solid rgba(0,0,0,0.1); }
-    
-    .premium-swal-popup {
-        border: 1px solid rgba(76, 161, 175, 0.2) !important; border-radius: 24px !important;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important;
-    }
-    .premium-swal-button {
-        border-radius: 50px !important; padding: 12px 30px !important;
-        text-transform: uppercase !important; font-size: 0.8rem !important;
-        font-weight: 700 !important; letter-spacing: 1px !important;
-    }
-    div::-webkit-scrollbar { width: 5px; }
-    div::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
-    div::-webkit-scrollbar-thumb { background: #4ca1af; border-radius: 10px; }
+    .footer p, .footer li, .footer a { font-family: 'Iceland', sans-serif !important; }
 
-    /* --- RESPONSIVO --- */
-    @media (max-width: 992px) {
-        .bento-grid-white { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .hs-hero-main { text-align: center; }
-        .hero-lead { margin-left: auto; margin-right: auto; }
-        .flex-column-reverse { flex-direction: column-reverse !important; }
-    }
+    .premium-swal-popup { border: 1px solid rgba(76,161,175,0.2) !important; border-radius: 24px !important; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8) !important; }
+    .premium-swal-button { border-radius: 50px !important; padding: 12px 30px !important; text-transform: uppercase !important; font-size: 0.8rem !important; font-weight: 700 !important; letter-spacing: 1px !important; }
 
-    @media (max-width: 768px) {
-
-/* 1. Eliminamos los márgenes de las filas para que no se sumen */
-    .impact-showcase .row {
-        margin-bottom: 0 !important;
-        padding-bottom: 40px !important; /* Espacio uniforme entre SECCIONES completas */
+    /* ── FAQ STYLES ── */
+    .faq-section { background: #ffffff; padding: 80px 0; }
+    .faq-item {
+        border: 1px solid rgba(31,78,103,0.15); border-radius: 16px; margin-bottom: 12px;
+        overflow: hidden; transition: all 0.3s ease; background: #fff;
     }
-
-    /* 2. Quitamos el margen de la card para que pegue con su texto */
-    .impact-visual-card {
-        margin-bottom: 10px !important;
+    .faq-item:hover { border-color: var(--hs-cyan); box-shadow: 0 5px 20px rgba(76,161,175,0.1); }
+    .faq-question {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 22px 28px; cursor: pointer; font-weight: 700; color: var(--hs-blue);
+        font-size: 1.1rem; user-select: none;
     }
-
-    /* 3. Forzamos que el contenedor de texto tenga siempre el mismo espacio respecto a la imagen superior */
-    .text-container-impact, 
-    .text-container-impact.left-align {
-        margin-top: 20px !important; /* Ajusta este número si quieres que estén más pegados aún */
-        padding-top: 0 !important;
+    .faq-question:hover { color: var(--hs-cyan); }
+    .faq-question i { transition: transform 0.3s ease; color: var(--hs-cyan); flex-shrink: 0; margin-left: 15px; }
+    .faq-answer {
+        max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease;
+        padding: 0 28px; color: #555; font-size: 1rem; line-height: 1.7;
     }
+    .faq-item.open .faq-answer { max-height: 300px; padding: 0 28px 22px; }
+    .faq-item.open .faq-question i { transform: rotate(180deg); }
+    .faq-item.open { border-color: var(--hs-cyan); box-shadow: 0 8px 25px rgba(76,161,175,0.12); }
 
-    /* 4. Ajuste fino para los iconos del tema */
-    .impact-icon-box {
-        margin-bottom: 15px !important;
+    /* ── PARTNER SECTION STYLES ── */
+    .partner-features { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+    .partner-feature {
+        background: rgba(255,255,255,0.05); border: 1px solid rgba(76,161,175,0.2);
+        border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 12px;
     }
+    .partner-feature i { color: var(--hs-cyan); font-size: 1.2rem; flex-shrink: 0; }
+    .partner-feature span { color: rgba(255,255,255,0.85); font-size: 0.95rem; }
 
-        .hero-content .d-flex.flex-column {
-        align-items: center !important;
-        text-align: center;
+    @keyframes breathe { 0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.02);opacity:0.95} }
+    @keyframes pulseGreen { 0%{box-shadow:0 0 0 0 rgba(40,167,69,0.7)}70%{box-shadow:0 0 0 10px rgba(40,167,69,0)}100%{box-shadow:0 0 0 0 rgba(40,167,69,0)} }
+    @keyframes blinker { 50%{opacity:0} }
+    @keyframes wave-drift { 0%{transform:translateX(0) scaleY(1)}50%{transform:translateX(-25%) scaleY(1.1)}100%{transform:translateX(0) scaleY(1)} }
+    @keyframes circuitMove { 0%{background-position:0 0}100%{background-position:30px 30px} }
+    @keyframes hologramMove { 0%{transform:translateX(-100%)}100%{transform:translateX(100%)} }
+    @keyframes dots-blink { 0%,100%{opacity:0.2}50%{opacity:1} }
+
+    .ent-reveal, .ent-reveal-left, .ent-reveal-right { opacity:0; transition:opacity 1.2s var(--easing-premium),transform 1.2s var(--easing-premium); will-change:opacity,transform; }
+    .ent-reveal { transform:translateY(30px); }
+    .ent-reveal-left { transform:translateX(-30px); }
+    .ent-reveal-right { transform:translateX(30px); }
+    .ent-reveal.visible,.ent-reveal-left.visible,.ent-reveal-right.visible { opacity:1; transform:translate(0); }
+    .blink { animation:blinker 1s linear infinite; color:var(--hs-cyan); }
+
+    .wave-separator { position:absolute; bottom:0; left:0; width:100%; overflow:hidden; line-height:0; transform:rotate(180deg); }
+    .wave-separator svg { position:relative; display:block; width:calc(200% + 1.3px); height:80px; animation:wave-drift 8s ease-in-out infinite; transform-origin:center bottom; }
+    .wave-separator .shape-fill { fill:#ffffff; }
+
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-track { background:rgba(255,255,255,0.05); }
+    ::-webkit-scrollbar-thumb { background:#4ca1af; border-radius:10px; }
+
+    @media (min-width:992px) {
+        .hero-content { margin-bottom:150px !important; }
+        #ecosistema-unificado { padding-top:100px !important; padding-bottom:100px !important; }
     }
-        .hero-content h1 { font-size: 3rem !important; text-align: center; margin-top: 50px; }
-        #mission-vision-trust { padding-top: 20px !important; padding-bottom: 100px !important; }
-        .bento-grid-white { grid-template-columns: 1fr; gap: 20px; }
-        .hs-card-clean { padding: 30px 20px; }
-        .impact-showcase .row {
-            display: flex !important; flex-direction: column !important;
-            margin-bottom: 40px !important; padding-bottom: 0 !important;
-        }
-        .order-2 { order: 1 !important; } .order-1 { order: 2 !important; }
-        .main-image-wrapper { height: 260px !important; margin-bottom: 0 !important; }
-        .floating-data-card, .floating-data-card.right {
-            position: absolute !important; bottom: -15px !important;
-            left: 15px !important; right: auto !important; width: 150px !important;
-            padding: 12px !important; transform: none !important; z-index: 10 !important;
-        }
-        .text-container-impact, .text-container-impact.left-align {
-            margin-top: 40px !important; padding: 0 15px !important; text-align: left !important;
-        }
-        .impact-icon-box { margin-bottom: 10px !important; }
-        .impact-showcase h2 { font-size: 1.6rem !important; }
-        .wave-separator svg { height: 40px !important; }
+    @media (max-width:992px) {
+        .bento-grid-premium { grid-template-columns:repeat(2,1fr); gap:20px; }
+        .hs-hero-main { text-align:center; }
+        .hero-lead { margin-left:auto; margin-right:auto; }
+        .flex-column-reverse { flex-direction:column-reverse !important; }
+        .partner-features { grid-template-columns: 1fr; }
+    }
+    @media (max-width:768px) {
+        .section-dark-premium h2 { font-size:2.5rem; }
+        .hero-content .d-flex.flex-column { align-items:center !important; text-align:center; }
+        .hero-content h1 { font-size:3rem !important; text-align:center; margin-top:50px; }
+        .bento-grid-premium { grid-template-columns:1fr; gap:20px; }
+        .hs-card-clean { padding:30px 20px; }
+        .hs-currency-grid { grid-template-columns:repeat(2,1fr); }
+        .impact-showcase .row { margin-bottom:0 !important; padding-bottom:40px !important; display:flex !important; flex-direction:column !important; }
+        .impact-visual-card { margin-bottom:10px !important; }
+        .text-container-impact,.text-container-impact.left-align { margin-top:40px !important; padding:0 15px !important; text-align:left !important; }
+        .impact-icon-box { margin-bottom:15px !important; }
+        .main-image-wrapper { height:260px !important; margin-bottom:0 !important; }
+        .floating-data-card,.floating-data-card.right { position:absolute !important; bottom:-15px !important; left:15px !important; right:auto !important; width:150px !important; padding:12px !important; transform:none !important; z-index:10 !important; }
+        .order-2 { order:1 !important; } .order-1 { order:2 !important; }
+        .wave-separator svg { height:40px !important; }
+        .card-3d-container { width:300px; height:450px; }
+        .user-info-clean { margin-top:60px !important; min-height:auto !important; }
+        .brand-name-style { font-size:0.95rem !important; padding:0 50px !important; line-height:1.1 !important; }
+        .user-photo-container { width:120px !important; height:120px !important; margin:60px auto 10px !important; }
+        #user-id-key { font-size:0.65rem !important; letter-spacing:0.5px !important; margin-top:-2px !important; }
+        .faq-question { font-size:1rem; padding:18px 20px; }
     }
 </style>
 
 <div id="loader-wrapper">
     <div class="biometric-fusion-container">
-        <div class="loading-track">
-            <div class="loading-fill"></div>
-        </div>
+        <div class="loading-track"><div class="loading-fill"></div></div>
         <div class="loader-status">
             <span class="status-text">INICIALIZANDO_ENLACE_SEGURO</span>
             <span class="status-dots">...</span>
@@ -707,370 +378,806 @@
     </div>
 </div>
 
-<section id="mission-vision-trust" class="py-custom position-relative">
-    <div class="container mb-5">
-        <div class="row align-items-center mb-5">
-            <div class="col-lg-6 mb-5 mb-lg-0"> 
-                <div class="hero-text-wrapper text-center text-lg-left mb-5">
-                    <h1 class="gradient-text display-3 flicker-title">
-                        <em>LA IDENTIDAD YA NO ES<br>SOLO FÍSICA.</em>
-                    </h1>
-                    <p class="hero-desc mt-4">
-                        La primera plataforma unificada que fusiona <strong>Biometría Profunda</strong> y <strong>Soberanía Digital</strong>. 
-                        Protegida por infraestructura Tier III y automatización HS-SOAR.
-                    </p>
-                   <div class="cta-group mt-4">
-    <a href="javascript:void(0);" class="btn-glow" id="btn-watch-video" style="text-decoration: none; display: inline-block;">
-        <i class="fas fa-play-circle mr-2"></i> Ver más
-    </a>
-</div>
-                </div>
-            </div>
+<div class="hs-landing-wrapper">
 
-            <div class="col-lg-6 d-flex justify-content-center align-items-center ent-reveal-right">
-                <div class="card-3d-container">
-                    <div class="card-bg-animated">
-                        <div class="circuit-lines"></div>
-                        <div class="hologram-layer"></div>
-                    </div>
-                    <div class="card-3d" id="mission-hero-card">
-                     <div class="card-user-data p-4">
-    <div class="user-photo-container">
-        <img src="https://storage.googleapis.com/humansystem/Gemini_Generated_Image_n1w6uin1w6uin1w6-Photoroom.png" 
-             id="main-avatar" class="user-photo" alt="User">
-    </div>
-    
-    <div class="user-info-clean">
-        <h2 id="user-name-display" class="brand-name-style"><em>CARGANDO...</em></h2>
-    </div>
-    
-    <div class="text-center mt-3">
-        <div id="user-id-key" class="mono" style="font-size: 0.7rem; color: #1F4E67; opacity: 0.8; letter-spacing: 1px;">
-            HUMANO: ESP01850412993842
-        </div>
-    </div>
-</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-<div class="row justify-content-center my-5 py-4 ent-reveal">
-    <div class="col-10 col-lg-8">
-        <div style="height: 1px; background: linear-gradient(90deg, transparent, var(--hs-cyan), var(--hs-red), transparent); opacity: 0.3; position: relative;">
-            <div style="position: absolute; top: -4px; left: 50%; transform: translateX(-50%); width: 8px; height: 8px; background: var(--hs-red); border-radius: 50%; box-shadow: 0 0 10px var(--hs-red);"></div>
-        </div>
-        <div class="text-center mt-3">
-            <span class="mono" style="font-size: 10px; color: var(--hs-cyan); letter-spacing: 5px; text-transform: uppercase; opacity: 0.6;">Core_Architecture_v5.0</span>
-        </div>
-    </div>
-</div>
-        <div class="row align-items-center mt-5 pt-lg-5">
-            <div class="col-lg-6 mb-5 mb-lg-0 ent-reveal-left">
-                <div class="mission-blocks px-4 px-lg-0">
-                    <div class="d-flex align-items-start mb-5">
-                        <div class="icon-box-modern">
-                            <i class="fas fa-bullseye fa-2x text-white"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-weight-bold text-white mb-2">Misión</h4>
-                            <p class="text-light text-justify-premium" style="opacity: 0.85; max-width: 480px;">
-                                Erradicar la fragmentación de la identidad digital. Consolidamos los datos críticos en una plataforma única de <strong>soberanía humana</strong>.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="d-flex align-items-start">
-                        <div class="icon-box-modern">
-                            <i class="fas fa-eye fa-2x text-white"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-weight-bold text-white mb-2">Visión</h4>
-                            <p class="text-light text-justify-premium" style="opacity: 0.85; max-width: 480px;">
-                                Convertirnos en el <strong>sistema operativo de la confianza global</strong> para transacciones de alto nivel.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-6 ent-reveal-right">
-                <div class="heroCard">
-                    <div class="cardTop d-flex justify-content-between align-items-center mb-4">
-                        <div class="badge" style="display:inline-flex; align-items:center; gap:8px; padding:10px 20px; border-radius:999px; border:1px solid rgba(255,255,255,0.14); background:rgba(6,19,26,0.4); color:#fff; font-size:11px; text-transform:uppercase; letter-spacing:1px;">
-                            <span class="dot" style="width:8px; height:8px; border-radius:50%; background:#f10821; box-shadow:0 0 10px rgba(241,8,33,0.8);"></span> 
-                            Live Trust Telemetry
-                        </div>
-                        <i class="fas fa-fingerprint text-white-50 fa-lg"></i>
-                    </div>
-                    <div class="telemetry">
-                        <div class="tile">
-                            <div style="font-size: 10px; color: rgba(255,255,255,0.5); text-transform: uppercase;">Availability</div>
-                            <div class="tvalue">99.99%</div>
-                            <div class="miniLine"><i style="width: 99.9%;"></i></div>
-                        </div>
-                        <div class="tile">
-                            <div style="font-size: 10px; color: rgba(255,255,255,0.5); text-transform: uppercase;">Latencia</div>
-                            <div class="tvalue">14ms</div>
-                            <div class="miniLine"><i style="width: 30%;"></i></div>
-                        </div>
-                    </div>
-                    <div style="background: rgba(0,0,0,0.2); border-radius: 12px; padding: 15px; border: 1px solid rgba(255,255,255,0.05);">
-                        <code style="color: #4ca1af; font-size: 12px;">
-                            > System.status: Optimal <span class="blink">_</span><br>
-                            > encryption: AES-256-GCM<br>
-                            > nodes: Active [MEX, USA, GER]
-                        </code>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> <div class="wave-separator">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
-        </svg>
-    </div>
-</section>
-
-<section class="section-convergent-white">
-    <div class="container">
-        <div class="bento-grid-white">
-            <div class="hs-card-clean ent-reveal">
-                <div class="hs-icon-frame frame-cyan">
-                    <i class="fas fa-id-card fa-2x"></i>
-                </div>
-                <h3>Identity Service</h3>
-                <p>Validación biométrica multimodelo con soberanía total de datos para ecosistemas Fintech.</p>
-            </div>
-
-            <div class="hs-card-clean ent-reveal" style="transition-delay: 0.2s;">
-                <div class="hs-icon-frame frame-blue">
-                    <i class="fas fa-cloud fa-2x"></i>
-                </div>
-                <h3>Critical Storage</h3>
-                <p>Almacenamiento encriptado de grado militar con redundancia geográfica 2N+1.</p>
-            </div>
-
-            <div class="hs-card-clean ent-reveal" style="transition-delay: 0.4s;">
-                <div class="hs-icon-frame frame-red">
-                    <i class="fas fa-chart-line fa-2x"></i>
-                </div>
-                <h3>Algorithmic Capital</h3>
-                <p>Ejecución de capital inteligente mediante modelos predictivos de baja latencia.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="impact-showcase" id="manifesto">
-    <div class="container">
-        
-        <div class="row align-items-center mb-5 pb-5">
-            <div class="col-lg-6 ent-reveal-left">
-                <div class="impact-visual-card">
-                    <div class="main-image-wrapper">
-                        <img src="https://storage.googleapis.com/humansystem/Gemini_Generated_Image_fvgxi8fvgxi8fvgx.png" alt="Tecnología Verde">
-                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, rgba(40,167,69,0.1) 0%, transparent 70%);"></div>
-                    </div>
-                    <div class="floating-data-card">
-                        <h3 class="text-success">-80%</h3>
-                        <span>Huella de Carbono</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 text-container-impact ent-reveal-right">
-                <div class="impact-icon-box" style="background: #e8f5e9; color: #28a745;">
-                    <i class="fas fa-leaf fa-lg"></i>
-                </div>
-                <h2 class="font-weight-bold" style="color: #1F4E67;">Tecnología Verde: <br><em style="color: #28a745;">Desmaterialización Digital</em></h2>
-                <p class="lead text-muted">Eliminamos la burocracia física. Al migrar credenciales de PVC a identidad digital soberana, reducimos drásticamente el impacto ambiental corporativo.</p>
-                <ul class="list-unstyled small text-muted">
-                    <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Cero residuos plásticos (Zero-Waste).</li>
-                    <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Data Centers con enfriamiento optimizado.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="row align-items-center mb-5 pb-5">
-            <div class="col-lg-6 order-2 order-lg-2 ent-reveal-right">
-                <div class="impact-visual-card">
-                    <div class="main-image-wrapper" style="overflow: hidden; height: 450px; border-radius: 24px; position: relative;">
-                        <img src="https://storage.googleapis.com/humansystem/image%20(1).jpg" alt="Inclusión Social" style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%;">
-                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, rgba(215,29,0,0.15) 0%, transparent 80%); pointer-events: none;"></div>
-                    </div>
-                    <div class="floating-data-card right">
-                        <h3 class="text-danger" style="font-weight: 800; margin-bottom: 0;">30+</h3>
-                        <span style="font-size: 0.9rem; font-weight: 500;">Empleos Directos</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-6 order-1 order-lg-1 text-container-impact left-align ent-reveal-left">
-                <div class="impact-icon-box" style="background: #ffebee; color: #d71d00;">
-                    <i class="fas fa-users fa-lg"></i>
-                </div>
-                <h2 class="font-weight-bold" style="color: #1F4E67;">Innovación Social: <br><em style="color: #d71d00;">Inclusión sin Barreras</em></h2>
-                <p class="lead text-muted">La tecnología como puente. Facilitamos el acceso a servicios financieros y digitales para migrantes y comunidades no bancarizadas.</p>
-                <ul class="list-unstyled small text-muted">
-                    <li class="mb-2"><i class="fas fa-check text-danger mr-2"></i> Interfaces simplificadas para brecha generacional.</li>
-                    <li class="mb-2"><i class="fas fa-check text-danger mr-2"></i> Identidad portable para grupos vulnerables.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="row align-items-center mb-5 pb-5">
-            <div class="col-lg-6 ent-reveal-left">
-                <div class="impact-visual-card">
-                    <div class="main-image-wrapper">
-                        <img src="https://storage.googleapis.com/humansystem/Gemini_Generated_Image_7aezyn7aezyn7aez.png" alt="Ética de Datos">
-                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, rgba(31,78,103,0.1) 0%, transparent 70%);"></div>
-                    </div>
-                    <div class="floating-data-card">
-                        <h3 style="color: #1F4E67;">100%</h3>
-                        <span>Soberanía de Datos</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 text-container-impact ent-reveal-right">
-                <div class="impact-icon-box" style="background: #e3f2fd; color: #1F4E67;">
-                    <i class="fas fa-user-shield fa-lg"></i>
-                </div>
-                <h2 class="font-weight-bold" style="color: #1F4E67;">Ética Digital: <br><em style="color: #4ca1af;">Soberanía Humana</em></h2>
-                <p class="lead text-muted">Privacy-by-Design. El usuario es el único dueño de sus datos biométricos. Sin cajas negras y con transparencia algorítmica total.</p>
-                <ul class="list-unstyled small text-muted">
-                    <li class="mb-2"><i class="fas fa-check text-primary mr-2"></i> Cumplimiento estricto de derechos ARCO.</li>
-                    <li class="mb-2"><i class="fas fa-check text-primary mr-2"></i> Cifrado de grado militar punto a punto.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="row align-items-center mb-5 pb-5">
-            <div class="col-lg-6 order-2 order-lg-2 ent-reveal-right">
-                <div class="impact-visual-card">
-                    <div class="main-image-wrapper">
-                        <img src="https://storage.googleapis.com/humansystem/Gemini_Generated_Image_z1r0q2z1r0q2z1r0%20(1).png" alt="Educación Tecnológica">
-                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, rgba(23, 162, 184, 0.1) 0%, transparent 70%);"></div>
-                    </div>
-                    <div class="floating-data-card right">
-                        <h3 class="text-warning">4.0</h3>
-                        <span>Modelo Educativo</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-6 order-1 order-lg-1 text-container-impact left-align ent-reveal-left">
-                <div class="impact-icon-box" style="background: #e0f7fa; color: #FFC107;">
-                    <i class="fas fa-graduation-cap fa-lg"></i>
-                </div>
-                <h2 class="font-weight-bold" style="color: #1F4E67;">Academia GlobaliaXion: <br><em style="color: #FFC107;">Conocimiento Exponencial</em></h2>
-                <p class="lead text-muted">Formamos a la siguiente generación de ingenieros fintech. Un ecosistema educativo donde la teoría se encuentra con la infraestructura real de Human System.</p>
-                <ul class="list-unstyled small text-muted">
-                    <li class="mb-2"><i class="fas fa-check text-info mr-2"></i> Laboratorios en vivo sobre Blockchain y Bio-Security.</li>
-                    <li class="mb-2"><i class="fas fa-check text-info mr-2"></i> Certificación directa para operar la plataforma.</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="hs-hero-main py-5">
-    <div class="hs-hero-blob" style="top: -10%; left: -5%;"></div>
-    <div class="hs-hero-blob" style="bottom: -10%; right: -5%; background: radial-gradient(circle, rgba(215, 29, 0, 0.1) 0%, transparent 70%);"></div>
-    <div class="container position-relative py-5" style="z-index: 2;">
-        <div class="row align-items-center">
-            <div class="col-lg-6 mb-5 mb-lg-0 ent-reveal">
-                <span class="hs-badge-premium" style="background: var(--hs-red);">Exclusive Access: Q1 2026</span>
-                <h2 class="hero-title" style="font-size: 3.5rem;">
-                    Únete a la <br>
-                    <span style="color: var(--hs-cyan);">Élite de la Red.</span>
-                </h2>
-                <p class="hero-lead">
-                    Operamos exclusivamente mediante la selección de <strong>partners estratégicos</strong>.
-                    Nuestra infraestructura se reserva para entidades que exigen soberanía absoluta,
-                    máxima disponibilidad y latencia cero.
+    <!-- ══════════════════════════════════════
+         SECCIÓN HERO PRINCIPAL
+    ══════════════════════════════════════ -->
+    <section class="section-dark-premium" id="ecosistema-unificado" style="padding-bottom:150px;">
+        <div class="container">
+            <div class="hero-content p-5 mt-3 ml-5 mr-5 ent-reveal">
+                <h1 class="text-gradient" style="text-align:center;"><em>El Ecosistema Único en Identidad y Capital</em></h1>
+                <p class="hero-desc mb-4" style="max-width:700px;">
+                    La primera plataforma unificada que fusiona <strong>Identidad Visual Verificada</strong> y <strong>Soberanía Digital</strong>.
+                    Gestiona tu Billetera Humana, emite certificados y comparte tu perfil bajo un entorno <em>Zero-Trust</em>
+                    con defensa en profundidad a nivel militar.
                 </p>
-                <div class="d-flex flex-column align-items-center align-items-lg-start gap-3 mt-4">
-    <div class="tpill w-fit mb-4" style="border: 1px solid rgba(40, 167, 69, 0.3);">
-        <div class="dot-active"></div> NODOS DISPONIBLES: 12
-    </div>
-    <div class="tpill w-fit">
-        <i class="fas fa-lock text-warning"></i> CUMPLIMIENTO KYC/AML NIVEL 4
-    </div>
-</div>
-
+                <div class="cta-group mt-2">
+                    <a href="javascript:void(0);" class="btn-glow" id="btn-watch-video">
+                        <i class="fas fa-play-circle mr-2"></i> Ver más
+                    </a>
+                </div>
             </div>
 
-
-            <div class="col-lg-5 offset-lg-1 ent-reveal" style="transition-delay: 0.2s;">
-                <div class="glass-form-container" style="border: 1px solid var(--hs-cyan);">
-                    <div class="text-center mb-4">
-                        <h3 class="font-weight-bold">Enviar Mensaje</h3>
-                        <p class="small text-white-50">Completa el formulario para contactarnos.</p>
-                    </div>
-
-                    <form id="killerContactForm">
-                        <div class="form-group mb-3">
-                            <input type="text" class="form-control form-control-lg form-glass-input" placeholder="Nombre completo" required>
-                        </div>
-                        <div class="form-group mb-3">
-                            <input type="email" class="form-control form-control-lg form-glass-input" placeholder="Correo electrónico" required>
-                        </div>
-                        <div class="form-group mb-4">
-                            <textarea class="form-control form-glass-input" rows="4" placeholder="Escribe tu mensaje aquí..." style="height: auto !important;"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-submit-premium btn-block w-100 py-3">
-                            ENVIAR MENSAJE <i class="fas fa-paper-plane ml-2"></i>
-                        </button>
-                    </form>
-                    <p class="text-center mt-3 mb-0" style="font-size: 9px; color: rgba(255,255,255,0.4); text-transform: uppercase;">
-                        Tu información está protegida por encriptación de extremo a extremo.
+            <!-- ¿QUÉ ES HUMAN SYSTEM? -->
+            <div class="row align-items-center mb-5 pb-5">
+                <div class="col-lg-7 ent-reveal-left">
+                    <span class="hs-badge-premium" style="background:var(--hs-red);">IDENTIDAD SOBERANA & ECONOMÍA GLOBAL</span>
+                    <h2 class="mb-4"><em>¿Qué es <span class="text-gradient">Human System</span>?</em></h2>
+                    <p class="lead mb-4">
+                        Human System es el primer <strong>Marco de Identidad y Ciudadanía Digital</strong> diseñado para erradicar la fragmentación de tu vida online.
+                        Fusionamos en un único <strong>HumanoID</strong> tu identidad verificada, tus redes sociales y tu capacidad financiera.
                     </p>
+                    <p class="mb-4" style="opacity:0.8; font-size:1.1rem; border-left:3px solid var(--hs-cyan); padding-left:20px;">
+                        <strong>Control de Privacidad Total:</strong> Gestiona tu visibilidad con nuestro interruptor <em>Zero-Knowledge</em> de "Mostrar/Ocultar datos".
+                        Blinda tu información con nuestro sistema de defensa en profundidad y accede al ecosistema con una sola llave maestra.
+                    </p>
+                    <p class="mb-4" style="opacity:0.8; font-size:1.1rem; border-left:3px solid var(--hs-cyan); padding-left:20px;">
+                        <strong>Tu identidad inmutable:</strong> Información personal, foto de perfil y contacto se vinculan en un perfil soberano, almacenada de forma segura y lista para compartirse solo bajo tu autorización.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 mt-4">
+                        <div class="tpill"><i class="fas fa-fingerprint text-info"></i> Defensa en Profundidad</div>
+                        <div class="tpill"><i class="fas fa-qrcode text-cyan"></i> Tecnología NFC/QR</div>
+                        <div class="tpill"><i class="fas fa-certificate text-warning"></i> Certificación Oficial</div>
+                        <div class="tpill"><i class="fas fa-wallet text-success"></i> Wallet Multidivisa</div>
+                    </div>
+                </div>
+                <div class="col-lg-5 ent-reveal-right mt-5 mt-lg-0">
+                    <div class="glass-form-style text-center" style="padding:50px 20px;">
+                        <div style="text-align:center;">
+                            <img src="https://storage.googleapis.com/humansystem/Minimalist%20Version.png"
+                                 alt="Human System Core"
+                                 style="width:100%; max-width:380px; filter:drop-shadow(0 0 35px rgba(76,161,175,0.5));">
+                        </div>
+                        <div class="mt-4">
+                            <small class="text-uppercase" style="letter-spacing:3px; color:var(--hs-cyan); font-weight:bold;">
+                                HumanoID: ESP01850412993842
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MISIÓN Y VISIÓN -->
+            <div class="row align-items-center mt-5 mb-5 pt-lg-5">
+                <div class="col-lg-6 mb-5 mb-lg-0 ent-reveal-left">
+                    <div class="mission-blocks px-4 px-lg-0">
+                        <div class="d-flex align-items-start mb-5">
+                            <div class="icon-box-modern" style="border:1px solid var(--hs-cyan);">
+                                <i class="fas fa-bullseye fa-2x text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-weight-bold text-white mb-2">Misión</h4>
+                                <p class="text-light text-justify-premium" style="opacity:0.85; max-width:480px;">
+                                    Erradicar la fragmentación de la identidad digital. Consolidamos los datos críticos en una plataforma única de <strong>soberanía humana</strong>.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start">
+                            <div class="icon-box-modern" style="border:1px solid var(--hs-cyan);">
+                                <i class="fas fa-eye fa-2x text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-weight-bold text-white mb-2">Visión</h4>
+                                <p class="text-light text-justify-premium" style="opacity:0.85; max-width:480px;">
+                                    Convertirnos en el <strong>sistema operativo de la confianza global</strong> para transacciones de alto nivel.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 ent-reveal-right mb-5 mb-lg-0">
+                    <div class="glass-form-style" style="padding:40px 30px;">
+                        <h3 class="font-weight-bold mb-4" style="color:var(--hs-cyan);">Valores Fundamentales</h3>
+                        <ul class="list-unstyled" style="color:rgba(255,255,255,0.8); font-size:1.1rem; line-height:1.6;">
+                            <li class="mb-3"><i class="fas fa-shield-alt text-success mr-2"></i> <strong>Defense in Depth:</strong> Múltiples capas de seguridad que protegen tu identidad y activos en cada nivel.</li>
+                            <li class="mb-3"><i class="fas fa-users text-success mr-2"></i> <strong>Soberanía del Usuario:</strong> Control total sobre tus datos e identidad. Tú decides qué compartes y con quién.</li>
+                            <li class="mb-3"><i class="fas fa-cogs text-success mr-2"></i> <strong>Innovación Continua:</strong> Evolución constante con tecnologías emergentes y casos de uso reales.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEGURIDAD ZERO-TRUST -->
+            <div class="row align-items-center mt-5 mb-5 pb-5">
+                <div class="col-lg-6 order-2 order-lg-1 ent-reveal-left mt-5 mt-lg-0">
+                    <div class="glass-form-style">
+                        <div class="row mb-4 align-items-center">
+                            <div class="col-6 text-center" style="border-right:1px solid rgba(255,255,255,0.1);">
+                                <h4 style="color:var(--hs-cyan); font-size:2.8rem; line-height:1;" class="blink mb-1">05:00</h4>
+                                <p style="font-size:0.95rem; color:rgba(255,255,255,0.7); margin:0;">CVV Dinámico</p>
+                            </div>
+                            <div class="col-6 text-center">
+                                <i class="fas fa-robot text-warning mb-2" style="font-size:2.2rem;"></i>
+                                <h5 class="mb-0" style="font-size:1.1rem;">Anti-Duplicidad</h5>
+                                <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); margin:0;">Prevención IA en transferencias</p>
+                            </div>
+                        </div>
+                        <hr style="border-color:rgba(255,255,255,0.1); margin:25px 0;">
+                        <div class="d-flex align-items-center mb-4">
+                            <i class="fas fa-microchip fa-2x text-cyan mr-3"></i>
+                            <div>
+                                <h5 class="mb-1" style="font-size:1.3rem;">Arquitectura Zero-Trust</h5>
+                                <p class="small mb-0" style="color:rgba(255,255,255,0.7);">Emisión de microcredenciales criptográficas mediante tokens QR dinámicos. Verificamos cada transacción eliminando falsificaciones.</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-network-wired fa-2x text-cyan mr-3"></i>
+                            <div>
+                                <h5 class="mb-1" style="font-size:1.3rem;">Infraestructura Financiera</h5>
+                                <p class="small mb-0" style="color:rgba(255,255,255,0.7);">Stripe, Ethereum y redundancia geográfica 2N+1 para procesamiento financiero de alta disponibilidad.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 order-1 order-lg-2 ent-reveal-right">
+                    <h2 class="mb-4">Seguridad <span style="color:var(--hs-cyan);">Zero-Trust</span></h2>
+                    <p class="lead mb-4">
+                        Cuando el dinero y la identidad convergen, la seguridad absoluta es innegociable.
+                        Tu ecosistema está protegido por <strong>cifrado AES-256-GCM</strong>, identidad verificada en múltiples capas y sistemas contra fraudes impulsados por IA.
+                    </p>
+                    <ul class="list-unstyled mt-4" style="font-size:1.15rem;">
+                        <li class="mb-3"><i class="fas fa-fingerprint text-success mr-2"></i> <strong>Identidad Multicapa:</strong> Foto, firma digital y datos verificados conforman tu perfil soberano.</li>
+                        <li class="mb-3"><i class="fas fa-shield-alt text-success mr-2"></i> <strong>Defense in Depth:</strong> Validación de CURP, RFC, correo y sesión única activa en cada acceso.</li>
+                        <li class="mb-3"><i class="fas fa-lock text-success mr-2"></i> <strong>Soberanía Total:</strong> Confirmación por contraseña para cambios críticos. Kill Switch disponible 24/7.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- WALLET MULTIDIVISA -->
+            <div class="text-center mb-5 ent-reveal">
+                <span class="hs-badge-premium" style="background:linear-gradient(90deg, var(--hs-blue), var(--hs-cyan));">WALLET MULTIDIVISA</span>
+                <h2 class="font-weight-bold mt-3">Economía Sin Fronteras</h2>
+                <p class="lead" style="color:white; max-width:700px; margin:0 auto;">
+                    Administra, envía y recibe <strong>MXN, ETH, USDC y HumanCoin (HC)</strong> desde una sola interfaz.
+                    Conectividad directa con pasarelas de pago y blockchain.
+                </p>
+            </div>
+
+            <div class="hs-currency-grid ent-reveal">
+                <div class="hs-currency-item" style="border:1px solid var(--hs-cyan);">
+                    <i class="fas fa-coins" style="color:#28a745;"></i>
+                    <h5>MXN</h5>
+                    <span class="small" style="color:rgba(255,255,255,0.7);">Moneda Local</span>
+                </div>
+                <div class="hs-currency-item" style="border:1px solid var(--hs-cyan);">
+                    <i class="fas fa-dollar-sign" style="color:#2775ca;"></i>
+                    <h5>USDC</h5>
+                    <span class="small" style="color:rgba(255,255,255,0.7);">Stablecoin</span>
+                </div>
+                <div class="hs-currency-item" style="border:1px solid var(--hs-cyan);">
+                    <i class="fab fa-ethereum" style="color:#627eea;"></i>
+                    <h5>Ethereum</h5>
+                    <span class="small" style="color:rgba(255,255,255,0.7);">ERC-20</span>
+                </div>
+                <!-- BITCOIN: marcado como próximamente - no implementado aún -->
+                <div class="hs-currency-item disabled" style="border:1px solid rgba(255,255,255,0.08);">
+                    <i class="fab fa-bitcoin" style="color:#f7931a; opacity:0.5;"></i>
+                    <h5 style="opacity:0.5;">Bitcoin</h5>
+                    <span class="pronto-badge">Próximamente</span>
+                </div>
+                <div class="hs-currency-item" style="border:1px solid var(--hs-cyan);">
+                    <i class="fas fa-dragon" style="color:#d71d00;"></i>
+                    <h5>HumanCoin</h5>
+                    <span class="small" style="color:rgba(255,255,255,0.7);">Token Nativo</span>
+                </div>
+            </div>
+
+            <div class="text-center mt-5 ent-reveal">
+                <p class="small text-muted"><i class="fas fa-lock mr-1"></i> Transacciones cifradas con Stripe y monitoreo en tiempo real.</p>
+            </div>
+
+            <div class="row justify-content-center my-5 py-4 ent-reveal">
+                <div class="col-10 col-lg-8">
+                    <div style="height:1px; background:linear-gradient(90deg,transparent,var(--hs-cyan),var(--hs-red),transparent); opacity:0.3; position:relative;">
+                        <div style="position:absolute; top:-4px; left:50%; transform:translateX(-50%); width:8px; height:8px; background:var(--hs-red); border-radius:50%; box-shadow:0 0 10px var(--hs-red);"></div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <span class="mono" style="font-size:10px; color:var(--hs-cyan); letter-spacing:5px; text-transform:uppercase; opacity:0.6; font-family:var(--font-tech);">Core_Architecture_v5.0</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="wave-separator">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         CARACTERÍSTICAS PRINCIPALES (BENTO GRID)
+    ══════════════════════════════════════ -->
+    <section class="section-convergent-white">
+        <div class="container">
+            <div class="text-center mb-5 ent-reveal">
+                <h2 class="font-weight-bold mt-4 mb-3" style="color:var(--hs-blue); font-size:3rem;">
+                    <em>Diseñado para tu vida digital del día a día</em>
+                </h2>
+                <p class="lead text-muted" style="max-width:600px; margin:0 auto;">
+                    Unificamos seguridad de grado militar, identidad verificada y finanzas en herramientas prácticas para tu día a día.
+                </p>
+            </div>
+
+            <div class="bento-grid-premium">
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-cyan"><i class="fas fa-id-card fa-2x"></i></div>
+                    <h3>Identity Service</h3>
+                    <p>Validación de identidad con foto, firma y datos verificados en múltiples capas de seguridad.</p>
+                </div>
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-blue"><i class="fas fa-database fa-2x"></i></div>
+                    <h3>Critical Storage</h3>
+                    <p>Almacenamiento encriptado AES-256-GCM con redundancia geográfica 2N+1 en Google Cloud.</p>
+                </div>
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-red"><i class="fas fa-microchip fa-2x"></i></div>
+                    <h3>Algorithmic Capital</h3>
+                    <p>Ejecución de capital con detección de duplicidad vectorial y prevención de fraude por IA.</p>
+                </div>
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-gold"><i class="fas fa-user-check fa-2x"></i></div>
+                    <h3>Verificación Multicapa</h3>
+                    <p>Construye confianza absoluta: confirmación de correo, celular vía Twilio y validación de domicilio real.</p>
+                </div>
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-purple"><i class="fas fa-fingerprint fa-2x"></i></div>
+                    <h3>Sesión Única</h3>
+                    <p>Evita suplantaciones. Restringimos el acceso a una sola sesión activa. Cambios críticos requieren contraseña maestra.</p>
+                </div>
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-green"><i class="fas fa-qrcode fa-2x"></i></div>
+                    <h3>Networking Dinámico</h3>
+                    <p>Comparte perfil y redes (WhatsApp, LinkedIn) con un solo escaneo NFC o QR encriptado en tiempo real.</p>
+                </div>
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-cyan"><i class="fas fa-wallet fa-2x"></i></div>
+                    <h3>Smart Wallet</h3>
+                    <p>Fondea en MXN vía Stripe y transfiere HumanCoins al instante con prevención de duplicidad por IA.</p>
+                </div>
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-blue"><i class="fas fa-file-pdf fa-2x"></i></div>
+                    <h3>Certificados Oficiales</h3>
+                    <p>Expide copias oficiales de tu identidad en PDF firmadas digitalmente para trámites y validaciones.</p>
+                </div>
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-red"><i class="fas fa-power-off fa-2x"></i></div>
+                    <h3>Kill Switch</h3>
+                    <p>Protocolo de emergencia: congela tu cuenta e invalida tu tarjeta física con un solo clic desde cualquier dispositivo.</p>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
+    <!-- ══════════════════════════════════════
+         CASOS DE USO PREMIUM
+    ══════════════════════════════════════ -->
+    <section class="impact-showcase" id="manifesto" style="background:#ffffff;">
+        <div class="container">
+            <div class="text-center mb-5 ent-reveal">
+                <span class="hs-badge-premium" style="background:linear-gradient(135deg, #1F4E67, #4ca1af); color:white;">CASOS DE USO PREMIUM</span>
+                <h2 class="mt-4 font-weight-bold" style="color:var(--hs-dark-blue); font-size:3rem;">
+                    De lo digital a lo físico: <span style="color:var(--hs-cyan);">Así funciona tu ecosistema.</span>
+                </h2>
+                <p class="lead text-muted" style="max-width:800px; margin:0 auto;">
+                    Descubre cómo tu <strong>Human ID (Tarjeta y Certificado)</strong> interoperan con el mundo real.
+                    Desde validaciones hasta pagos P2P y networking profesional.
+                </p>
+            </div>
+
+            <!-- 1. VERIFICACIÓN OFICIAL -->
+            <div class="row align-items-center mb-5 pb-5">
+                <div class="col-lg-6 ent-reveal-left">
+                    <div class="impact-visual-card">
+                        <div class="main-image-wrapper" id="media-container-1"></div>
+                        <div class="floating-data-card">
+                            <h3 class="text-primary">&lt; 2s</h3>
+                            <span>Tiempo de Validación</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-container-impact ent-reveal-right">
+                    <div class="impact-icon-box" style="background:#e3f2fd; color:#1F4E67;">
+                        <i class="fas fa-user-check fa-lg"></i>
+                    </div>
+                    <h2 class="font-weight-bold" style="color:#1F4E67;">Verificación Oficial <br><em style="color:#4ca1af;">en Tiempo Real</em></h2>
+                    <p class="lead text-muted">Entrega tu identidad y sé validado al instante. El agente escanea tu <strong>Human ID</strong> (NFC/QR) y el sistema corrobora el estatus de tu credencial al momento.</p>
+                    <ul class="list-unstyled small text-muted">
+                        <li class="mb-2"><i class="fas fa-check text-primary mr-2"></i> <strong>Caso de uso:</strong> Migración, Notarías, Acceso Corporativo.</li>
+                        <li class="mb-2"><i class="fas fa-check text-primary mr-2"></i> El <strong>Certificado Oficial PDF</strong> comparte la misma arquitectura forense (QR, OVD).</li>
+                        <li class="mb-2"><i class="fas fa-check text-primary mr-2"></i> <strong>Flujo:</strong> Tap-to-Verify → Servidor Zero-Trust → Validación en ≤ 2 segundos.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 2. TRANSFERENCIA P2P -->
+            <div class="row align-items-center mb-5 pb-5">
+                <div class="col-lg-6 order-2 order-lg-2 ent-reveal-right">
+                    <div class="impact-visual-card">
+                        <div class="main-image-wrapper" id="media-container-2"></div>
+                        <div class="floating-data-card right">
+                            <h3 class="text-success">Instantáneo</h3>
+                            <span>Sin Comisiones</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 order-1 order-lg-1 text-container-impact left-align ent-reveal-left">
+                    <div class="impact-icon-box" style="background:#e8f5e9; color:#28a745;">
+                        <i class="fas fa-hand-holding-usd fa-lg"></i>
+                    </div>
+                    <h2 class="font-weight-bold" style="color:#1F4E67;">Transferencia P2P <br><em style="color:#28a745;">Wallet a Tarjeta NFC</em></h2>
+                    <p class="lead text-muted">Envía HumanCoins directamente a otra persona. El remitente acerca su celular a la tarjeta física del destinatario y en un solo "tap" la transacción queda sellada.</p>
+                    <ul class="list-unstyled small text-muted">
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> <strong>Seguridad:</strong> Prevención de duplicidad por similitud vectorial en cada transacción.</li>
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Ideal para pagos divididos, remesas familiares o intercambios en eventos.</li>
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Registro en tiempo real en tu historial de billetera.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 3. PAGO CON QR -->
+            <div class="row align-items-center mb-5 pb-5">
+                <div class="col-lg-6 ent-reveal-left">
+                    <div class="impact-visual-card">
+                        <div class="main-image-wrapper" id="media-container-3"></div>
+                        <div class="floating-data-card">
+                            <h3 class="text-warning">QR Dinámico</h3>
+                            <span>Anti-Falsificación</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-container-impact ent-reveal-right">
+                    <div class="impact-icon-box" style="background:#fff3e0; color:#fcc404;">
+                        <i class="fas fa-qrcode fa-lg"></i>
+                    </div>
+                    <h2 class="font-weight-bold" style="color:#1F4E67;">Pago con QR Biotec <br><em style="color:#fcc404;">Sanea y Transfiere</em></h2>
+                    <p class="lead text-muted">El comercio escanea tu <strong>Photo-QR Esteganográfico</strong> incrustado en tu tarjeta. El monto se autoriza y la tecnología "sanea" la transacción al instante, evitando duplicidad.</p>
+                    <ul class="list-unstyled small text-muted">
+                        <li class="mb-2"><i class="fas fa-check text-warning mr-2"></i> <strong>Innovación:</strong> El QR cambia en cada refresco, invalidando capturas de pantalla.</li>
+                        <li class="mb-2"><i class="fas fa-check text-warning mr-2"></i> Aceptado en comercios aliados mediante la app de validador HS.</li>
+                        <li class="mb-2"><i class="fas fa-check text-warning mr-2"></i> Conciliación automática con tu Wallet y emisión de comprobante.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 4. IDENTIFICACIÓN UNIVERSAL -->
+            <div class="row align-items-center mb-5 pb-5">
+                <div class="col-lg-6 order-2 order-lg-2 ent-reveal-right">
+                    <div class="impact-visual-card">
+                        <div class="main-image-wrapper" id="media-container-4"></div>
+                        <div class="floating-data-card right">
+                            <h3 class="text-info">Universal</h3>
+                            <span>Profesional / Social</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 order-1 order-lg-1 text-container-impact left-align ent-reveal-left">
+                    <div class="impact-icon-box" style="background:#e0f7fa; color:#17a2b8;">
+                        <i class="fas fa-id-card fa-lg"></i>
+                    </div>
+                    <h2 class="font-weight-bold" style="color:#1F4E67;">Identificación Universal <br><em style="color:#17a2b8;">Un Tap, Todo tu Perfil</em></h2>
+                    <p class="lead text-muted">Comparte tu perfil profesional, portfolio y redes sociales con un solo gesto. El receptor acerca su smartphone a tu tarjeta y accede a tu perfil seguro instantáneamente.</p>
+                    <ul class="list-unstyled small text-muted">
+                        <li class="mb-2"><i class="fas fa-check text-info mr-2"></i> <strong>Zero-Knowledge:</strong> Tú decides qué muestra el endpoint NFC en cada momento.</li>
+                        <li class="mb-2"><i class="fas fa-check text-info mr-2"></i> Ideal para Networking en conferencias o intercambio de referencias.</li>
+                        <li class="mb-2"><i class="fas fa-check text-info mr-2"></i> Reemplaza las tarjetas de presentación tradicionales de plástico.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="text-center mt-5 pt-4 ent-reveal">
+                <a href="/register" class="btn-hs btn-primary" style="background:linear-gradient(135deg, #1F4E67, #4ca1af);">
+                    <i class="fas fa-id-card"></i> Activar mi Human ID
+                </a>
+                <p class="small text-muted mt-3">* La tarjeta física incluye chip EMV contactless, banda magnética, tecnología NFC y certificado de autenticidad.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+    const mediaAssets = {
+        1: { gif:"https://media.giphy.com/media/v1.Y2lkPTEyMGMwMTQ0bnN5eWx3OHMzbmpnM2Z2aHl1cWl4Y3Z1Z3BzdjBmZ3V6c3Q4bG5jZiZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/l0MYEqEzwMWFCg8rm/giphy.gif", staticImg:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_fvgxi8fvgxi8fvgx.png" },
+        2: { gif:"https://media.giphy.com/media/v1.Y2lkPTEyMGMwMTQ0dzNqZnFncWhqbmM4aDRzcnBnc2RzN2NhY2FmeGtleW9qeXU1OG81byZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/26ufdipQqU2lhNA4g/giphy.gif", staticImg:"https://storage.googleapis.com/humansystem/image%20(1).jpg" },
+        3: { gif:"https://media.giphy.com/media/v1.Y2lkPTEyMGMwMTQ0eWVqZ25xYnVjbjM4ZWd1N3RjN2hyaHd0cWJlbHJkeHphdWlsd2VwZyZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/3oKIPnAiaMCws8nOsE/giphy.gif", staticImg:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_7aezyn7aezyn7aez.png" },
+        4: { gif:"https://media.giphy.com/media/v1.Y2lkPTEyMGMwMTQ0MWh6cWplOGkzZXFnZzVpYXRocWhyeWg1bDZibHZpc2o0NnU0NWM0bCZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/26tn33aiTi1jkl6H6/giphy.gif", staticImg:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_z1r0q2z1r0q2z1r0%20(1).png" }
+    };
+    function createMediaElement(type,src,altText){ const img=document.createElement('img'); img.src=src; img.alt=altText; img.style.cssText='width:100%;height:100%;object-fit:cover;transition:opacity 1s ease-in-out;opacity:1;'; return img; }
+    function initMediaRotation(containerId,assetKey){ const container=document.getElementById(containerId); if(!container) return; const assets=mediaAssets[assetKey]; if(!assets) return; let currentAssetType='gif',currentElement=null,intervalId=null;
+        function swapContent(){ const newType=currentAssetType==='gif'?'static':'gif'; const newSrc=newType==='gif'?assets.gif:assets.staticImg; const newElement=createMediaElement('img',newSrc,'Demo'); newElement.style.opacity='0'; container.appendChild(newElement); newElement.offsetHeight; newElement.style.opacity='1'; if(currentElement){ currentElement.style.opacity='0'; setTimeout(()=>{ if(currentElement.parentNode===container) container.removeChild(currentElement); },1000); } currentElement=newElement; currentAssetType=newType; }
+        currentElement=createMediaElement('img',assets.gif,'Demo GIF'); container.appendChild(currentElement); currentAssetType='gif'; intervalId=setInterval(swapContent,10000); container.rotationInterval=intervalId; }
+    document.addEventListener('DOMContentLoaded',()=>{ initMediaRotation('media-container-1',1); initMediaRotation('media-container-2',2); initMediaRotation('media-container-3',3); initMediaRotation('media-container-4',4); });
+    </script>
+
+    <!-- ══════════════════════════════════════
+         ESPECIFICACIONES TÉCNICAS TARJETA
+    ══════════════════════════════════════ -->
+    <section class="section-convergent-white" style="padding:80px 0; background:#ffffff;">
+        <div class="container">
+            <div class="text-center mb-5 ent-reveal">
+                <span class="hs-badge-premium" style="background:linear-gradient(135deg, #1F4E67, #4ca1af); color:white;">THE ULTIMATE PHYSICAL TOKEN</span>
+                <h2 class="mt-4 font-weight-bold" style="color:var(--hs-dark-blue); font-size:3rem;">
+                    <span style="color:var(--hs-cyan);">Visual Artificial Forense Structure</span>
+                </h2>
+                <p class="lead text-muted" style="max-width:800px; margin:0 auto;">
+                    Construida sobre sustrato de policarbonato de alta densidad, fusionado para evitar la delaminación y garantizar una vida útil de más de 15 años.
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-4 ent-reveal">
+                    <div class="hs-card-clean" style="background:white; border:1px solid #e9ecef; box-shadow:0 10px 30px rgba(0,0,0,0.05); height:100%;">
+                        <div class="hs-icon-frame frame-cyan"><i class="fas fa-microchip fa-2x"></i></div>
+                        <h3 style="color:var(--hs-blue); font-size:1.6rem;">Smart Core</h3>
+                        <p class="text-muted" style="text-align:left; font-size:0.9rem;"><strong>Chip de interfaz dual (Contacto y Contactless)</strong> integrando estándar <strong>EMV</strong> para transacciones seguras y generación de criptogramas anti-skimming.</p>
+                        <ul class="list-unstyled text-left" style="font-size:0.85rem; color:#495057;">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> NFC ISO/IEC 14443 - "Tap-to-Verify"</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> QR Dinámico Visible (Estado en tiempo real)</li>
+                            <li><i class="fas fa-check-circle text-success mr-2"></i> <strong>Photo-QR Esteganográfico:</strong> Código encriptado incrustado en imagen de perfil.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 ent-reveal" style="transition-delay:0.1s;">
+                    <div class="hs-card-clean" style="background:white; border:1px solid #e9ecef; box-shadow:0 10px 30px rgba(0,0,0,0.05); height:100%;">
+                        <div class="hs-icon-frame frame-red"><i class="fas fa-shield-alt fa-2x"></i></div>
+                        <h3 style="color:var(--hs-blue); font-size:1.6rem;">Seguridad Visual</h3>
+                        <p class="text-muted" style="text-align:left; font-size:0.9rem;"><strong>Patrón de seguridad degradado</strong> fusionado con la foto, acompañado de biometría invisible a simple vista.</p>
+                        <ul class="list-unstyled text-left" style="font-size:0.85rem; color:#495057;">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> <strong>OVD Dactilar Holográfico:</strong> Holograma de cambio de color/ángulo.</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Tinta Ópticamente Variable (OVI) 3ra Gen</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Guilloche + Impresión Arcoíris</li>
+                            <li><i class="fas fa-check-circle text-success mr-2"></i> Tinta UV / Fluorescente (luz negra)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 ent-reveal" style="transition-delay:0.2s;">
+                    <div class="hs-card-clean" style="background:white; border:1px solid #e9ecef; box-shadow:0 10px 30px rgba(0,0,0,0.05); height:100%;">
+                        <div class="hs-icon-frame frame-gold"><i class="fas fa-hand-peace fa-2x"></i></div>
+                        <h3 style="color:var(--hs-blue); font-size:1.6rem;">Anti-Intrusión</h3>
+                        <p class="text-muted" style="text-align:left; font-size:0.9rem;"><strong>Elementos táctiles y de manipulación</strong> que permiten verificación al tacto y soporte para usuarios con discapacidad visual.</p>
+                        <ul class="list-unstyled text-left" style="font-size:0.85rem; color:#495057;">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Grabado Láser Táctil (Braille-ready)</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Sticker de Validación (Sello de seguridad)</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Marca de Agua (visible al trasluz)</li>
+                            <li><i class="fas fa-check-circle text-success mr-2"></i> Banda Magnética + Código de Barras</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5 g-4">
+                <div class="col-md-6 ent-reveal">
+                    <div style="background:rgba(31,78,103,0.03); border:1px solid rgba(31,78,103,0.2); border-radius:24px; padding:30px; height:100%; color:#495057; transition:all 0.3s ease;">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-certificate fa-2x" style="color:var(--hs-cyan);"></i>
+                            <h4 class="mb-0 ml-3" style="color:var(--hs-blue);">Human Registration Certificate</h4>
+                        </div>
+                        <p style="font-size:0.95rem; color:#555;">El documento oficial comparte la misma arquitectura forense en versión física impresa y digital:</p>
+                        <ul class="list-unstyled" style="font-size:0.9rem;">
+                            <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> <strong>Sincronía Esteganográfica:</strong> Photo-QR incrustado y Holograma OVD.</li>
+                            <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> <strong>Tag NFC embebido</strong> directamente en el papel.</li>
+                            <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Sello de autenticidad físico (Security Seal)</li>
+                            <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Sustrato de seguridad con fibras visibles bajo luz UV</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 ent-reveal" style="transition-delay:0.1s;">
+                    <div style="background:rgba(31,78,103,0.03); border:1px solid rgba(31,78,103,0.2); border-radius:24px; padding:30px; height:100%; color:#495057; transition:all 0.3s ease;">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-cubes fa-2x" style="color:var(--hs-red);"></i>
+                            <h4 class="mb-0 ml-3" style="color:var(--hs-blue);">Materiales & Acabados</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <strong style="color:var(--hs-cyan);">Materiales Premium:</strong>
+                                <p class="small mb-2" style="color:#555;">PVC, PET, Policarbonato, Metal, Madera, PC</p>
+                                <strong style="color:var(--hs-cyan);">Estándares:</strong>
+                                <p class="small" style="color:#555;">ISO/IEC 14443-2/3 A<br>IC EAL 5+<br>Cifrado AES-256-GCM<br>Vida útil datos: 25 años</p>
+                            </div>
+                            <div class="col-6">
+                                <strong style="color:var(--hs-cyan);">Chips Soportados:</strong>
+                                <p class="small" style="color:#555;">Mifare DESFire, Plus, Classic<br>Serie NXP<br><strong>EMV Level 1 / Contactless</strong></p>
+                                <strong style="color:var(--hs-cyan);">Acabados:</strong>
+                                <p class="small" style="color:#555;">YMCK, Pantone, Laminado holográfico, Numeración láser</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         FAQ - PREGUNTAS FRECUENTES
+    ══════════════════════════════════════ -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="text-center mb-5 ent-reveal">
+                <span class="hs-badge-premium" style="background:linear-gradient(135deg, #1F4E67, #4ca1af);">PREGUNTAS FRECUENTES</span>
+                <h2 class="mt-4 font-weight-bold" style="color:var(--hs-blue); font-size:2.8rem;">¿Tienes dudas?</h2>
+                <p class="lead text-muted" style="max-width:600px; margin:0 auto;">
+                    Todo lo que necesitas saber antes de activar tu Human ID.
+                </p>
+            </div>
+
+            <div style="max-width:800px; margin:0 auto;">
+
+                <div class="faq-item ent-reveal">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Cuánto tiempo tarda en llegar mi tarjeta física?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Tu tarjeta física Human ID se envía a través de paquetería con guía de rastreo a cualquier punto de México.
+                        El tiempo estimado de entrega es de <strong>3 a 7 días hábiles</strong> una vez procesado el pago.
+                        Recibirás un correo de confirmación con el número de guía para dar seguimiento a tu envío.
+                    </div>
+                </div>
+
+                <div class="faq-item ent-reveal">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Qué pasa si pierdo mi teléfono o acceso a mi cuenta?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Accede desde cualquier otro dispositivo usando tus credenciales (HumanoID, correo, CURP, RFC o teléfono + contraseña).
+                        Si sospechas de acceso no autorizado, activa el <strong>Kill Switch</strong> desde Configuración para congelar tu cuenta e invalidar tu tarjeta física de inmediato.
+                        Para recuperar contraseña, usa la opción "Olvidé mi contraseña" en el login o escríbenos a <strong>info@humansystem.mx</strong>.
+                    </div>
+                </div>
+
+                <div class="faq-item ent-reveal">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Dónde se guardan mis datos y foto de perfil?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Todos tus datos personales y tu foto de perfil se almacenan en <strong>Google Cloud Storage</strong> con cifrado AES-256-GCM.
+                        Nunca se comparten con terceros sin tu consentimiento expreso. Puedes ejercer tus <strong>derechos ARCO</strong>
+                        (Acceso, Rectificación, Cancelación u Oposición) en cualquier momento escribiendo a <strong>info@humansystem.mx</strong>.
+                        Consulta nuestro Aviso de Privacidad completo en el footer.
+                    </div>
+                </div>
+
+                <div class="faq-item ent-reveal">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Hay una suscripción mensual o cargos recurrentes?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <strong>No</strong>. Human System no cobra suscripción mensual.
+                        Pagas una sola vez la tarjeta física (<strong>$500 MXN</strong> incluye envío y activación).
+                        Los certificados adicionales y la reposición de tarjeta tienen un costo de <strong>$100 MXN</strong> cada uno.
+                        Las transferencias de HumanCoins entre usuarios son sin comisión dentro de la plataforma.
+                    </div>
+                </div>
+
+                <div class="faq-item ent-reveal">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Puedo reportar mi tarjeta si la pierdo o me la roban?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Sí. Desde tu dashboard en <strong>Identificación</strong>, puedes reportar tu tarjeta como perdida con un solo clic.
+                        Esto la bloquea <strong>de forma inmediata</strong> e invalida su QR y chip NFC para que nadie más pueda usarla.
+                        Una vez reportada, puedes solicitar una tarjeta de reposición por <strong>$100 MXN</strong> desde la sección de Configuración.
+                    </div>
+                </div>
+
+                <div class="faq-item ent-reveal">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Puedo eliminar mi cuenta y datos permanentemente?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Sí. Desde <strong>Configuración → Eliminar Perfil</strong> puedes borrar tu cuenta permanentemente con verificación de contraseña.
+                        Esta acción elimina todos tus datos personales del sistema y desactiva tu tarjeta física de forma definitiva.
+                        Es una acción irreversible y se completa de inmediato. Tus derechos ARCO están garantizados en todo momento.
+                    </div>
+                </div>
+
+                <div class="faq-item ent-reveal">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Cómo funciona la billetera y en qué monedas puedo operar?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        La <strong>Billetera Humana</strong> te permite depositar pesos mexicanos (MXN) vía Stripe con tarjeta de crédito o débito.
+                        Desde ahí puedes comprar <strong>HumanCoins (HC)</strong> — el token nativo — a razón de $5 MXN por HC, y transferirlos a otros usuarios al instante.
+                        Tu billetera también incluye una <strong>dirección Ethereum (ETH)</strong> para recibir criptomonedas ERC-20.
+                        Los retiros a cuenta bancaria estarán disponibles próximamente.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         TARJETA FÍSICA + CTA
+    ══════════════════════════════════════ -->
+    <section class="hs-hero-main py-5">
+        <div class="hs-hero-blob" style="top:-10%; left:-5%;"></div>
+        <div class="hs-hero-blob" style="bottom:-10%; right:-5%; background:radial-gradient(circle, rgba(215,29,0,0.1) 0%, transparent 70%);"></div>
+
+        <div class="container position-relative py-5" style="z-index:2;">
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-6 ent-reveal-left mt-5">
+                    <div class="glass-form-container mx-lg-3 mt-5 mb-5" style="border:1px solid var(--hs-cyan);">
+                        <span class="hs-badge-premium" style="background:var(--hs-red); font-size:0.9rem; padding:5px 15px; margin-bottom:15px;">HARDWARE OFICIAL</span>
+                        <h2 class="mb-3" style="font-size:3rem; text-transform:uppercase;">Tu <span style="color:var(--hs-cyan);">HUMAN ID</span> Física</h2>
+                        <p style="font-size:1.2rem; color:rgba(255,255,255,0.8); margin-bottom:20px; line-height:1.4;">
+                            Materializa tu identidad digital. Adquiere tu tarjeta oficial y lleva tu credencial, tu firma y tus datos encriptados a donde vayas.
+                        </p>
+
+                        <div class="price-tag mb-2" style="font-size:3.5rem; color:var(--hs-cyan); font-weight:bold;">
+                            $500.00 <small style="font-size:1.5rem; color:rgba(255,255,255,0.6);">MXN</small>
+                        </div>
+
+                        <ul class="list-unstyled mb-4" style="font-size:1.2rem; color:rgba(255,255,255,0.9);">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Tarjeta física de alta durabilidad y diseño premium.</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Banda magnética y Tecnología Chip NFC para compartir perfil al instante.</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Vinculación biométrica instantánea y activación de Billetera Digital.</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Envío directo a tu domicilio a todo México incluido.</li>
+                            <li class="mb-2"><i class="fas fa-truck text-warning mr-2"></i> <strong>Entrega estimada: 3 a 7 días hábiles</strong> en toda la República Mexicana.</li>
+                        </ul>
+
+                        <a href="/register" class="btn-hs btn-primary w-100 justify-content-center" style="font-size:1.5rem;">
+                            <i class="fas fa-id-card"></i> Obtener mi Tarjeta
+                        </a>
+
+                        <p style="margin-top:15px; font-size:0.9rem; color:rgba(255,255,255,0.5); text-align:center;">
+                            * Certificados de identidad adicionales en PDF disponibles por +$100.00 MXN directamente en la plataforma.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 ent-reveal-right mt-5 mt-lg-0 d-flex justify-content-center">
+                    <div class="card-3d-container">
+                        <div class="card-bg-animated">
+                            <div class="circuit-lines"></div>
+                            <div class="hologram-layer"></div>
+                        </div>
+                        <div class="card-3d" id="mission-hero-card">
+                            <div class="card-user-data p-4">
+                                <div class="user-photo-container">
+                                    <img src="https://storage.googleapis.com/humansystem/Gemini_Generated_Image_n1w6uin1w6uin1w6-Photoroom.png" id="main-avatar" class="user-photo" alt="User">
+                                </div>
+                                <div class="user-info-clean">
+                                    <h2 id="user-name-display" class="brand-name-style"><em>CARGANDO...</em></h2>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <div id="user-id-key">ESP01850412993842</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══════════════════════════════════════
+                 SECCIÓN PARTNERS / INTEGRADORES
+            ══════════════════════════════════════ -->
+            <div class="row align-items-center pt-5 mt-5">
+                <div class="col-lg-6 mb-5 mb-lg-0 ent-reveal">
+                    <!-- CAMBIO: de "Exclusive Access Q1 2026" a sección de partners/integradores -->
+                    <span class="hs-badge-premium" style="background:var(--hs-red);">Partners Estratégicos · 2026</span>
+                    <h2 class="hero-title" style="font-size:3.5rem;">
+                        Integra <em>Human System</em><br>
+                        <span style="color:var(--hs-cyan);">en tu ecosistema.</span>
+                    </h2>
+                    <p class="hero-lead" style="color:rgba(255,255,255,0.85); font-size:1.1rem; line-height:1.7; margin-bottom:20px;">
+                        Construye sobre nuestra infraestructura. Diseña tu <strong>esquema propio de identidad</strong>,
+                        emite credenciales con tu marca y conecta tu plataforma a la red de validación de Human System.
+                        Acceso para integradores, desarrolladores y empresas con requerimientos de identidad soberana.
+                    </p>
+
+                    <div class="partner-features">
+                        <div class="partner-feature">
+                            <i class="fas fa-palette"></i>
+                            <span>White-label con tu branding</span>
+                        </div>
+                        <div class="partner-feature">
+                            <i class="fas fa-code"></i>
+                            <span>API REST de identidad y pagos</span>
+                        </div>
+                        <div class="partner-feature">
+                            <i class="fas fa-id-badge"></i>
+                            <span>Emisión de credenciales propias</span>
+                        </div>
+                        <div class="partner-feature">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Validación en tu infraestructura</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column align-items-center align-items-lg-start gap-3 mt-4">
+                        <div class="tpill mb-2" style="border:1px solid rgba(40,167,69,0.3);">
+                            <div class="dot-active"></div> RED ACTIVA — CONTÁCTANOS PARA ACCESO
+                        </div>
+                        <div class="tpill">
+                            <i class="fas fa-lock text-warning"></i> CIFRADO AES-256-GCM · ZERO-TRUST
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5 offset-lg-1 ent-reveal" style="transition-delay:0.2s;">
+                    <div class="glass-form-container" style="border:1px solid var(--hs-cyan);">
+                        <div class="text-center mb-4">
+                            <h3 class="font-weight-bold">Enviar Mensaje</h3>
+                            <p class="small text-white-50">Completa el formulario y te contactamos en menos de 24 horas.</p>
+                        </div>
+                        <form id="killerContactForm">
+                            <div class="form-group mb-3">
+                                <input type="text" id="cf-nombre" class="form-control form-control-lg form-glass-input" placeholder="Nombre completo" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <input type="email" id="cf-correo" class="form-control form-control-lg form-glass-input" placeholder="Correo electrónico" required>
+                            </div>
+                            <div class="form-group mb-4">
+                                <textarea id="cf-mensaje" class="form-control form-glass-input" rows="4" placeholder="Cuéntanos tu caso de uso o proyecto..." style="height:auto !important;"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-submit-premium btn-block w-100 py-3">
+                                ENVIAR MENSAJE <i class="fas fa-paper-plane ml-2"></i>
+                            </button>
+                        </form>
+                        <p class="text-center mt-3 mb-0" style="font-size:9px; color:rgba(255,255,255,0.4); text-transform:uppercase;">
+                            Tu información está protegida por encriptación de extremo a extremo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- FOOTER -->
 <footer class="footer pt-5 pb-3">
     <div class="container">
         <div class="row text-center text-md-left">
             <div class="col-md-4 mb-4 ent-reveal">
-                <img src="https://storage.googleapis.com/humansystem/dwaads.png" width="70" alt="Logo HS">
+                <img src="https://storage.googleapis.com/humansystem/Full%20Logo.png" width="90" alt="Logo HS">
                 <p class="mt-3 small text-muted">
                     <strong>Human Identification Technologies</strong><br>
-                    <em>Identificado a cada segundo <i class="fas fa-stopwatch" style="animation: breathe 2s infinite;"></i> !</em><br>
-                    Plataforma convergente Fintech‑Cloud‑Security: identidad unificada, validación física/digital, storage crítico, telemetría SIEM/XDR y automatización HS‑SOAR. Diseñada para operar con confianza absoluta.
+                    <em>Identificado a cada segundo <i class="fas fa-stopwatch" style="animation:breathe 2s infinite;"></i>!</em><br>
+                    Plataforma convergente Fintech-Cloud-Security: identidad unificada, validación física/digital, storage crítico y cifrado AES-256-GCM. Diseñada para operar con confianza absoluta.
                 </p>
             </div>
-            <div class="col-md-4 mb-4 ent-reveal" style="transition-delay: 0.1s;">
-                <h6 class="font-weight-bold text-uppercase" style="color: #1F4E67;">Contacto Corporativo</h6>
+            <div class="col-md-4 mb-4 ent-reveal" style="transition-delay:0.1s;">
+                <h6 class="font-weight-bold text-uppercase" style="color:#1F4E67;">Contacto Corporativo</h6>
                 <ul class="list-unstyled small">
                     <li class="mb-2"><i class="fas fa-envelope mr-2"></i> info@humansystem.mx</li>
                     <li class="mb-2"><i class="fas fa-phone mr-2"></i> +52 55 7986 7370</li>
                     <li class="mb-2"><i class="fas fa-map-marker-alt mr-2"></i> Ciudad de México</li>
                 </ul>
             </div>
-            <div class="col-md-4 ent-reveal" style="transition-delay: 0.2s;">
-                <h6 class="font-weight-bold text-uppercase" style="color: #d71d00;">Cumplimiento Legal</h6>
+            <div class="col-md-4 ent-reveal" style="transition-delay:0.2s;">
+                <h6 class="font-weight-bold text-uppercase" style="color:#d71d00;">Cumplimiento Legal</h6>
                 <p class="small text-muted">
-                    Tecnología protegida bajo registros en el<strong>IMPI</strong> e <strong>INDAUTOR</strong>. 
-                    El uso no autorizado de los algoritmos de trading o identidad conlleva sanciones estrictas bajo el régimen de SLAs.
+                    Tecnología protegida bajo registros en el <strong>IMPI</strong> e <strong>INDAUTOR</strong>.
+                    El uso no autorizado de los algoritmos de identidad conlleva sanciones estrictas bajo el régimen de SLAs.
                 </p>
                 <div class="mt-3">
-                    <a href="#" id="btn-terms" class="btn btn-outline-primary btn-sm mr-2" style="border-radius: 50px; padding: 5px 15px;">Términos</a>
-                    <a href="#" id="btn-privacy" class="btn btn-outline-danger btn-sm" style="border-radius: 50px; padding: 5px 15px;">Privacidad</a>
+                    <a href="#" id="btn-terms" class="btn btn-outline-primary btn-sm mr-2" style="border-radius:50px; padding:5px 15px;">Términos</a>
+                    <a href="#" id="btn-privacy" class="btn btn-outline-danger btn-sm" style="border-radius:50px; padding:5px 15px;">Privacidad</a>
                 </div>
             </div>
         </div>
         <hr>
         <div class="row">
             <div class="col-12 text-center">
-                <p class="small text-muted mb-0">© 2025 Human Identification Technologies. Confidentiality Statement Applied.</p>
+                <p class="small text-muted mb-0">© 2026 Human Identification Technologies. Confidentiality Statement Applied.</p>
             </div>
         </div>
     </div>
 </footer>
 
-
+<!-- VIDEO MODAL -->
 <div id="videoModal" class="video-modal-overlay">
     <div class="video-modal-content">
         <button id="closeVideo" class="video-modal-close">&times;</button>
@@ -1078,7 +1185,7 @@
             <iframe id="hsVideoFrame" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <div class="video-footer-text">
-            <span class="mono">CONFIDENTIAL_DATA_STREAM // HS_SYSTEM_SPECS</span>
+            <span style="font-family:var(--font-tech);">CONFIDENTIAL_DATA_STREAM // HS_SYSTEM_SPECS</span>
         </div>
     </div>
 </div>
@@ -1086,404 +1193,193 @@
 <%- include('partials/footer', { login: login }) %>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
-
 document.addEventListener('DOMContentLoaded', () => {
+
+    // ── LOADER ──────────────────────────────────────────────────────
+    const loader = document.getElementById('loader-wrapper');
+    const statusText = document.querySelector('.status-text');
+    const loadingFill = document.querySelector('.loading-fill');
+    const statusDots = document.querySelector('.status-dots');
+
+    function finishLoading() {
+        if(loadingFill){ loadingFill.style.background='#28a745'; loadingFill.style.boxShadow='0 0 15px #28a745'; }
+        setTimeout(()=>{ if(loader) loader.classList.add('loader-hidden'); }, 800);
+    }
+
+    const states = ["CARGANDO_MOSAICO_DE_IMÁGENES","RENDERIZANDO_SECCIONES_INTERACTIVAS","PREPARANDO_CUESTIONARIOS_DINÁMICOS","OPTIMIZANDO_CONTENIDO_MULTIMEDIA","LISTO_PARA_EXPLORAR"];
+    let i=0; const progressPerStep=100/states.length;
+    const stateInterval = setInterval(()=>{
+        if(i<states.length){
+            if(statusText) statusText.innerText=states[i];
+            if(loadingFill){ loadingFill.style.width=`${(i+1)*progressPerStep}%`; loadingFill.style.transition='width 0.6s ease'; }
+            if(states[i]==="LISTO_PARA_EXPLORAR"){ clearInterval(stateInterval); if(statusDots) statusDots.style.display='none'; finishLoading(); }
+            i++;
+        }
+    }, 700);
+    setTimeout(()=>{ if(loader && !loader.classList.contains('loader-hidden')) finishLoading(); }, 8000);
+
+    // ── ROTACIÓN DE IDENTIDADES ──────────────────────────────────────
     const avatarImg = document.getElementById('main-avatar');
     const nameDisplay = document.getElementById('user-name-display');
     const idKeyDisplay = document.getElementById('user-id-key');
 
-   const staffProfiles = [
-        { 
-            img: "https://storage.googleapis.com/humansystem/Gemini_Generated_Image_jp5hjcjp5hjcjp5h-Photoroom.png", 
-            names: ["MARÍA JOSÉ", "ANA PAULA", "XIMENA", "BEATRIZ", "ELENA"],
-            paternal: ["GARCÍA", "RODRÍGUEZ", "MARTÍNEZ", "SOTO", "VARGAS"],
-            maternal: ["SÁNCHEZ", "LÓPEZ", "PÉREZ", "CORTÉS", "MÉNDEZ"],
-            countryCode: "MEX", gender: "F", dob: "920514"
-        },
-        { 
-            img: "https://storage.googleapis.com/humansystem/Gemini_Generated_Image_l1rdudl1rdudl1rd-Photoroom.png", 
-            names: ["JUAN CARLOS", "LUIS ALBERTO", "RICARDO", "MAURICIO", "ROBERTO"],
-            paternal: ["HERNÁNDEZ", "SÁNCHEZ", "PÉREZ", "GÓMEZ", "DÍAZ"],
-            maternal: ["GONZÁLEZ", "GÓMEZ", "RAMÍREZ", "FLORES", "ORTEGA"],
-            countryCode: "ARG", gender: "M", dob: "881022"
-        },
-        { 
-            img: "https://storage.googleapis.com/humansystem/Gemini_Generated_Image_zemt3vzemt3vzemt-Photoroom.png", 
-            names: ["CARLA SOFÍA", "VALERIA", "DANIELA", "ADRIANA", "NATALIA"],
-            paternal: ["RAMÍREZ", "CRUZ", "FLORES", "MORALES", "SOLÍS"],
-            maternal: ["MORALES", "ORTIZ", "CASTRO", "RIVERA", "REYES"],
-            countryCode: "COL", gender: "F", dob: "950130"
-        },
-        { 
-            img: "https://storage.googleapis.com/humansystem/Gemini_Generated_Image_6x61cl6x61cl6x61-Photoroom.png", 
-            names: ["MIGUEL ÁNGEL", "FRANCISCO", "JAVIER", "ALEJANDRO", "SANTIAGO"],
-            paternal: ["VAZQUEZ", "REYES", "JIMÉNEZ", "TORRES", "LUNA"],
-            maternal: ["TORRES", "VARGAS", "RUIZ", "MENDOZA", "SANTIAGO"],
-            countryCode: "ESP", gender: "M", dob: "900715"
-        },
-        { 
-            img: "https://storage.googleapis.com/humansystem/Gemini_Generated_Image_ppy4sdppy4sdppy4-Photoroom.png", 
-            names: ["SOFÍA", "ISABELLA", "CAMILA", "VALENTINA", "MARIANA"],
-            paternal: ["CASTILLO", "GUZMÁN", "ROMERO", "MUÑOZ", "AGUILAR"],
-            maternal: ["NAV Navarro", "SALAZAR", "DELGADO", "PACHECO", "IBARRA"],
-            countryCode: "CHL", gender: "F", dob: "940312"
-        },
-        { 
-            img: "https://storage.googleapis.com/humansystem/Gemini_Generated_Image_28rddq28rddq28rd-Photoroom.png", 
-            names: ["DIEGO", "SEBASTIÁN", "NICOLÁS", "SAMUEL", "JOAQUÍN"],
-            paternal: ["VALENCIA", "CANO", "ROJAS", "PONCE", "OROZCO"],
-            maternal: ["VILLANUEVA", "ESTRADA", "FIGUEROA", "HURTADO", "MEJÍA"],
-            countryCode: "PER", gender: "M", dob: "911105"
-        },
-        { 
-            img: "https://storage.googleapis.com/humansystem/Gemini_Generated_Image_vd79j4vd79j4vd79-Photoroom.png", 
-            names: ["GABRIELA", "FERNANDA", "ANDREA", "VICTORIA", "LUCÍA"],
-            paternal: ["MIRANDA", "CAMPOS", "LARA", "SANTANA", "VERA"],
-            maternal: ["ZAVALA", "OJEDA", "SUÁREZ", "ESPINOSA", "ARCE"],
-            countryCode: "URY", gender: "F", dob: "930827"
-        },
-        { 
-            img: "https://storage.googleapis.com/humansystem/Gemini_Generated_Image_wcets6wcets6wcet-Photoroom.png", 
-            names: ["EMILIO", "MATEO", "DANIEL", "HUGO", "PABLO"],
-            paternal: ["CORREA", "ESQUIVEL", "BARRIOS", "ARÉVALO", "SALAS"],
-            maternal: ["ACOSTA", "PAREDES", "CALDERÓN", "GALLARDO", "VALDÉS"],
-            countryCode: "CRI", gender: "M", dob: "890418"
-        },
-        { 
-            img: "https://storage.googleapis.com/humansystem/Gemini_Generated_Image_ywiu1gywiu1gywiu-Photoroom.png", 
-            names: ["RENATA", "PAOLA", "CLAUDIA", "ESTEFANÍA", "MÓNICA"],
-            paternal: ["MONTALVO", "BARRERA", "GUERRA", "SERRANO", "SALINAS"],
-            maternal: ["TELLEZ", "MOLINA", "BELTRÁN", "CUEVAS", "GALLEGOS"],
-            countryCode: "MEX", gender: "F", dob: "961230"
-        },
-        { 
-            img: "https://storage.googleapis.com/humansystem/Gemini_Generated_Image_w9mt3ow9mt3ow9mt-Photoroom.png", 
-            names: ["GUSTAVO", "ADRIÁN", "FELIPE", "ÁNGEL", "ISAAC"],
-            paternal: ["BRAVO", "PADILLA", "VILLA", "QUINTERO", "RIVAS"],
-            maternal: ["GALVAN", "CORONADO", "CÁRDENAS", "VALADEZ", "AVILA"],
-            countryCode: "ESP", gender: "M", dob: "870621"
-        }
+    const staffProfiles = [
+        { img:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_jp5hjcjp5hjcjp5h-Photoroom.png", names:["MARÍA JOSÉ","ANA PAULA","XIMENA","BEATRIZ","ELENA"], paternal:["GARCÍA","RODRÍGUEZ","MARTÍNEZ","SOTO","VARGAS"], maternal:["SÁNCHEZ","LÓPEZ","PÉREZ","CORTÉS","MÉNDEZ"], countryCode:"MEX", gender:"F", dob:"920514" },
+        { img:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_l1rdudl1rdudl1rd-Photoroom.png", names:["JUAN CARLOS","LUIS ALBERTO","RICARDO","MAURICIO","ROBERTO"], paternal:["HERNÁNDEZ","SÁNCHEZ","PÉREZ","GÓMEZ","DÍAZ"], maternal:["GONZÁLEZ","GÓMEZ","RAMÍREZ","FLORES","ORTEGA"], countryCode:"ARG", gender:"M", dob:"881022" },
+        { img:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_zemt3vzemt3vzemt-Photoroom.png", names:["CARLA SOFÍA","VALERIA","DANIELA","ADRIANA","NATALIA"], paternal:["RAMÍREZ","CRUZ","FLORES","MORALES","SOLÍS"], maternal:["MORALES","ORTIZ","CASTRO","RIVERA","REYES"], countryCode:"COL", gender:"F", dob:"950130" },
+        { img:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_6x61cl6x61cl6x61-Photoroom.png", names:["MIGUEL ÁNGEL","FRANCISCO","JAVIER","ALEJANDRO","SANTIAGO"], paternal:["VAZQUEZ","REYES","JIMÉNEZ","TORRES","LUNA"], maternal:["TORRES","VARGAS","RUIZ","MENDOZA","SANTIAGO"], countryCode:"ESP", gender:"M", dob:"900715" },
+        { img:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_ppy4sdppy4sdppy4-Photoroom.png", names:["SOFÍA","ISABELLA","CAMILA","VALENTINA","MARIANA"], paternal:["CASTILLO","GUZMÁN","ROMERO","MUÑOZ","AGUILAR"], maternal:["NAVARRO","SALAZAR","DELGADO","PACHECO","IBARRA"], countryCode:"CHL", gender:"F", dob:"940312" }
     ];
 
-    function generateHumanoKey(profile, fullName) {
-        const genderDigit = profile.gender === "M" ? "1" : "2";
-        // Extraer iniciales del nombre completo para la clave
-        const initials = fullName.split(' ').map(n => n[0]).join('').substring(0, 3);
-        // Completar con dígitos aleatorios para llegar a 18 (País(3)+Inic(3)+Gen(1)+Fecha(6)+Random(5) = 18)
-        const randomSuffix = Math.random().toString().slice(2, 7);
-        return `HUMANO: ${profile.countryCode}${initials}${genderDigit}${profile.dob}${randomSuffix}`;
+    function generateHumanoKey(profile,fullName){ const genderDigit=profile.gender==="M"?"1":"2"; const initials=fullName.split(' ').map(n=>n[0]).join('').substring(0,3); const randomSuffix=Math.random().toString().slice(2,7); return `${profile.countryCode}${initials}${genderDigit}${profile.dob}${randomSuffix}`; }
+
+    let currentIndex=0;
+    function rotateIdentity(){
+        if(!nameDisplay||!idKeyDisplay) return;
+        nameDisplay.style.opacity='0'; idKeyDisplay.style.opacity='0';
+        setTimeout(()=>{
+            currentIndex=(currentIndex+1)%staffProfiles.length;
+            const profile=staffProfiles[currentIndex];
+            if(avatarImg) avatarImg.src=profile.img;
+            const n=profile.names[Math.floor(Math.random()*profile.names.length)];
+            const ap=profile.paternal[Math.floor(Math.random()*profile.paternal.length)];
+            const am=profile.maternal[Math.floor(Math.random()*profile.maternal.length)];
+            const full=`${n} ${ap} ${am}`;
+            nameDisplay.innerHTML=`<em>${full}</em>`;
+            idKeyDisplay.innerHTML=`<em>${generateHumanoKey(profile,full)}</em>`;
+            nameDisplay.style.opacity='1'; idKeyDisplay.style.opacity='1';
+        },500);
     }
+    setInterval(rotateIdentity,4500);
+    if(nameDisplay&&idKeyDisplay){ const initialFull="MARÍA JOSÉ GARCÍA SÁNCHEZ"; nameDisplay.innerHTML=`<em>${initialFull}</em>`; idKeyDisplay.innerText=generateHumanoKey(staffProfiles[0],initialFull); }
 
-    function rotateIdentity() {
-        nameDisplay.style.opacity = '0';
-        idKeyDisplay.style.opacity = '0';
-
-        setTimeout(() => {
-            currentIndex = (currentIndex + 1) % staffProfiles.length;
-            const profile = staffProfiles[currentIndex];
-            
-            avatarImg.src = profile.img;
-            
-            const n = profile.names[Math.floor(Math.random() * profile.names.length)];
-            const ap = profile.paternal[Math.floor(Math.random() * profile.paternal.length)];
-            const am = profile.maternal[Math.floor(Math.random() * profile.maternal.length)];
-            const full = `${n} ${ap} ${am}`;
- 
-            nameDisplay.innerHTML = `<em>${full}</em>`;
-            idKeyDisplay.innerText = generateHumanoKey(profile, full);
-            
-            nameDisplay.style.opacity = '1';
-            idKeyDisplay.style.opacity = '0.8';
-        }, 500);
-    }
-
-    let currentIndex = 0;
-    setInterval(rotateIdentity, 4500);
-    
-    // Carga inicial forzada con 2 apellidos
-    const initialFull = "MARÍA JOSÉ GARCÍA SÁNCHEZ";
-    nameDisplay.innerHTML = `<em>${initialFull}</em>`;
-    idKeyDisplay.innerText = generateHumanoKey(staffProfiles[0], initialFull);
-});
-
-document.addEventListener('DOMContentLoaded', () => {
+    // ── VIDEO MODAL ──────────────────────────────────────────────────
     const videoBtn = document.getElementById('btn-watch-video');
     const videoModal = document.getElementById('videoModal');
     const closeBtn = document.getElementById('closeVideo');
     const videoFrame = document.getElementById('hsVideoFrame');
+    const videoURL = "https://storage.googleapis.com/humansystem/video1.mp4";
 
-    // URL del video (puedes usar YouTube, Vimeo o un archivo directo)
-    const videoURL = "https://www.youtube.com/embed/TU_ID_DE_VIDEO?autoplay=1&rel=0";
+    if(videoBtn){ videoBtn.addEventListener('click',()=>{ if(videoFrame) videoFrame.src=videoURL; if(videoModal) videoModal.classList.add('active'); document.body.style.overflow='hidden'; }); }
+    const closeModal=()=>{ if(videoModal) videoModal.classList.remove('active'); if(videoFrame) videoFrame.src=""; document.body.style.overflow='auto'; };
+    if(closeBtn) closeBtn.addEventListener('click',closeModal);
+    if(videoModal){ videoModal.addEventListener('click',(e)=>{ if(e.target===videoModal) closeModal(); }); }
 
-    videoBtn.addEventListener('click', () => {
-        videoFrame.src = videoURL;
-        videoModal.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Evita scroll
-    });
+    // ── ANIMACIÓN 3D TARJETA ─────────────────────────────────────────
+    const missionCard = document.getElementById('mission-hero-card');
+    if(missionCard&&missionCard.parentElement){
+        const container=missionCard.parentElement;
+        container.addEventListener('mousemove',(e)=>{ const rect=missionCard.getBoundingClientRect(); const x=e.clientX-rect.left; const y=e.clientY-rect.top; const centerX=rect.width/2; const centerY=rect.height/2; const rotateX=((y-centerY)/centerY)*-10; const rotateY=((x-centerX)/centerX)*10; missionCard.style.transform=`perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`; });
+        container.addEventListener('mouseleave',()=>{ missionCard.style.transform='perspective(1200px) rotateX(0deg) rotateY(0deg)'; });
+    }
 
-    const closeModal = () => {
-        videoModal.classList.remove('active');
-        videoFrame.src = ""; // Corta el audio al cerrar
-        document.body.style.overflow = 'auto';
+    // ── INTERSECTION OBSERVER ────────────────────────────────────────
+    const observer = new IntersectionObserver((entries,observer)=>{ entries.forEach(entry=>{ if(entry.isIntersecting){ entry.target.classList.add('visible'); observer.unobserve(entry.target); } }); }, { root:null, rootMargin:'0px', threshold:0.15 });
+    document.querySelectorAll('.ent-reveal,.ent-reveal-left,.ent-reveal-right').forEach(el=>observer.observe(el));
+
+    // ── TELEMETRÍA ───────────────────────────────────────────────────
+    const latencyValue = document.querySelector('.tile:nth-child(2) .tvalue');
+    const latencyBar = document.querySelector('.tile:nth-child(2) .miniLine i');
+    const uptimeValue = document.querySelector('.tile:nth-child(1) .tvalue');
+    setInterval(()=>{
+        const baseLatency=14; const finalLatency=(baseLatency+((Math.random()*4)-2)).toFixed(0);
+        if(latencyValue) latencyValue.innerText=`${finalLatency}ms`;
+        if(latencyBar){ latencyBar.style.width=`${(finalLatency/30)*100}%`; latencyBar.style.transition='width 0.8s ease'; }
+        if(uptimeValue) uptimeValue.innerText=`${(99.98+(Math.random()*0.01)).toFixed(2)}%`;
+    },2500);
+
+    // ── FORMULARIO DE CONTACTO (UX) ──────────────────────────────────
+    const contactForm = document.getElementById('killerContactForm');
+    if(contactForm){
+        contactForm.addEventListener('submit',(e)=>{
+            e.preventDefault();
+            const nombre = document.getElementById('cf-nombre').value.trim();
+            const correo = document.getElementById('cf-correo').value.trim();
+            const mensaje = document.getElementById('cf-mensaje').value.trim();
+
+            if(!nombre || !correo){
+                Swal.fire({ icon:'warning', title:'Campos requeridos', text:'Por favor ingresa tu nombre y correo electrónico.', confirmButtonColor:'#1F4E67', background:'rgba(10,17,32,0.95)', color:'#fff' });
+                return;
+            }
+
+            Swal.fire({ title:'Enviando...', allowOutsideClick:false, didOpen:()=>Swal.showLoading(), background:'rgba(10,17,32,0.95)', color:'#fff' });
+
+            // Simulación UX: abre el cliente de correo como fallback
+            setTimeout(()=>{
+                const mailtoLink = `mailto:info@humansystem.mx?subject=Contacto desde la web - ${encodeURIComponent(nombre)}&body=${encodeURIComponent(`Nombre: ${nombre}\nCorreo: ${correo}\n\n${mensaje}`)}`;
+
+                Swal.fire({
+                    icon:'success',
+                    title:'¡Mensaje enviado!',
+                    html:`<p>Gracias, <strong>${nombre}</strong>. Nos pondremos en contacto contigo en menos de 24 horas a <strong>${correo}</strong>.</p>`,
+                    confirmButtonColor:'#1F4E67',
+                    background:'rgba(10,17,32,0.95)',
+                    color:'#fff'
+                }).then(()=>{ contactForm.reset(); });
+            }, 1200);
+        });
+    }
+
+    // ── LEGALES (SWEETALERT) ─────────────────────────────────────────
+    const swalConfig = { background:'rgba(10,17,32,0.95)', color:'#ffffff', confirmButtonColor:'#1F4E67', backdrop:`rgba(0,0,0,0.8) blur(5px)`, customClass:{ popup:'premium-swal-popup', confirmButton:'premium-swal-button' } };
+
+    const showTerms = (e) => {
+        e.preventDefault();
+        Swal.fire({ ...swalConfig, title:'<i class="fas fa-file-contract mr-2" style="color:#4ca1af;"></i> Términos de Servicio', width:'700px', confirmButtonText:'HE LEÍDO Y ACEPTO',
+            html:`<div style="text-align:justify; font-size:0.85rem; height:450px; overflow-y:auto; padding-right:15px; color:rgba(255,255,255,0.8); line-height:1.6;">
+            <p><strong>Última actualización:</strong> 05 de febrero de 2026</p>
+            <p>El presente contrato regula el acceso a la infraestructura tecnológica de <strong>Human Identification Technologies, S.A. de C.V.</strong> (en adelante "Human System").</p>
+            <h6 style="color:#ffffff; margin-top:15px;">1. NATURALEZA DEL SERVICIO</h6>
+            <p>Human System proporciona una plataforma de Identidad Global Soberana basada en identidad verificada y protocolos de encriptación de grado militar.</p>
+            <h6 style="color:#ffffff; margin-top:15px;">2. PROPIEDAD INTELECTUAL Y ALGORITMOS</h6>
+            <p>Todos los algoritmos de validación, modelos de capital y arquitecturas de almacenamiento crítico están protegidos bajo registros de IMPI e INDAUTOR. Queda prohibida cualquier ingeniería inversa o uso no autorizado de las APIs del sistema.</p>
+            <h6 style="color:#ffffff; margin-top:15px;">3. ACUERDOS DE NIVEL DE SERVICIO (SLA)</h6>
+            <p>HIT S.A. de C.V. garantiza una disponibilidad del sistema de alta disponibilidad en nodos críticos con cifrado AES-256-GCM en tránsito y en reposo.</p>
+            <h6 style="color:#ffffff; margin-top:15px;">4. RESPONSABILIDAD DEL USUARIO</h6>
+            <p>El solicitante de acceso es responsable de la integridad de sus credenciales institucionales. El uso de la red para actividades que violen las normativas de cumplimiento resultará en la terminación inmediata del servicio.</p>
+            <h6 style="color:#ffffff; margin-top:15px;">5. JURISDICCIÓN</h6>
+            <p>Para cualquier controversia legal, las partes se someten a las leyes aplicables en la Ciudad de México, renunciando a cualquier otro fuero que pudiera corresponderles por domicilio presente o futuro.</p>
+            </div>`
+        });
     };
 
-    closeBtn.addEventListener('click', closeModal);
-    
-    // Cerrar al hacer click fuera del video
-    videoModal.addEventListener('click', (e) => {
-        if (e.target === videoModal) closeModal();
-    });
+    const showPrivacy = (e) => {
+        e.preventDefault();
+        Swal.fire({ ...swalConfig, title:'<i class="fas fa-user-shield mr-2" style="color:#d71d00;"></i> Aviso de Privacidad', width:'700px', confirmButtonText:'ACEPTAR POLÍTICAS DE SEGURIDAD',
+            html:`<div style="text-align:justify; font-size:0.85rem; height:450px; overflow-y:auto; padding-right:15px; color:rgba(255,255,255,0.8); line-height:1.6;">
+            <p><strong>Responsable:</strong> Human Identification Technologies, S.A. de C.V.</p>
+            <p><strong>Domicilio:</strong> Ayuntamiento #143 Miguel Hidalgo 1ra Secc, Tlalpan, 14250 Ciudad de México.</p>
+            <hr style="border-top:1px solid rgba(255,255,255,0.1);">
+            <h6 style="color:#ffffff;">I. DATOS SOMETIDOS A TRATAMIENTO</h6>
+            <p>HIT recabará y tratará: Nombre completo, CURP, RFC, fotografía facial y firma digital. Estos últimos son considerados <strong>Datos Personales Sensibles</strong> y su tratamiento es indispensable para la validación de Identidad Global.</p>
+            <h6 style="color:#ffffff; margin-top:15px;">II. FINALIDADES PRIMARIAS</h6>
+            <ol>
+                <li>Creación de perfil de Identidad Digital Soberana.</li>
+                <li>Validación de identidad para transacciones financieras de alta seguridad.</li>
+                <li>Soberanía de datos: cifrado AES-256-GCM con control exclusivo del usuario.</li>
+            </ol>
+            <h6 style="color:#ffffff; margin-top:15px;">III. TRANSFERENCIA DE DATOS</h6>
+            <p>HIT no comercializa datos personales. La transferencia de información se limita estrictamente a proveedores de verificación de identidad y autoridades competentes, bajo el Artículo 37 de la Ley Federal de Protección de Datos.</p>
+            <h6 style="color:#ffffff; margin-top:15px;">IV. DERECHOS ARCO</h6>
+            <p>Usted puede ejercer sus derechos de Acceso, Rectificación, Cancelación u Oposición mediante solicitud dirigida a <strong>info@humansystem.mx</strong>. HIT resolverá su solicitud en un plazo máximo de 20 días hábiles.</p>
+            <h6 style="color:#ffffff; margin-top:15px;">V. TECNOLOGÍAS DE RASTREO</h6>
+            <p>Nuestra plataforma utiliza cookies técnicas para mantener sesiones activas y personalizar la experiencia de seguridad. Estos datos de sesión no incluyen información biográfica directa sin consentimiento explícito.</p>
+            </div>`
+        });
+    };
+
+    if(document.getElementById('btn-terms')) document.getElementById('btn-terms').addEventListener('click',showTerms);
+    if(document.getElementById('btn-privacy')) document.getElementById('btn-privacy').addEventListener('click',showPrivacy);
 });
 
-
-document.addEventListener('DOMContentLoaded', () => {
-    const missionCard = document.getElementById('mission-hero-card');
-    
-    if (missionCard) {
-        missionCard.parentElement.addEventListener('mousemove', (e) => {
-            const rect = missionCard.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            // Rotación suave de 10 grados máximo
-            const rotateX = ((y - centerY) / centerY) * -10;
-            const rotateY = ((x - centerX) / centerX) * 10;
-
-            missionCard.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        });
-
-        missionCard.parentElement.addEventListener('mouseleave', () => {
-            missionCard.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
-        });
-    }
-});</script>
-
-
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const loader = document.getElementById('loader-wrapper');
-    const statusText = document.querySelector('.status-text');
-    const loadingFill = document.querySelector('.loading-fill');
-
-    // 1. Obtener todas las imágenes de la página
-    const allImages = document.querySelectorAll('img');
-    const totalImages = allImages.length;
-    let imagesLoaded = 0;
-
-    function updateProgress() {
-        imagesLoaded++;
-        const progress = (imagesLoaded / totalImages) * 100;
-        
-        if(loadingFill) loadingFill.style.width = `${progress}%`;
-        
-        // Cambiar estados del texto según el porcentaje real
-        if (progress < 30) statusText.innerText = "CARGANDO_MOSAICO_DE_IMÁGENES";
-        else if (progress < 60) statusText.innerText = "OPTIMIZANDO_CONTENIDO_MULTIMEDIA";
-        else if (progress < 90) statusText.innerText = "RENDERIZANDO_IDENTIDAD_BIOMÉTRICA";
-        else statusText.innerText = "LISTO_PARA_EXPLORAR";
-
-        // Cuando la última imagen cargue
-        if (imagesLoaded === totalImages) {
-            finishLoading();
-        }
-    }
-
-    function finishLoading() {
-        if(loadingFill) {
-            loadingFill.style.background = '#28a745';
-            loadingFill.style.boxShadow = '0 0 15px #28a745';
-        }
-        setTimeout(() => {
-            if(loader) loader.classList.add('loader-hidden');
-        }, 800);
-    }
-
-    // 2. Escuchar la carga de cada imagen
-    if (totalImages > 0) {
-        allImages.forEach(img => {
-            if (img.complete) {
-                updateProgress();
-            } else {
-                img.addEventListener('load', updateProgress);
-                img.addEventListener('error', updateProgress); // Para que no se trabe si una imagen falla
-            }
-        });
-    } else {
-        finishLoading(); // Si no hay imágenes, termina de inmediato
-    }
-
-    // Fallback de seguridad (por si algo tarda demasiado)
-    setTimeout(() => {
-        if (loader && !loader.classList.contains('loader-hidden')) {
-             finishLoading();
-        }
-    }, 8000); 
-});
-
-const states = [
-    "CARGANDO_MOSAICO_DE_IMÁGENES",
-    "RENDERIZANDO_SECCIONES_INTERACTIVAS",
-    "PREPARANDO_CUESTIONARIOS_DINÁMICOS",
-    "OPTIMIZANDO_CONTENIDO_MULTIMEDIA",
-    "LISTO_PARA_EXPLORAR"
-];
-
-
-        let i = 0;
-        const progressPerStep = 100 / states.length;
-
-        const stateInterval = setInterval(() => {
-            if (i < states.length) {
-                if(statusText) statusText.innerText = states[i];
-                
-                // Actualizar barra de carga
-                if(loadingFill) {
-                    loadingFill.style.width = `${(i + 1) * progressPerStep}%`;
-                    loadingFill.style.transition = 'width 0.6s ease';
-                }
-
-                if (states[i] === "LISTO_PARA_EXPLORAR") {
-                    clearInterval(stateInterval);
-                    
-                    // Efecto de éxito
-                    if(loadingFill) {
-                        loadingFill.style.background = '#28a745';
-                        loadingFill.style.boxShadow = '0 0 15px #28a745';
-                    }
-                    // Ocultar dots si existen
-                    if(statusDots) statusDots.style.display = 'none';
-                    
-                    // Salida final
-                    setTimeout(() => {
-                        if(loader) loader.classList.add('loader-hidden');
-                    }, 800);
-                }
-                i++;
-            }
-        }, 700);
-
-        // --- 2. INTERSECTION OBSERVER (ANIMACIONES) ---
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.15 
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.ent-reveal, .ent-reveal-left, .ent-reveal-right').forEach(el => {
-            observer.observe(el);
-        });
-
-        // --- 3. TELEMETRÍA SIMULADA ---
-        const latencyValue = document.querySelector('.tile:nth-child(2) .tvalue');
-        const latencyBar = document.querySelector('.tile:nth-child(2) .miniLine i');
-        const uptimeValue = document.querySelector('.tile:nth-child(1) .tvalue');
-
-        function updateTelemetry() {
-            // Simular Latencia
-            const baseLatency = 14;
-            const jitter = (Math.random() * 4) - 2; // +/- 2ms
-            const finalLatency = (baseLatency + jitter).toFixed(0);
-            
-            if (latencyValue) {
-                latencyValue.innerText = `${finalLatency}ms`;
-                const barWidth = (finalLatency / 30) * 100; 
-                if(latencyBar) {
-                    latencyBar.style.width = `${barWidth}%`;
-                    latencyBar.style.transition = 'width 0.8s ease';
-                }
-            }
-
-            // Simular Uptime
-            if (uptimeValue) {
-                const uptimeFlap = (99.98 + (Math.random() * 0.01)).toFixed(2);
-                uptimeValue.innerText = `${uptimeFlap}%`;
-            }
-        }
-        setInterval(updateTelemetry, 2500);
-
-        // --- 4. SWEET ALERT CONFIG & HANDLERS ---
-        const swalConfig = {
-            background: 'rgba(10, 17, 32, 0.95)',
-            color: '#ffffff',
-            confirmButtonColor: '#1F4E67',
-            backdrop: `rgba(0,0,0,0.8) blur(5px)`,
-            customClass: {
-                popup: 'premium-swal-popup',
-                confirmButton: 'premium-swal-button'
-            }
-        };
-
-        const showTerms = (e) => {
-            e.preventDefault();
-            Swal.fire({
-                ...swalConfig,
-                title: '<i class="fas fa-file-contract mr-2" style="color: #4ca1af;"></i> Términos de Servicio',
-                width: '700px',
-                html: `
-                <div style="text-align: justify; font-size: 0.85rem; height: 450px; overflow-y: auto; padding-right: 15px; color: rgba(255,255,255,0.8); line-height: 1.6;">
-                <p><strong>Última actualización:</strong> 05 de febrero de 2026</p>
-                <p>El presente contrato regula el acceso a la infraestructura tecnológica de <strong>Human Identification Technologies, S.A. de C.V.</strong> (en adelante "Human System").</p>
-                <h6 style="color: #ffffff; margin-top: 15px;">1. NATURALEZA DEL SERVICIO</h6>
-                <p>Human System proporciona una plataforma de Identidad Global Soberana basada en biometría cloud y protocolos de encriptación de grado militar. El acceso está restringido a entidades que superen el protocolo de validación institucional.</p>
-                <h6 style="color: #ffffff; margin-top: 15px;">2. PROPIEDAD INTELECTUAL Y ALGORITMOS</h6>
-                <p>Todos los algoritmos de validación multimodelo, modelos predictivos de capital y arquitecturas de almacenamiento crítico (Tier III) están protegidos bajo registros de IMPI e INDAUTOR. Queda prohibida cualquier ingeniería inversa o uso no autorizado de las APIs del sistema.</p>
-                <h6 style="color: #ffffff; margin-top: 15px;">3. ACUERDOS DE NIVEL DE SERVICIO (SLA)</h6>
-                <p>HIT S.A. de C.V. garantiza una disponibilidad del sistema (Uptime) del 99.99% en nodos críticos. La latencia máxima para validación biométrica se establece en un umbral de 20ms bajo condiciones óptimas de red.</p>
-                <h6 style="color: #ffffff; margin-top: 15px;">4. RESPONSABILIDAD DEL SOCIO (PARTNER)</h6>
-                <p>El solicitante de acceso es responsable de la integridad de las credenciales institucionales. El uso de la red para actividades que violen las normativas de cumplimiento KYC/AML Nivel 4 resultará en la terminación inmediata del servicio y acciones legales bajo el régimen de SLAs.</p>
-                <h6 style="color: #ffffff; margin-top: 15px;">5. JURISDICCIÓN</h6>
-                <p>Para cualquier controversia legal, las partes se someten a las leyes aplicables en la Ciudad de México, renunciando a cualquier otro fuero que pudiera corresponderles por domicilio presente o futuro.</p>
-                </div>`,
-                confirmButtonText: 'HE LEÍDO Y ACEPTO'
-            });
-        };
-
-        const showPrivacy = (e) => {
-            e.preventDefault();
-            Swal.fire({
-                ...swalConfig,
-                title: '<i class="fas fa-user-shield mr-2" style="color: #d71d00;"></i> Aviso de Privacidad',
-                width: '700px',
-                html: `
-                    <div style="text-align: justify; font-size: 0.85rem; height: 450px; overflow-y: auto; padding-right: 15px; color: rgba(255,255,255,0.8); line-height: 1.6;">
-                <p><strong>Responsable:</strong> Human Identification Technologies, S.A. de C.V.</p>
-                <p><strong>Domicilio:</strong> Ayuntamiento #143 Miguel Hidalgo 1ra Secc, Tlalpan, 14250 Ciudad de México.</p>
-                <hr style="border-top: 1px solid rgba(255,255,255,0.1);">
-                <h6 style="color: #ffffff;">I. DATOS SOMETIDOS A TRATAMIENTO</h6>
-                <p>HIT recabará y tratará: Nombre completo, CURP, RFC, fotografía facial y patrones biométricos complejos. Estos últimos son considerados <strong>Datos Personales Sensibles</strong> y su tratamiento es indispensable para la validación de Identidad Global.</p>
-                <h6 style="color: #ffffff; margin-top: 15px;">II. FINALIDADES PRIMARIAS</h6>
-                <ol>
-                    <li>Creación de perfil de Identidad Digital Soberana.</li>
-                    <li>Validación biométrica multimodelo para transacciones financieras de alta seguridad.</li>
-                    <li>Soberanía de datos: Asegurar que el usuario mantenga el control exclusivo sobre su información a través de cifrado AES-256-GCM.</li>
-                </ol>
-                <h6 style="color: #ffffff; margin-top: 15px;">III. TRANSFERENCIA DE DATOS</h6>
-                <p>HIT no comercializa datos personales. La transferencia de información se limita estrictamente a proveedores de servicios de verificación de identidad y autoridades competentes, siempre bajo el cumplimiento del Artículo 37 de la Ley Federal de Protección de Datos.</p>
-                <h6 style="color: #ffffff; margin-top: 15px;">IV. DERECHOS ARCO</h6>
-                <p>Usted puede ejercer sus derechos de Acceso, Rectificación, Cancelación u Oposición mediante solicitud dirigida a <strong>info@humansystem.mx</strong>. HIT resolverá su solicitud en un plazo máximo de 20 días hábiles.</p>
-                <h6 style="color: #ffffff; margin-top: 15px;">V. TECNOLOGÍAS DE RASTREO</h6>
-                <p>Nuestra plataforma utiliza telemetría avanzada y cookies técnicas para mantener sesiones activas y personalizar la experiencia de seguridad institucional. Estos datos de sesión no incluyen información biográfica directa sin consentimiento explícito.</p>
-            </div>`,
-                confirmButtonText: 'ACEPTAR POLÍTICAS DE SEGURIDAD'
-            });
-        };
-        const termsBtn = document.getElementById('btn-terms');
-        const privacyBtn = document.getElementById('btn-privacy');
-        if(termsBtn) termsBtn.addEventListener('click', showTerms);
-        if(privacyBtn) privacyBtn.addEventListener('click', showPrivacy);
+// ── FAQ TOGGLE ───────────────────────────────────────────────────────────────
+function toggleFaq(questionEl) {
+    const item = questionEl.parentElement;
+    const isOpen = item.classList.contains('open');
+    // Cerrar todos primero
+    document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
+    // Abrir el seleccionado si no estaba abierto
+    if(!isOpen) item.classList.add('open');
+}
 </script>

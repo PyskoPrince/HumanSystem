@@ -507,7 +507,7 @@ async function generateQRCode(enlaceValidacion) {
         const response = await fetch('https://odin.qrcode-ai.com/api/qrcode', {
             method: 'POST',
             headers: {
-                'x-api-key': process.env.QR_API_KEY || 'qrc_w7yppGSEBZEjnRY6pz_x1722956173479',
+                'x-api-key': process.env.QR_API_KEY, 
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -533,7 +533,9 @@ async function generateQRCode(enlaceValidacion) {
     // ── MOTOR 2: me-qr.com ───────────────────────────────────────────────
     try {
         console.log(`[QR-M2] Intentando motor me-qr (URL directa sin Base64)...`);
-        const apiKey = (process.env.QR_API_KEY_2 || 'ae7a76016fb1a35672b1f1a1a41783f3c4ec0a4b2838b140c987fb7ad9ddf042').trim();
+        // Cámbiala a:
+        const apiKey = process.env.QR_API_KEY_2;
+        if (!apiKey) throw new Error('QR_API_KEY_2 no definida en variables de entorno');
         const response = await fetch('https://me-qr.com/api/v2/qr/link/create', {
             method: 'POST',
             headers: {
@@ -2059,7 +2061,7 @@ router.get('/confirmarPago', isAuthenticated, async (req, res) => {
         const qrResponse = await fetch('https://odin.qrcode-ai.com/api/qrcode', {
             method: 'POST',
             headers: {
-                'x-api-key': 'qrc_w7yppGSEBZEjnRY6pz_x1722956173479',
+                'x-api-key': process.env.QR_API_KEY, 
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({

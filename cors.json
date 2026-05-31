@@ -1,0 +1,8 @@
+[
+  {
+    "origin": ["http://localhost:7777", "https://www.humansystem.mx"],
+    "method": ["GET"],
+    "responseHeader": ["Content-Type"],
+    "maxAgeSeconds": 3600
+  }
+]
