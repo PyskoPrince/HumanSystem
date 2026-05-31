@@ -5,6 +5,8 @@ npm-debug.log*
 
 # Configuración y Secretos (CRÍTICO)
 .env
+env.yaml
+
 config/key.json
 config/google-credentials.json
 *.pem
