@@ -48,9 +48,7 @@ exports.renderHome = async (req, res) => {
                 titularMostrar = user.tarjeta.titular || titularMostrar;
             }
 
-            // CORRECCIÓN: Se declara 'bh' para evitar el error "bh is not defined". 
-            // Por favor, verifica si los datos vienen de 'user.bh' u otra propiedad.
-            const bh = user.bh || {};
+            const bh = user.billeteraHumana || {};
 
             return res.render('index', { 
                 title: 'Dashboard - Human System',

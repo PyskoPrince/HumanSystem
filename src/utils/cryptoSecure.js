@@ -20,7 +20,7 @@ const cifrarToken = (texto) => {
     return `${iv.toString('hex')}:${authTag}:${encrypted}`;
 };
 
-const descifrarToken = (token Cifrado) => {
+const descifrarToken = (tokenCifrado) => {
     try {
         const partes = tokenCifrado.split(':');
         if (partes.length !== 3) throw new Error('Token corrupto');

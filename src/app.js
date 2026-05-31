@@ -83,7 +83,11 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
-    cookie: { secure: false } 
+    cookie: { 
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: 'lax'
+    }
 }));
 
 app.use('/', indexRoutes);
@@ -100,7 +104,8 @@ app.use((req, res) => {
     res.status(404).send("Error 404: Página no encontrada"); 
 });
 
-const PORT = process.env.PORT || 7777;
+const PORT = process.env.PORT || 7777; 
+
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Servidor v5.0 corriendo en puerto ${PORT}`);
 });
