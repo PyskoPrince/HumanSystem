@@ -249,7 +249,7 @@ router.post('/confirmarPagoTarjetaInline', isAuthenticated, async (req, res) => 
 router.post('/crearIntentoPagoCertificado', isAuthenticated, async (req, res) => {
     try {
         const paymentIntent = await stripe.paymentIntents.create({
-            amount: 5000, // $50.00 MXN
+              amount: 10000, // $100.00 MXN
             currency: 'mxn',
             metadata: { humanoID: req.session.humano }
         });
