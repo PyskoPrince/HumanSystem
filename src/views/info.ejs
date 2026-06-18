@@ -65,7 +65,7 @@
         background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
         padding: 6px 14px; border-radius: 50px; font-size: 0.85rem;
         display: flex; align-items: center; gap: 8px; backdrop-filter: blur(5px);
-        width: fit-content; font-family: monospace !important;
+        width: auto; font-family: monospace !important;
     }
     .tpill .dot-active {
         width: 8px; height: 8px; background: #28a745;
@@ -296,6 +296,7 @@
     .faq-answer {
         max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease;
         padding: 0 28px; color: #555; font-size: 1rem; line-height: 1.7;
+        text-align: justify; text-justify: inter-word;
     }
     .faq-item.open .faq-answer { max-height: 300px; padding: 0 28px 22px; }
     .faq-item.open .faq-question i { transform: rotate(180deg); }
@@ -365,6 +366,7 @@
         .user-photo-container { width:120px !important; height:120px !important; margin:60px auto 10px !important; }
         #user-id-key { font-size:0.65rem !important; letter-spacing:0.5px !important; margin-top:-2px !important; }
         .faq-question { font-size:1rem; padding:18px 20px; }
+        .pills-grid { grid-template-columns: 1fr !important; }
     }
 </style>
 
@@ -385,12 +387,11 @@
     ══════════════════════════════════════ -->
     <section class="section-dark-premium" id="ecosistema-unificado" style="padding-bottom:150px;">
         <div class="container">
-            <div class="hero-content p-5 mt-3 ml-5 mr-5 ent-reveal">
-                <h1 class="text-gradient" style="text-align:center;"><em>El Ecosistema Único en Identidad y Capital</em></h1>
+            <div class="hero-content p-5 mt-2 ml-5 mr-5 ent-reveal">
+                <h1 class="text-gradient" style="text-align:center;"><em>  <strong>Identidad Visual</strong> y <strong>Soberanía Digital</strong></em></h1>
                 <p class="hero-desc mb-4" style="max-width:700px;">
-                    La primera plataforma unificada que fusiona <strong>Identidad Visual Verificada</strong> y <strong>Soberanía Digital</strong>.
-                    Gestiona tu Billetera Humana, emite certificados y comparte tu perfil bajo un entorno <em>Zero-Trust</em>
-                    con defensa en profundidad a nivel militar.
+                  
+                     Un nuevo paradigma de confianza para tu vida online. Tu identidad, tus reglas, tu control total.
                 </p>
                 <div class="cta-group mt-2">
                     <a href="javascript:void(0);" class="btn-glow" id="btn-watch-video">
@@ -405,17 +406,17 @@
                     <span class="hs-badge-premium" style="background:var(--hs-red);">IDENTIDAD SOBERANA & ECONOMÍA GLOBAL</span>
                     <h2 class="mb-4"><em>¿Qué es <span class="text-gradient">Human System</span>?</em></h2>
                     <p class="lead mb-4">
-                        Human System es el primer <strong>Marco de Identidad y Ciudadanía Digital</strong> diseñado para erradicar la fragmentación de tu vida online.
-                        Fusionamos en un único <strong>HumanoID</strong> tu identidad verificada, tus redes sociales y tu capacidad financiera.
+                        El primer <strong>Marco de Identidad y Ciudadanía Digital</strong> que erradica la fragmentación de tu vida online.
+                        Un único <strong>HumanoID</strong> — identidad verificada, redes sociales y capacidad financiera unificados.
                     </p>
-                    <p class="mb-4" style="opacity:0.8; font-size:1.1rem; border-left:3px solid var(--hs-cyan); padding-left:20px;">
-                        <strong>Control de Privacidad Total:</strong> Gestiona tu visibilidad con nuestro interruptor <em>Zero-Knowledge</em> de "Mostrar/Ocultar datos".
-                        Blinda tu información con nuestro sistema de defensa en profundidad y accede al ecosistema con una sola llave maestra.
+                    <p class="mb-3" style="opacity:0.8; font-size:1.05rem; border-left:3px solid var(--hs-cyan); padding-left:20px;">
+                        <strong>Privacidad Total:</strong> Toggle <em>Zero-Knowledge</em> integrado. Una sola llave maestra con defensa en profundidad en cada capa.
                     </p>
-                    <p class="mb-4" style="opacity:0.8; font-size:1.1rem; border-left:3px solid var(--hs-cyan); padding-left:20px;">
-                        <strong>Tu identidad inmutable:</strong> Información personal, foto de perfil y contacto se vinculan en un perfil soberano, almacenada de forma segura y lista para compartirse solo bajo tu autorización.
+                    <p class="mb-4" style="opacity:0.8; font-size:1.05rem; border-left:3px solid var(--hs-cyan); padding-left:20px;">
+                        <strong>Identidad inmutable:</strong> Foto, firma y contacto vinculados en un perfil soberano — compartido sólo bajo tu autorización explícita.
                     </p>
-                    <div class="d-flex flex-wrap gap-3 mt-4">
+                    <!-- PILLS 2x2 GRID -->
+                    <div class="pills-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:1.5rem; max-width:500px;">
                         <div class="tpill"><i class="fas fa-fingerprint text-info"></i> Defensa en Profundidad</div>
                         <div class="tpill"><i class="fas fa-qrcode text-cyan"></i> Tecnología NFC/QR</div>
                         <div class="tpill"><i class="fas fa-certificate text-warning"></i> Certificación Oficial</div>
@@ -425,13 +426,13 @@
                 <div class="col-lg-5 ent-reveal-right mt-5 mt-lg-0">
                     <div class="glass-form-style text-center" style="padding:50px 20px;">
                         <div style="text-align:center;">
-                            <img src="https://storage.googleapis.com/humansystem/Minimalist%20Version.png"
+                            <img src="https://storage.googleapis.com/humansystem/HUMAN%20SYSTEM%20HAND.png"
                                  alt="Human System Core"
-                                 style="width:100%; max-width:380px; filter:drop-shadow(0 0 35px rgba(76,161,175,0.5));">
+                                 style="width:100%; max-width:380px; filter:drop-shadow(0 0 35px rgba(76,161,175,0.5)); border-radius:20px;">
                         </div>
                         <div class="mt-4">
                             <small class="text-uppercase" style="letter-spacing:3px; color:var(--hs-cyan); font-weight:bold;">
-                                HumanoID: ESP01850412993842
+                            Capital Global
                             </small>
                         </div>
                     </div>
@@ -439,7 +440,7 @@
             </div>
 
             <!-- MISIÓN Y VISIÓN -->
-            <div class="row align-items-center mt-5 mb-5 pt-lg-5">
+            <div class="row align-items-center mt-5 mb-5 pt-lg-5 pb-lg-5">
                 <div class="col-lg-6 mb-5 mb-lg-0 ent-reveal-left">
                     <div class="mission-blocks px-4 px-lg-0">
                         <div class="d-flex align-items-start mb-5">
@@ -480,7 +481,7 @@
             </div>
 
             <!-- SEGURIDAD ZERO-TRUST -->
-            <div class="row align-items-center mt-5 mb-5 pb-5">
+            <div class="row align-items-center mt-5 mb-5 pb-5 pt-lg-5 pb-lg-5">
                 <div class="col-lg-6 order-2 order-lg-1 ent-reveal-left mt-5 mt-lg-0">
                     <div class="glass-form-style">
                         <div class="row mb-4 align-items-center">
@@ -551,7 +552,6 @@
                     <h5>Ethereum</h5>
                     <span class="small" style="color:rgba(255,255,255,0.7);">ERC-20</span>
                 </div>
-                <!-- BITCOIN: marcado como próximamente - no implementado aún -->
                 <div class="hs-currency-item disabled" style="border:1px solid rgba(255,255,255,0.08);">
                     <i class="fab fa-bitcoin" style="color:#f7931a; opacity:0.5;"></i>
                     <h5 style="opacity:0.5;">Bitcoin</h5>
@@ -658,9 +658,9 @@
     <section class="impact-showcase" id="manifesto" style="background:#ffffff;">
         <div class="container">
             <div class="text-center mb-5 ent-reveal">
-                <span class="hs-badge-premium" style="background:linear-gradient(135deg, #1F4E67, #4ca1af); color:white;">CASOS DE USO PREMIUM</span>
+                <span class="hs-badge-premium" style="background:linear-gradient(135deg, #1F4E67, #4ca1af); color:white;">HUMAN SYSTEM · CASOS DE USO</span>
                 <h2 class="mt-4 font-weight-bold" style="color:var(--hs-dark-blue); font-size:3rem;">
-                    De lo digital a lo físico: <span style="color:var(--hs-cyan);">Así funciona tu ecosistema.</span>
+                    De lo digital a lo físico: <span style="color:var(--hs-cyan);">Así funciona <em>Human System</em>.</span>
                 </h2>
                 <p class="lead text-muted" style="max-width:800px; margin:0 auto;">
                     Descubre cómo tu <strong>Human ID (Tarjeta y Certificado)</strong> interoperan con el mundo real.
@@ -869,7 +869,7 @@
                     <div style="background:rgba(31,78,103,0.03); border:1px solid rgba(31,78,103,0.2); border-radius:24px; padding:30px; height:100%; color:#495057; transition:all 0.3s ease;">
                         <div class="d-flex align-items-center mb-3">
                             <i class="fas fa-cubes fa-2x" style="color:var(--hs-red);"></i>
-                            <h4 class="mb-0 ml-3" style="color:var(--hs-blue);">Materiales & Acabados</h4>
+                            <h4 class="mb-0 ml-3" style="color:var(--hs-blue);">Materiales &amp; Acabados</h4>
                         </div>
                         <div class="row">
                             <div class="col-6">
@@ -1018,13 +1018,22 @@
                             $500.00 <small style="font-size:1.5rem; color:rgba(255,255,255,0.6);">MXN</small>
                         </div>
 
-                        <ul class="list-unstyled mb-4" style="font-size:1.2rem; color:rgba(255,255,255,0.9);">
+                        <ul class="list-unstyled mb-3" style="font-size:1.2rem; color:rgba(255,255,255,0.9);">
                             <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Tarjeta física de alta durabilidad y diseño premium.</li>
                             <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Banda magnética y Tecnología Chip NFC para compartir perfil al instante.</li>
                             <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Vinculación biométrica instantánea y activación de Billetera Digital.</li>
                             <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Envío directo a tu domicilio a todo México incluido.</li>
                             <li class="mb-2"><i class="fas fa-truck text-warning mr-2"></i> <strong>Entrega estimada: 3 a 7 días hábiles</strong> en toda la República Mexicana.</li>
                         </ul>
+
+                        <!-- FSC ECO-FRIENDLY PACKAGING -->
+                        <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px; padding:12px 16px; border:1px solid rgba(40,167,69,0.35); border-radius:14px; background:rgba(40,167,69,0.07);">
+                            <i class="fas fa-leaf" style="color:#28a745; font-size:1.4rem; flex-shrink:0;"></i>
+                            <div>
+                                <strong style="color:#28a745; font-size:0.82rem; letter-spacing:1.5px; text-transform:uppercase; display:block;">FSC &amp; Eco-Friendly Packaging</strong>
+                                <span style="font-size:0.8rem; color:rgba(255,255,255,0.55);">Cajas y etiquetas de envío certificadas con materiales sostenibles.</span>
+                            </div>
+                        </div>
 
                         <a href="/register" class="btn-hs btn-primary w-100 justify-content-center" style="font-size:1.5rem;">
                             <i class="fas fa-id-card"></i> Obtener mi Tarjeta
@@ -1064,7 +1073,6 @@
             ══════════════════════════════════════ -->
             <div class="row align-items-center pt-5 mt-5">
                 <div class="col-lg-6 mb-5 mb-lg-0 ent-reveal">
-                    <!-- CAMBIO: de "Exclusive Access Q1 2026" a sección de partners/integradores -->
                     <span class="hs-badge-premium" style="background:var(--hs-red);">Partners Estratégicos · 2026</span>
                     <h2 class="hero-title" style="font-size:3.5rem;">
                         Integra <em>Human System</em><br>
@@ -1096,10 +1104,10 @@
                     </div>
 
                     <div class="d-flex flex-column align-items-center align-items-lg-start gap-3 mt-4">
-                        <div class="tpill mb-2" style="border:1px solid rgba(40,167,69,0.3);">
+                        <div class="tpill mb-2" style="border:1px solid rgba(40,167,69,0.3); width:fit-content;">
                             <div class="dot-active"></div> RED ACTIVA — CONTÁCTANOS PARA ACCESO
                         </div>
-                        <div class="tpill">
+                        <div class="tpill" style="width:fit-content;">
                             <i class="fas fa-lock text-warning"></i> CIFRADO AES-256-GCM · ZERO-TRUST
                         </div>
                     </div>
@@ -1259,7 +1267,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoModal = document.getElementById('videoModal');
     const closeBtn = document.getElementById('closeVideo');
     const videoFrame = document.getElementById('hsVideoFrame');
-    const videoURL = "https://storage.googleapis.com/humansystem/video1.mp4";
+    const videoURL = "https://storage.googleapis.com/humansystem/video_landingpage.mp4";
 
     if(videoBtn){ videoBtn.addEventListener('click',()=>{ if(videoFrame) videoFrame.src=videoURL; if(videoModal) videoModal.classList.add('active'); document.body.style.overflow='hidden'; }); }
     const closeModal=()=>{ if(videoModal) videoModal.classList.remove('active'); if(videoFrame) videoFrame.src=""; document.body.style.overflow='auto'; };
@@ -1305,10 +1313,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             Swal.fire({ title:'Enviando...', allowOutsideClick:false, didOpen:()=>Swal.showLoading(), background:'rgba(10,17,32,0.95)', color:'#fff' });
 
-            // Simulación UX: abre el cliente de correo como fallback
             setTimeout(()=>{
-                const mailtoLink = `mailto:info@humansystem.mx?subject=Contacto desde la web - ${encodeURIComponent(nombre)}&body=${encodeURIComponent(`Nombre: ${nombre}\nCorreo: ${correo}\n\n${mensaje}`)}`;
-
                 Swal.fire({
                     icon:'success',
                     title:'¡Mensaje enviado!',
@@ -1377,9 +1382,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function toggleFaq(questionEl) {
     const item = questionEl.parentElement;
     const isOpen = item.classList.contains('open');
-    // Cerrar todos primero
     document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
-    // Abrir el seleccionado si no estaba abierto
     if(!isOpen) item.classList.add('open');
 }
 </script>
