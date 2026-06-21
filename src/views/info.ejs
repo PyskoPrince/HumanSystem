@@ -319,6 +319,53 @@
     .partner-feature i { color: var(--hs-cyan); font-size: 1.2rem; flex-shrink: 0; }
     .partner-feature span { color: rgba(255,255,255,0.85); font-size: 0.95rem; }
 
+/* ── BOTÓN ICONO PDF (EVALUACIÓN DE IMPACTO) ── */
+.btn-icon-legal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(76,161,175,0.08);
+    border: 1px solid rgba(76,161,175,0.3);
+    color: var(--hs-cyan);
+    font-size: 1rem;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+}
+.btn-icon-legal:hover {
+    background: linear-gradient(135deg, var(--hs-blue), var(--hs-cyan));
+    color: white;
+    border-color: transparent;
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 8px 20px rgba(76,161,175,0.35);
+}
+.btn-icon-legal::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: var(--hs-dark);
+    color: #fff;
+    font-size: 0.65rem;
+    letter-spacing: 0.5px;
+    text-transform: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+    transition: all 0.25s ease;
+}
+.btn-icon-legal:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-4px);
+}
+
     @keyframes breathe { 0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.02);opacity:0.95} }
     @keyframes pulseGreen { 0%{box-shadow:0 0 0 0 rgba(40,167,69,0.7)}70%{box-shadow:0 0 0 10px rgba(40,167,69,0)}100%{box-shadow:0 0 0 0 rgba(40,167,69,0)} }
     @keyframes blinker { 50%{opacity:0} }
@@ -800,8 +847,8 @@
                     <div class="impact-icon-box" style="background:#fff3e0; color:#fcc404;">
                         <i class="fas fa-qrcode fa-lg"></i>
                     </div>
-                    <h2 class="font-weight-bold" style="color:#1F4E67;">Pago con QR Biotec <br><em style="color:#fcc404;">Sanea y Transfiere</em></h2>
-                    <p class="lead text-muted">El comercio escanea tu <strong>Photo-QR Esteganográfico</strong> incrustado en tu tarjeta. El monto se autoriza y la tecnología "sanea" la transacción al instante, evitando duplicidad.</p>
+                    <h2 class="font-weight-bold" style="color:#1F4E67;">Pago con QR Biotec <br><em style="color:#fcc404;">Escanea y Transfiere</em></h2>
+                    <p class="lead text-muted">El comercio escanea tu <strong>Photo-QR Esteganográfico</strong> incrustado en tu tarjeta. El monto se autoriza y la tecnología identifica la transacción al instante, evitando duplicidad.</p>
                     <ul class="list-unstyled small text-muted">
                         <li class="mb-2"><i class="fas fa-check text-warning mr-2"></i> <strong>Innovación:</strong> El QR cambia en cada refresco, invalidando capturas de pantalla.</li>
                         <li class="mb-2"><i class="fas fa-check text-warning mr-2"></i> Aceptado en comercios aliados mediante la app de validador HS.</li>
@@ -1153,7 +1200,7 @@ Humano:</div>
             ══════════════════════════════════════ -->
             <div class="row align-items-center pt-5 mt-5">
                 <div class="col-lg-6 mb-5 mb-lg-0 ent-reveal">
-                    <span class="hs-badge-premium" style="background:var(--hs-red);">Partners Estratégicos · 2026</span>
+                   <span class="hs-badge-premium" style="background:var(--hs-gold); color:#000;">Partners Estratégicos · 2026</span>
                     <h2 class="hero-title" style="font-size:3.5rem;">
                         Integranos en tu<br>
                         <span style="color:var(--hs-cyan);">ecosistema.</span>
@@ -1250,10 +1297,17 @@ Humano:</div>
                     Tecnología protegida bajo registros en el <strong>IMPI</strong> e <strong>INDAUTOR</strong>.
                     El uso no autorizado de los algoritmos de identidad conlleva sanciones estrictas bajo el régimen de SLAs.
                 </p>
-                <div class="mt-3">
-                    <a href="#" id="btn-terms" class="btn btn-outline-primary btn-sm mr-2" style="border-radius:50px; padding:5px 15px;">Términos</a>
-                    <a href="#" id="btn-privacy" class="btn btn-outline-danger btn-sm" style="border-radius:50px; padding:5px 15px;">Privacidad</a>
-                </div>
+               <div class="mt-3 d-flex align-items-center justify-content-center justify-content-md-start" style="gap:10px;">
+    <a href="#" id="btn-terms" class="btn btn-outline-primary btn-sm" style="border-radius:50px; padding:5px 15px;">Términos</a>
+    <a href="#" id="btn-privacy" class="btn btn-outline-danger btn-sm" style="border-radius:50px; padding:5px 15px;">Privacidad</a>
+    <a href="https://storage.googleapis.com/humansystem/Evaluacion_Impacto_Privacidad.pdf"
+       target="_blank" rel="noopener"
+       class="btn-icon-legal"
+       data-tooltip="Guía de Evaluación de Impacto a la Privacidad"
+       aria-label="Descarga la Guía de Evaluación de Impacto a la Privacidad (PDF)">
+        <i class="fas fa-file-pdf"></i>
+    </a>
+</div>
             </div>
         </div>
         <hr>
