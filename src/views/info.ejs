@@ -181,6 +181,7 @@
     .impact-visual-card { position: relative; border-radius: 25px; overflow: visible; margin-bottom: 60px; }
     .main-image-wrapper { position: relative; border-radius: 25px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1); z-index: 1; height: 350px; }
     .main-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
+   .main-image-wrapper video { transition: transform 0.8s ease; }
     .impact-visual-card:hover .main-image-wrapper img { transform: scale(1.05); }
     .floating-data-card {
         position: absolute; bottom: -25px; left: -20px; width: 200px; background: white; border-radius: 18px; padding: 20px;
@@ -892,22 +893,82 @@
     </section>
 
     <script>
-    const staticImages = {
-        1: "https://storage.googleapis.com/humansystem/Gemini_Generated_Image_xnjmb7xnjmb7xnjm%20(1).png",
-        2: "https://storage.googleapis.com/humansystem/Gemini_Generated_Image_n30epdn30epdn30e.png",
-        3: "https://storage.googleapis.com/humansystem/Gemini_Generated_Image_jp35rzjp35rzjp35.png",
-        4: "https://storage.googleapis.com/humansystem/Gemini_Generated_Image_3v8j6n3v8j6n3v8j.png"
-    };
+const mediaAssets = {
+    1: { video:"https://storage.googleapis.com/humansystem/1.mp4", staticImg:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_xnjmb7xnjmb7xnjm%20(1).png"},
+    2: { video:"https://storage.googleapis.com/humansystem/4.mp4", staticImg:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_n30epdn30epdn30e.png" },
+    3: { video:"https://storage.googleapis.com/humansystem/2.mp4", staticImg:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_jp35rzjp35rzjp35.png" },
+    4: { video:"https://storage.googleapis.com/humansystem/5.mp4", staticImg:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_3v8j6n3v8j6n3v8j.png" }
+};
 
-    document.addEventListener('DOMContentLoaded', () => { 
-        // Recorremos los 4 contenedores y les metemos tu imagen fija directo
-        for (let i = 1; i <= 4; i++) {
-            const container = document.getElementById(`media-container-${i}`);
-            if (container) {
-                container.innerHTML = `<img src="${staticImages[i]}" alt="Human System Asset ${i}" style="width:100%; height:100%; object-fit:cover; opacity:1;">`;
-            }
-        }
-    });
+document.addEventListener('DOMContentLoaded', () => {
+
+    function playClip(container) {
+        if (container.isPlaying) return;
+        container.isPlaying = true;
+        container.videoEl.style.display = 'block';
+        container.imgEl.style.display = 'none';
+        container.videoEl.currentTime = 0;
+        const p = container.videoEl.play();
+        if (p && p.catch) p.catch(() => stopClip(container)); // si el navegador bloquea el play, regresa a la imagen
+    }
+
+    function stopClip(container) {
+        container.isPlaying = false;
+        container.videoEl.pause();
+        container.videoEl.style.display = 'none';
+        container.imgEl.style.display = 'block';
+    }
+
+    // 1. Crear imagen estática + video (oculto) por cada contenedor
+    for (let i = 1; i <= 4; i++) {
+        const container = document.getElementById(`media-container-${i}`);
+        if (!container) continue;
+
+        const img = document.createElement('img');
+        img.src = mediaAssets[i].staticImg;
+        img.alt = `Human System Asset ${i}`;
+        img.style.cssText = 'width:100%; height:100%; object-fit:cover; cursor:pointer; display:block;';
+
+        const video = document.createElement('video');
+        video.src = mediaAssets[i].video;
+        video.muted = true;
+        video.defaultMuted = true;
+        video.setAttribute('muted', '');
+        video.playsInline = true;
+        video.setAttribute('playsinline', '');
+        video.preload = 'auto';
+        video.style.cssText = 'width:100%; height:100%; object-fit:cover; cursor:pointer; display:none;';
+
+        container.innerHTML = '';
+        container.appendChild(img);
+        container.appendChild(video);
+
+        container.imgEl = img;
+        container.videoEl = video;
+        container.isPlaying = false;
+
+        video.addEventListener('ended', () => stopClip(container));
+        video.addEventListener('error', () => stopClip(container)); // si falla la carga, se queda en la imagen
+    }
+
+    // 2. Hover / touch
+    for (let i = 1; i <= 4; i++) {
+        const container = document.getElementById(`media-container-${i}`);
+        if (!container) continue;
+        container.addEventListener('mouseenter', () => playClip(container));
+        container.addEventListener('touchstart', () => playClip(container), { passive: true });
+    }
+
+    // 3. Scroll (Intersection Observer)
+    const mediaObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) playClip(entry.target); });
+    }, { root: null, rootMargin: '0px', threshold: 0.5 });
+
+    for (let i = 1; i <= 4; i++) {
+        const container = document.getElementById(`media-container-${i}`);
+        if (container) mediaObserver.observe(container);
+    }
+});
 </script>
 
     <!-- ══════════════════════════════════════

@@ -178,30 +178,6 @@
     });
     </script>
 
-    <!-- GIF Handler Script -->
-    <script>
-        window.onload = function() {
-            showGIFFirst();
-        };
-
-        function showGIFFirst() {
-            document.getElementById('gif').style.display = 'block';
-            document.getElementById('image').style.display = 'none';
-            setTimeout(function() {
-                document.getElementById('gif').style.display = 'none';
-                document.getElementById('image').style.display = 'block';
-            }, 6000);
-        }
-
-        function restartGIF() {
-            document.getElementById('gif').style.display = 'block';
-            document.getElementById('image').style.display = 'none';
-            setTimeout(function() {
-                document.getElementById('gif').style.display = 'none';
-                document.getElementById('image').style.display = 'block';
-            }, 6000);
-        }
-    </script>
   <!-- Scripts para usuarios autenticados -->
   <script>
     // --- LÓGICA PRINCIPAL DE NAVEGACIÓN Y SECCIONES ---

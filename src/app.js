@@ -66,6 +66,7 @@ app.use(helmet({
             // ✅ AGREGADO: Permitir que los videos de Google Cloud se vean en marcos (frames)
             frameSrc: ["'self'", "js.stripe.com", "https://storage.googleapis.com"],
             // ✅ AGREGADO: Permitir workers de Google Cloud (necesario para algunos scripts premium)
+            mediaSrc: ["'self'", "https://storage.googleapis.com"],
             workerSrc: ["'self'", "blob:", "https://storage.googleapis.com"],
             objectSrc: ["'none'"],
             upgradeInsecureRequests: null,
