@@ -40,6 +40,15 @@
 
     h1, h2, h3, h4, h5, h6 { font-weight: 700; }
 
+.hs-landing-wrapper {
+    color: white;
+    font-family: 'Iceland', sans-serif !important;
+    overflow-x: hidden;
+}
+.hs-landing-wrapper .container {
+    padding-left: clamp(20px, 5vw, 50px) !important;
+    padding-right: clamp(20px, 5vw, 50px) !important;
+}
     .text-gradient {
         background: linear-gradient(135deg, #fff, var(--hs-cyan));
         -webkit-background-clip: text;
@@ -182,7 +191,8 @@
     .main-image-wrapper { position: relative; border-radius: 25px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1); z-index: 1; height: 350px; }
     .main-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
    .main-image-wrapper video { transition: transform 0.8s ease; }
-    .impact-visual-card:hover .main-image-wrapper img { transform: scale(1.05); }
+   .impact-visual-card:hover .main-image-wrapper img,
+.impact-visual-card:hover .main-image-wrapper video { transform: scale(1.05); }
     .floating-data-card {
         position: absolute; bottom: -25px; left: -20px; width: 200px; background: white; border-radius: 18px; padding: 20px;
         box-shadow: 0 15px 35px rgba(0,0,0,0.15); z-index: 3; border: 1px solid rgba(0,0,0,0.05); animation: breathe 4s infinite ease-in-out;
@@ -394,6 +404,11 @@
         .hero-content { margin-bottom:150px !important; }
         #ecosistema-unificado { padding-top:100px !important; padding-bottom:100px !important; }
     }
+       /* ── BREATHING ROOM MOBILE ── */
+    .hs-landing-wrapper .container {
+        padding-left: 28px !important;
+        padding-right: 28px !important;
+    }
     @media (max-width:992px) {
         .bento-grid-premium { grid-template-columns:repeat(2,1fr); gap:20px; }
         .hs-hero-main { text-align:center; }
@@ -401,14 +416,35 @@
         .flex-column-reverse { flex-direction:column-reverse !important; }
         .partner-features { grid-template-columns: 1fr; }
     }
-
-@media (max-width:768px) {
-    /* HEADER - Reducir espacio superior, centrar botón, espacio hacia siguiente sección */
-    .hs-landing-wrapper { padding-top: 0px; }
-    .section-dark-premium {
-        position: relative; padding: 0px 0; color: white;
+   /* ── BREATHING ROOM MOBILE ── */
+    .hs-landing-wrapper .container {
+        padding-left: 38px !important;
+        padding-right: 38px !important;
     }
+@media (max-width:768px) {
+   /* ── BREATHING ROOM MOBILE ── */
+    .hs-landing-wrapper .container {
+        padding-left: 38px !important;
+        padding-right: 38px !important;
+    }
+    /* Forzamos a que las secciones oscuras respeten el flujo responsivo sin dejar franjas */
+    .section-dark-premium {
+        position: relative; 
+        padding: 40px 0 !important; 
+        color: white;
+        background: linear-gradient(135deg, #0a1120 0%, var(--hs-blue) 100%) !important;
+    }
+
+    /* Rediseño de cajas de cristal para que no se saturen de negro en móvil */
+    .glass-form-style, .glass-form-container, .hs-glass-panel {
+        padding: 25px 15px !important;
+        background: rgba(15, 23, 42, 0.75) !important; /* Mantiene el look glassmorphism limpio */
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
     .navbar { margin-bottom: 8px !important; }
+    
     .btn-glow { 
         display: block !important; 
         width: 100% !important; 
@@ -417,16 +453,27 @@
         margin-bottom: 60px !important;
     }
     
-    /* HERO - agregar espacio después del botón */
-    .hero-content { margin-bottom: 80px !important; }
+    /* HERO - Eliminar los márgenes rígidos de Bootstrap que causaban el desfase negro */
+    .hero-content { 
+        margin-bottom: 40px !important; 
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding: 20px 10px !important;
+    }
+    .hero-content h1 { font-size: 2.4rem !important; text-align: center; margin-top: 20px; }
+    .hero-content .d-flex.flex-column { align-items: center !important; text-align: center; }
 
-    /* ZERO-TRUST - Espacio entre elementos de la fila */
-    .row.align-items-center.mt-5.mb-5.pb-5.pt-lg-5.pb-lg-5 { gap: 160px; }
-    .col-lg-6.order-2.order-lg-1 { margin-top: 80px !important; }
+    /* ZERO-TRUST - Ajuste de espacio entre filas */
+    .row.align-items-center.mt-5.mb-5.pb-5.pt-lg-5.pb-lg-5 { gap: 40px !important; }
+    .col-lg-6.order-2.order-lg-1 { margin-top: 30px !important; }
     
-    /* CARDS - Padding y overflow fix */
+    /* CARDS & BENTO GRID */
+    .bento-grid-premium { grid-template-columns: 1fr; gap: 20px; }
+    .hs-card-clean { padding: 30px 20px; margin-bottom: 0 !important; }
+    .col-lg-4.ent-reveal { margin-bottom: 20px !important; }
+    
     .floating-data-card h3 { 
-        font-size: 2rem !important; 
+        font-size: 1.8rem !important; 
         word-break: break-word;
         padding: 0 5px;
     }
@@ -435,54 +482,111 @@
         white-space: normal;
     }
     
-    /* TARJETA ESPECIFICACIONES - Espacio entre cards */
-    .col-lg-4.ent-reveal { 
-        margin-bottom: 30px !important; 
-    }
-    .hs-card-clean { 
-        padding: 25px 20px !important; 
-        margin-bottom: 0 !important;
-    }
+    /* CARDS INFERIORES */
+    .row.mt-5.g-4 { gap: 20px !important; margin-top: 20px !important; }
+    .col-md-6.ent-reveal { margin-bottom: 10px !important; }
     
-    /* CARDS INFERIORES (Human Registration & Materiales) - Espacio entre ellas */
-    .row.mt-5.g-4 { gap: 40px !important; }
-    .col-md-6.ent-reveal { 
-        margin-bottom: 20px !important;
-    }
-    
-    /* HUMAN ID CARD - Subir hacia arriba, sin margin-top extra */
-    .col-lg-6.ent-reveal-right.mt-5.mt-lg-0 { 
-        margin-top: 30px !important; 
-    }
-    .card-3d-container { 
-        margin-top: 0 !important; 
-    }
-    
-    /* SECTION DARK PREMIUM H2 */
-    .section-dark-premium h2 { font-size:2.5rem; }
-    .hero-content .d-flex.flex-column { align-items:center !important; text-align:center; }
-    .hero-content h1 { font-size:3rem !important; text-align:center; margin-top:50px; }
-    .bento-grid-premium { grid-template-columns:1fr; gap:20px; }
-    .hs-card-clean { padding:30px 20px; }
-    .hs-currency-grid { grid-template-columns:repeat(2,1fr); }
-    .impact-showcase .row { margin-bottom:0 !important; padding-bottom:40px !important; display:flex !important; flex-direction:column !important; }
-    .impact-visual-card { margin-bottom:10px !important; }
-    .text-container-impact,.text-container-impact.left-align { margin-top:40px !important; padding:0 15px !important; text-align:left !important; }
-    .impact-icon-box { margin-bottom:15px !important; }
-    .main-image-wrapper { height:260px !important; margin-bottom:0 !important; }
-    .floating-data-card,.floating-data-card.right { position:absolute !important; bottom:-15px !important; left:15px !important; right:auto !important; width:150px !important; padding:12px !important; transform:none !important; z-index:10 !important; }
-    .order-2 { order:1 !important; } .order-1 { order:2 !important; }
-    .wave-separator svg { height:40px !important; }
-    .card-3d-container { width:220px; height:360px; }
-    .brand-name-style { font-size:0.875rem !important; padding:0 18px !important; line-height:1.05 !important; margin-top: 0px !important; }
-    .user-photo-container { width:100px !important; height:100px !important; margin:40px auto 0px !important; border: 1.5px solid transparent; }
+    /* HUMAN ID CARD (3D) */
+    .col-lg-6.ent-reveal-right.mt-5.mt-lg-0 { margin-top: 20px !important; }
+    .card-3d-container { margin-top: 0 !important; width: 220px; height: 360px; }
+    .brand-name-style { font-size: 0.875rem !important; padding: 0 18px !important; line-height: 1.05 !important; margin-top: 0px !important; }
+    .user-photo-container { width: 100px !important; height: 100px !important; margin: 40px auto 0px !important; border: 1.5px solid transparent; }
     .user-info-clean { margin-top: 0px !important; min-height: auto !important; }
-    #user-id-key { font-size:0.55rem !important; letter-spacing:1.5px !important; margin-top: 0px !important; }
-    .faq-question { font-size:1rem; padding:18px 20px; }
+    #user-id-key { font-size: 0.55rem !important; letter-spacing: 1.5px !important; margin-top: 0px !important; }
+    
+    /* OTROS AJUSTES RESPONSIVOS */
+    .section-dark-premium h2 { font-size: 2.2rem; }
+    .hs-currency-grid { grid-template-columns: repeat(2, 1fr); }
+    .impact-showcase .row { margin-bottom: 0 !important; padding-bottom: 20px !important; display: flex !important; flex-direction: column !important; }
+    .impact-visual-card { margin-bottom: 10px !important; }
+    .text-container-impact, .text-container-impact.left-align { margin-top: 25px !important; padding: 0 10px !important; text-align: left !important; }
+    .impact-icon-box { margin-bottom: 15px !important; }
+    .main-image-wrapper { height: 220px !important; margin-bottom: 0 !important; }
+    .floating-data-card, .floating-data-card.right { position: absolute !important; bottom: -10px !important; left: 10px !important; right: auto !important; width: 140px !important; padding: 10px !important; transform: none !important; z-index: 10 !important; }
+    
+    .order-2 { order: 1 !important; } 
+    .order-1 { order: 2 !important; }
+    .wave-separator svg { height: 30px !important; }
+    .faq-question { font-size: 1rem; padding: 15px 18px; }
     .pills-grid { grid-template-columns: 1fr !important; }
 }
 </style>
 
+<!-- ══════════════════════════════
+     ① CSS — pegar dentro de <style>
+══════════════════════════════ -->
+<style>
+    /* ── INFINITE TECH STRIP ─────────────────────────── */
+    .hs-tech-marquee {
+        background: #ffffff;
+        border-top: 1px solid rgba(31,78,103,0.08);
+        border-bottom: 1px solid rgba(31,78,103,0.08);
+        overflow: hidden;
+        position: relative;
+        z-index: 4;
+    }
+    .hs-tech-marquee .strip-label {
+        display: block;
+        text-align: center;
+        padding: 20px 0 4px;
+        font-size: 0.62rem;
+        letter-spacing: 4px;
+        color: rgba(0,0,0,0.20);
+        text-transform: uppercase;
+        font-family: var(--font-tech);
+    }
+    .marquee-fade-mask {
+        overflow: hidden;
+        padding: 10px 0 24px;
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+        mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    }
+    .marquee-rail {
+        display: inline-flex;
+        align-items: center;
+        animation: hs-marquee-scroll 40s linear infinite;
+        will-change: transform;
+        white-space: nowrap;
+    }
+    .marquee-rail:hover { animation-play-state: paused; }
+    .m-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 30px;
+        flex-shrink: 0;
+        opacity: 0.52;
+        transition: opacity 0.3s ease, transform 0.2s ease;
+        border-right: 1px solid rgba(31,78,103,0.09);
+        white-space: nowrap;
+        cursor: default;
+    }
+    .m-pill:hover { opacity: 1; transform: translateY(-2px); }
+    .m-pill i { font-size: 1.45rem; line-height: 1; }
+    .m-char {
+        font-size: 1.45rem;
+        font-weight: 900;
+        font-family: 'Monaco', 'Consolas', monospace;
+        line-height: 1;
+        display: inline-block;
+        width: 1.45rem;
+        text-align: center;
+    }
+    .m-label {
+        font-family: 'Iceland', sans-serif !important;
+        font-size: 0.82rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--hs-blue);
+        font-weight: 700;
+    }
+    @keyframes hs-marquee-scroll {
+        from { transform: translateX(0); }
+        to   { transform: translateX(-50%); }
+    }
+    /* ─────────────────────────────────────────────────── */
+</style>
+ 
 <div id="loader-wrapper">
     <div class="biometric-fusion-container">
         <div class="loading-track"><div class="loading-fill"></div></div>
@@ -517,7 +621,7 @@
             <div class="row align-items-center mb-5 pb-5">
                 <div class="col-lg-7 ent-reveal-left">
                     <span class="hs-badge-premium" style="background:var(--hs-red);">IDENTIDAD SOBERANA & ECONOMÍA GLOBAL</span>
-                    <h2 class="mb-4"><em>¿Qué es <span class="text-gradient">Human System</span>?</em></h2>
+                    <h2 class="mb-4"><em><span class="text-gradient">Quiénes somos </span> ?</em></h2>
                     <p class="lead mb-4">
                         El primer <strong>Marco de Identidad y Ciudadanía Digital</strong> que erradica la fragmentación de tu vida online.
                         Un único <strong>HumanoID</strong> — identidad verificada, redes sociales y capacidad financiera unificados.
@@ -703,12 +807,138 @@
         </div>
     </section>
 
+
+
+
+
+
     <!-- ══════════════════════════════════════
          CARACTERÍSTICAS PRINCIPALES (BENTO GRID)
     ══════════════════════════════════════ -->
     <section class="section-convergent-white">
+
+
+<!-- ══════════════════════════════════════
+     TECH STRIP — STACK & PARTNERS
+══════════════════════════════════════ -->
+<section class="hs-tech-marquee mt-2 mb-5">
+    <span class="strip-label">Tecnologías que impulsan HumanoID</span>
+    <div class="marquee-fade-mask">
+        <div class="marquee-rail">
+ 
+            <!-- ─── SET 1 ─── -->
+            <div class="m-pill">
+                <i class="fab fa-font-awesome" style="color:#528DD3;"></i>
+                <span class="m-label">Font Awesome</span>
+            </div>
+            <div class="m-pill">
+                <i class="fab fa-stripe-s" style="color:#635BFF;"></i>
+                <span class="m-label">Stripe</span>
+            </div>
+            <div class="m-pill">
+                <i class="fab fa-google" style="color:#4285F4;"></i>
+                <span class="m-label">Google Cloud</span>
+            </div>
+            <div class="m-pill">
+                <i class="fab fa-aws" style="color:#FF9900;"></i>
+                <span class="m-label">AWS</span>
+            </div>
+            <div class="m-pill">
+                <span class="m-char" style="color:#13AA52;">M</span>
+                <span class="m-label">Mongo DB</span>
+            </div>
+            <div class="m-pill">
+                <i class="fas fa-comment-dots" style="color:#F22F46;"></i>
+                <span class="m-label">Twilio</span>
+            </div>
+            <div class="m-pill">
+                <i class="fab fa-cc-visa" style="color:#1565C0;"></i>
+                <span class="m-label">Visa</span>
+            </div>
+            <div class="m-pill">
+                <i class="fas fa-satellite-dish" style="color:#1C77D4;"></i>
+                <span class="m-label">Thales</span>
+            </div>
+            <div class="m-pill">
+                <i class="fas fa-layer-group" style="color:#7B42BC;"></i>
+                <span class="m-label">HashiCorp</span>
+            </div>
+            <div class="m-pill">
+                <i class="fas fa-shield-alt" style="color:#FA582D;"></i>
+                <span class="m-label">Palo Alto</span>
+            </div>
+            <div class="m-pill">
+                <i class="fas fa-id-badge" style="color:#00B5D8;"></i>
+                <span class="m-label">D-ID</span>
+            </div>
+            <div class="m-pill">
+                <i class="fas fa-qrcode" style="color:#1F4E67;"></i>
+                <span class="m-label">Me-QR</span>
+            </div>
+            <div class="m-pill">
+                <i class="fas fa-robot" style="color:#8B5CF6;"></i>
+                <span class="m-label">QR AI</span>
+            </div>
+ 
+            <!-- ─── SET 2 (copia idéntica para loop seamless) ─── -->
+            <div class="m-pill">
+                <i class="fab fa-font-awesome" style="color:#528DD3;"></i>
+                <span class="m-label">Font Awesome</span>
+            </div>
+            <div class="m-pill">
+                <i class="fab fa-stripe-s" style="color:#635BFF;"></i>
+                <span class="m-label">Stripe</span>
+            </div>
+            <div class="m-pill">
+                <i class="fab fa-google" style="color:#4285F4;"></i>
+                <span class="m-label">Google Cloud</span>
+            </div>
+            <div class="m-pill">
+                <i class="fab fa-aws" style="color:#FF9900;"></i>
+                <span class="m-label">AWS</span>
+            </div>
+            <div class="m-pill">
+                <span class="m-char" style="color:#13AA52;">M</span>
+                <span class="m-label">MongoDB</span>
+            </div>
+            <div class="m-pill">
+                <i class="fas fa-comment-dots" style="color:#F22F46;"></i>
+                <span class="m-label">Twilio</span>
+            </div>
+            <div class="m-pill">
+                <i class="fab fa-cc-visa" style="color:#1565C0;"></i>
+                <span class="m-label">Visa</span>
+            </div>
+            <div class="m-pill">
+                <i class="fas fa-satellite-dish" style="color:#1C77D4;"></i>
+                <span class="m-label">Thales</span>
+            </div>
+            <div class="m-pill">
+                <i class="fas fa-layer-group" style="color:#7B42BC;"></i>
+                <span class="m-label">HashiCorp</span>
+            </div>
+            <div class="m-pill">
+                <i class="fas fa-shield-alt" style="color:#FA582D;"></i>
+                <span class="m-label">Palo Alto</span>
+            </div>
+            <div class="m-pill">
+                <i class="fas fa-id-badge" style="color:#00B5D8;"></i>
+                <span class="m-label">D-ID</span>
+            </div>
+            <div class="m-pill">
+                <i class="fas fa-qrcode" style="color:#1F4E67;"></i>
+                <span class="m-label">Me-QR</span>
+            </div>
+            <div class="m-pill">
+                <i class="fas fa-robot" style="color:#8B5CF6;"></i>
+                <span class="m-label">QR AI</span>
+            </div>
+ 
+        </div>
+    </div>
+</section>
         <div class="container">
-            <div class="text-center mb-5 ent-reveal">
+            <div class="text-center mt-5 mb-5 ent-reveal">
                 <h2 class="font-weight-bold mt-4 mb-3" style="color:var(--hs-blue); font-size:3rem;">
                     <em>Diseñado para tu vida digital del día a día</em>
                 </h2>
@@ -894,10 +1124,10 @@
 
     <script>
 const mediaAssets = {
-    1: { video:"https://storage.googleapis.com/humansystem/1.mp4", staticImg:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_xnjmb7xnjmb7xnjm%20(1).png"},
+    1: { video:"https://storage.googleapis.com/humansystem/5.mp4", staticImg:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_xnjmb7xnjmb7xnjm%20(1).png"},
     2: { video:"https://storage.googleapis.com/humansystem/4.mp4", staticImg:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_n30epdn30epdn30e.png" },
-    3: { video:"https://storage.googleapis.com/humansystem/2.mp4", staticImg:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_jp35rzjp35rzjp35.png" },
-    4: { video:"https://storage.googleapis.com/humansystem/5.mp4", staticImg:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_3v8j6n3v8j6n3v8j.png" }
+    3: { video:"https://storage.googleapis.com/humansystem/2.mp4", staticImg:"https://storage.googleapis.com/humansystem/img.png" },
+    4: { video:"https://storage.googleapis.com/humansystem/1.mp4", staticImg:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_3v8j6n3v8j6n3v8j.png" }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
