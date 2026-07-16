@@ -1,6 +1,5 @@
 const crypto = require('crypto');
 
-// ¡CRÍTICO! Esta clave debe ir en tu .env. 
 // Genera una de 32 bytes así en tu consola: require('crypto').randomBytes(32).toString('hex')
 const ENCRYPTION_KEY = Buffer.from(process.env.ENCRYPTION_KEY, 'hex'); // 32 bytes
 const IV_LENGTH = 16; 

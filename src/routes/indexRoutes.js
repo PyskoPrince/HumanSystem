@@ -495,44 +495,15 @@ router.post('/register', upload, async (req, res) => {
 
 // ════════════════════════════════════════════════════════════════════════════
 //  MOTOR QR — TRIPLE FALLBACK
-//  1º  qrcode-ai.com   (diseño personalizado con template)
-//  2º  qr-api.net      (nueva API, 10k/mes gratis)
+//  1º  me-qr.com       (diseño personalizado con template)
+//  2º  qrcode-ai.com   (nueva API, 10k/mes gratis)
 //  3º  local qrcode    (emergencia, siempre disponible)
 // ════════════════════════════════════════════════════════════════════════════
 
 async function generateQRCode(enlaceValidacion) {
-    // ── MOTOR 1: qrcode-ai.com ───────────────────────────────────────────────
+    // ── MOTOR 1: me-qr.com ───────────────────────────────────────────────
     try {
-        console.log(`[QR-M1] Intentando motor principal QR AI para: ${enlaceValidacion}`);
-        const response = await fetch('https://odin.qrcode-ai.com/api/qrcode', {
-            method: 'POST',
-            headers: {
-                'x-api-key': process.env.QR_API_KEY, 
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                to: enlaceValidacion,
-                type: 'url',
-                template: '69d3d3eeacd791551420de54'
-            })
-        });
-
-        if (!response.ok) throw new Error(`M1 HTTP ${response.status}`);
-
-        const data = await response.json();
-        if (data?.qrcode?.url) {
-            console.log(`[QR-M1] ✅ Éxito: ${data.qrcode.url}`);
-            return data.qrcode.url;
-        }
-        throw new Error('M1: respuesta sin qrcode.url');
-
-    } catch (err) {
-        console.warn(`[QR-M1] ⚠️ Falló: ${err.message} — activando Motor 2 ecample ME QR CODE ...`);
-    }
-
-    // ── MOTOR 2: me-qr.com ───────────────────────────────────────────────
-    try {
-        console.log(`[QR-M2] Intentando motor me-qr (URL directa sin Base64)...`);
+        console.log(`[QR-M1] Intentando motor me-qr (URL directa sin Base64)...`);
         // Cámbiala a:
         const apiKey = process.env.QR_API_KEY_2;
         if (!apiKey) throw new Error('QR_API_KEY_2 no definida en variables de entorno');
@@ -592,11 +563,40 @@ async function generateQRCode(enlaceValidacion) {
         const base64 = Buffer.from(arrayBuffer).toString('base64');
         const dataUrl = `data:image/png;base64,${base64}`;
 
-        console.log(`[QR-M2] ✅ Éxito motor 2 me la pelan  dadsadsas sperras`);
+        console.log(`[QR-M1] ✅ Éxito motor 1 me la pelan  dadsadsas sperras`);
         return dataUrl;
 
     } catch (err) {
-        console.warn(`[QR-M2] ⚠️ Falló: ${err.message} — pasando al Motor 3 que es el local...`);
+        console.warn(`[QR-M1] ⚠️ Falló: ${err.message} — pasando al Motor 2...`);
+    }
+
+    // ── MOTOR 2: qrcode-ai.com ───────────────────────────────────────────────
+    try {
+        console.log(`[QR-M2] Intentando motor QR AI para: ${enlaceValidacion}`);
+        const response = await fetch('https://odin.qrcode-ai.com/api/qrcode', {
+            method: 'POST',
+            headers: {
+                'x-api-key': process.env.QR_API_KEY, 
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                to: enlaceValidacion,
+                type: 'url',
+                template: '69d3d3eeacd791551420de54'
+            })
+        });
+
+        if (!response.ok) throw new Error(`M2 HTTP ${response.status}`);
+
+        const data = await response.json();
+        if (data?.qrcode?.url) {
+            console.log(`[QR-M2] ✅ Éxito: ${data.qrcode.url}`);
+            return data.qrcode.url;
+        }
+        throw new Error('M2: respuesta sin qrcode.url');
+
+    } catch (err) {
+        console.warn(`[QR-M2] ⚠️ Falló: ${err.message} — activando Motor 3 que es el local...`);
     }
 
     // ── MOTOR 3: LOCAL (salvavidas) ──────────────────────────────────────────

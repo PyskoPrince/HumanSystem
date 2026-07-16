@@ -1,7 +1,7 @@
 # ════════════════════════════════════════════════════
 #  STAGE 1: BUILDER
 # ════════════════════════════════════════════════════
-FROM node:20-alpine AS builder
+FROM node:20 AS builder
 
 # Instalar dependencias para compilar bcrypt, canvas, ethers
 RUN apk add --no-cache python3 make g++ build-base cairo-dev jpeg-dev pango-dev giflib-dev
