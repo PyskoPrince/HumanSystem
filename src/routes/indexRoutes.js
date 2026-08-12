@@ -2133,3 +2133,4 @@ router.delete('/eliminarPerfil', isAuthenticated, async (req, res) => {
 });
 
 module.exports = router;
+
