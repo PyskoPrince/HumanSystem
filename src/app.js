@@ -207,7 +207,22 @@ app.use('/', indexRoutes);
 // Endpoints de alta sensibilidad (wallet, certificados, kill switch)
 // app.use('/api/wallet',        strictLimiter, walletRoutes);
 // app.use('/api/certificates',  strictLimiter, certificateRoutes);
+// Rutas en Express
+app.get('/', (req, res) => {
+    res.render('index', { 
+        login: false, 
+        currentPage: 'home', 
+        title: 'Human System | Soberanía Digital' 
+    });
+});
 
+app.get('/tecnologia', (req, res) => {
+    res.render('tecnologia', { 
+        login: false, 
+        currentPage: 'tecnologia', 
+        title: 'Tecnología y Seguridad' 
+    });
+});
 // ─────────────────────────────────────────────────────────────────
 //  11. LOGOUT
 // ─────────────────────────────────────────────────────────────────

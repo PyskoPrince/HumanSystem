@@ -1,0 +1,216 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // ── LOADER ──────────────────────────────────────────────────────
+    const loader = document.getElementById('loader-wrapper');
+    const statusText = document.querySelector('.status-text');
+    const loadingFill = document.querySelector('.loading-fill');
+    const statusDots = document.querySelector('.status-dots');
+
+    function finishLoading() {
+        if(loadingFill){ loadingFill.style.background='#28a745'; loadingFill.style.boxShadow='0 0 15px #28a745'; }
+        setTimeout(()=>{ if(loader) loader.classList.add('loader-hidden'); }, 800);
+    }
+
+    const states = ["CARGANDO_MOSAICO_DE_IMÁGENES","RENDERIZANDO_SECCIONES_INTERACTIVAS","PREPARANDO_CUESTIONARIOS_DINÁMICOS","OPTIMIZANDO_CONTENIDO_MULTIMEDIA","LISTO_PARA_EXPLORAR"];
+    let i=0; const progressPerStep=100/states.length;
+    const stateInterval = setInterval(()=>{
+        if(i<states.length){
+            if(statusText) statusText.innerText=states[i];
+            if(loadingFill){ loadingFill.style.width=`${(i+1)*progressPerStep}%`; loadingFill.style.transition='width 0.6s ease'; }
+            if(states[i]==="LISTO_PARA_EXPLORAR"){ clearInterval(stateInterval); if(statusDots) statusDots.style.display='none'; finishLoading(); }
+            i++;
+        }
+    }, 700);
+    setTimeout(()=>{ if(loader && !loader.classList.contains('loader-hidden')) finishLoading(); }, 8000);
+
+    // ── ROTACIÓN DE IDENTIDADES ──────────────────────────────────────
+    const avatarImg = document.getElementById('main-avatar');
+    const nameDisplay = document.getElementById('user-name-display');
+    const idKeyDisplay = document.getElementById('user-id-key');
+
+    const staffProfiles = [
+        { img:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_jp5hjcjp5hjcjp5h-Photoroom.png", names:["MARÍA JOSÉ","ANA PAULA","XIMENA","BEATRIZ","ELENA"], paternal:["GARCÍA","RODRÍGUEZ","MARTÍNEZ","SOTO","VARGAS"], maternal:["SÁNCHEZ","LÓPEZ","PÉREZ","CORTÉS","MÉNDEZ"], countryCode:"MEX", gender:"F", dob:"920514" },
+        { img:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_l1rdudl1rdudl1rd-Photoroom.png", names:["JUAN CARLOS","LUIS ALBERTO","RICARDO","MAURICIO","ROBERTO"], paternal:["HERNÁNDEZ","SÁNCHEZ","PÉREZ","GÓMEZ","DÍAZ"], maternal:["GONZÁLEZ","GÓMEZ","RAMÍREZ","FLORES","ORTEGA"], countryCode:"ARG", gender:"M", dob:"881022" },
+        { img:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_zemt3vzemt3vzemt-Photoroom.png", names:["CARLA SOFÍA","VALERIA","DANIELA","ADRIANA","NATALIA"], paternal:["RAMÍREZ","CRUZ","FLORES","MORALES","SOLÍS"], maternal:["MORALES","ORTIZ","CASTRO","RIVERA","REYES"], countryCode:"COL", gender:"F", dob:"950130" },
+        { img:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_6x61cl6x61cl6x61-Photoroom.png", names:["MIGUEL ÁNGEL","FRANCISCO","JAVIER","ALEJANDRO","SANTIAGO"], paternal:["VAZQUEZ","REYES","JIMÉNEZ","TORRES","LUNA"], maternal:["TORRES","VARGAS","RUIZ","MENDOZA","SANTIAGO"], countryCode:"ESP", gender:"M", dob:"900715" },
+        { img:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_ppy4sdppy4sdppy4-Photoroom.png", names:["SOFÍA","ISABELLA","CAMILA","VALENTINA","MARIANA"], paternal:["CASTILLO","GUZMÁN","ROMERO","MUÑOZ","AGUILAR"], maternal:["NAVARRO","SALAZAR","DELGADO","PACHECO","IBARRA"], countryCode:"CHL", gender:"F", dob:"940312" }
+    ];
+
+    function generateHumanoKey(profile,fullName){ const genderDigit=profile.gender==="M"?"1":"2"; const initials=fullName.split(' ').map(n=>n[0]).join('').substring(0,3); const randomSuffix=Math.random().toString().slice(2,7); return `${profile.countryCode}${initials}${genderDigit}${profile.dob}${randomSuffix}`; }
+
+    let currentIndex=0;
+    function rotateIdentity(){
+        if(!nameDisplay||!idKeyDisplay) return;
+        nameDisplay.style.opacity='0'; idKeyDisplay.style.opacity='0';
+        setTimeout(()=>{
+            currentIndex=(currentIndex+1)%staffProfiles.length;
+            const profile=staffProfiles[currentIndex];
+            if(avatarImg) avatarImg.src=profile.img;
+            const n=profile.names[Math.floor(Math.random()*profile.names.length)];
+            const ap=profile.paternal[Math.floor(Math.random()*profile.paternal.length)];
+            const am=profile.maternal[Math.floor(Math.random()*profile.maternal.length)];
+            const full=`${n} ${ap} ${am}`;
+            nameDisplay.innerHTML=`<em>${full}</em>`;
+            idKeyDisplay.innerHTML=`<em>${generateHumanoKey(profile,full)}</em>`;
+            nameDisplay.style.opacity='1'; idKeyDisplay.style.opacity='1';
+        },500);
+    }
+    setInterval(rotateIdentity,4500);
+    if(nameDisplay&&idKeyDisplay){ const initialFull="MARÍA JOSÉ GARCÍA SÁNCHEZ"; nameDisplay.innerHTML=`<em>${initialFull}</em>`; idKeyDisplay.innerText=generateHumanoKey(staffProfiles[0],initialFull); }
+
+    // ── VIDEO MODAL ──────────────────────────────────────────────────
+    const videoBtn = document.getElementById('btn-watch-video');
+    const videoModal = document.getElementById('videoModal');
+    const closeBtn = document.getElementById('closeVideo');
+    const videoFrame = document.getElementById('hsVideoFrame');
+    const videoURL = "https://storage.googleapis.com/humansystem/video_landingpage.mp4";
+
+    if(videoBtn){ videoBtn.addEventListener('click',()=>{ if(videoFrame) videoFrame.src=videoURL; if(videoModal) videoModal.classList.add('active'); document.body.style.overflow='hidden'; }); }
+    const closeModal=()=>{ if(videoModal) videoModal.classList.remove('active'); if(videoFrame) videoFrame.src=""; document.body.style.overflow='auto'; };
+    if(closeBtn) closeBtn.addEventListener('click',closeModal);
+    if(videoModal){ videoModal.addEventListener('click',(e)=>{ if(e.target===videoModal) closeModal(); }); }
+
+    // ── ANIMACIÓN 3D TARJETA ─────────────────────────────────────────
+    const missionCard = document.getElementById('mission-hero-card');
+    if(missionCard&&missionCard.parentElement){
+        const container=missionCard.parentElement;
+        container.addEventListener('mousemove',(e)=>{ const rect=missionCard.getBoundingClientRect(); const x=e.clientX-rect.left; const y=e.clientY-rect.top; const centerX=rect.width/2; const centerY=rect.height/2; const rotateX=((y-centerY)/centerY)*-10; const rotateY=((x-centerX)/centerX)*10; missionCard.style.transform=`perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`; });
+        container.addEventListener('mouseleave',()=>{ missionCard.style.transform='perspective(1200px) rotateX(0deg) rotateY(0deg)'; });
+    }
+
+    // ── INTERSECTION OBSERVER ────────────────────────────────────────
+    const observer = new IntersectionObserver((entries,observer)=>{ entries.forEach(entry=>{ if(entry.isIntersecting){ entry.target.classList.add('visible'); observer.unobserve(entry.target); } }); }, { root:null, rootMargin:'0px', threshold:0.15 });
+    document.querySelectorAll('.ent-reveal,.ent-reveal-left,.ent-reveal-right').forEach(el=>observer.observe(el));
+
+    // ── TELEMETRÍA ───────────────────────────────────────────────────
+    const latencyValue = document.querySelector('.tile:nth-child(2) .tvalue');
+    const latencyBar = document.querySelector('.tile:nth-child(2) .miniLine i');
+    const uptimeValue = document.querySelector('.tile:nth-child(1) .tvalue');
+    setInterval(()=>{
+        const baseLatency=14; const finalLatency=(baseLatency+((Math.random()*4)-2)).toFixed(0);
+        if(latencyValue) latencyValue.innerText=`${finalLatency}ms`;
+        if(latencyBar){ latencyBar.style.width=`${(finalLatency/30)*100}%`; latencyBar.style.transition='width 0.8s ease'; }
+        if(uptimeValue) uptimeValue.innerText=`${(99.98+(Math.random()*0.01)).toFixed(2)}%`;
+    },2500);
+
+    // ── FORMULARIO DE CONTACTO (UX) ──────────────────────────────────
+    const contactForm = document.getElementById('killerContactForm');
+    if(contactForm){
+        contactForm.addEventListener('submit',(e)=>{
+            e.preventDefault();
+            const nombre = document.getElementById('cf-nombre').value.trim();
+            const correo = document.getElementById('cf-correo').value.trim();
+            const mensaje = document.getElementById('cf-mensaje').value.trim();
+
+            if(!nombre || !correo){
+                Swal.fire({ icon:'warning', title:'Campos requeridos', text:'Por favor ingresa tu nombre y correo electrónico.', confirmButtonColor:'#1F4E67', background:'rgba(10,17,32,0.95)', color:'#fff' });
+                return;
+            }
+
+            Swal.fire({ title:'Enviando...', allowOutsideClick:false, didOpen:()=>Swal.showLoading(), background:'rgba(10,17,32,0.95)', color:'#fff' });
+
+            setTimeout(()=>{
+                Swal.fire({
+                    icon:'success',
+                    title:'¡Mensaje enviado!',
+                    html:`<p>Gracias, <strong>${nombre}</strong>. Nos pondremos en contacto contigo en menos de 24 horas a <strong>${correo}</strong>.</p>`,
+                    confirmButtonColor:'#1F4E67',
+                    background:'rgba(10,17,32,0.95)',
+                    color:'#fff'
+                }).then(()=>{ contactForm.reset(); });
+            }, 1200);
+        });
+    }
+
+    // ── GUÍA GLOBAL DE EIP (envío por correo vía Brevo) ───────────────
+    const eipForm = document.getElementById('eipGuideForm');
+    if (eipForm) {
+        eipForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const correo = document.getElementById('eip-correo').value.trim();
+            if (!correo) return;
+
+            Swal.fire({ title: 'Enviando...', allowOutsideClick: false, didOpen: () => Swal.showLoading(), background: 'rgba(10,17,32,0.95)', color: '#fff' });
+
+            try {
+                const res = await fetch('/api/send-eip-guide', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ correo })
+                });
+                if (!res.ok) throw new Error('fallo');
+
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Guía enviada!',
+                    html: `<p>Revisa tu bandeja de entrada en <strong>${correo}</strong> (y spam, por si acaso).</p>`,
+                    confirmButtonColor: '#1F4E67', background: 'rgba(10,17,32,0.95)', color: '#fff'
+                }).then(() => eipForm.reset());
+            } catch (err) {
+                Swal.fire({ icon: 'error', title: 'Algo falló', text: 'Intenta de nuevo en unos minutos.', confirmButtonColor: '#1F4E67', background: 'rgba(10,17,32,0.95)', color: '#fff' });
+            }
+        });
+    }
+
+    // ── LEGALES (SWEETALERT) ─────────────────────────────────────────
+    const swalConfig = { background:'rgba(10,17,32,0.95)', color:'#ffffff', confirmButtonColor:'#1F4E67', backdrop:`rgba(0,0,0,0.8) blur(5px)`, customClass:{ popup:'premium-swal-popup', confirmButton:'premium-swal-button' } };
+
+    const showTerms = (e) => {
+        e.preventDefault();
+        Swal.fire({ ...swalConfig, title:'<i class="fas fa-file-contract mr-2" style="color:#4ca1af;"></i> Términos de Servicio', width:'700px', confirmButtonText:'HE LEÍDO Y ACEPTO',
+            html:`<div style="text-align:justify; font-size:0.85rem; height:450px; overflow-y:auto; padding-right:15px; color:rgba(255,255,255,0.8); line-height:1.6;">
+            <p><strong>Última actualización:</strong> 05 de febrero de 2026</p>
+            <p>El presente contrato regula el acceso a la infraestructura tecnológica de <strong>Human Identification Technologies, S.A. de C.V.</strong> (en adelante "Human System").</p>
+            <h6 style="color:#ffffff; margin-top:15px;">1. NATURALEZA DEL SERVICIO</h6>
+            <p>Human System proporciona una plataforma de Identidad Global Soberana basada en identidad verificada y protocolos de encriptación de grado militar.</p>
+            <h6 style="color:#ffffff; margin-top:15px;">2. PROPIEDAD INTELECTUAL Y ALGORITMOS</h6>
+            <p>Todos los algoritmos de validación, modelos de capital y arquitecturas de almacenamiento crítico están protegidos bajo registros de IMPI e INDAUTOR. Queda prohibida cualquier ingeniería inversa o uso no autorizado de las APIs del sistema.</p>
+            <h6 style="color:#ffffff; margin-top:15px;">3. ACUERDOS DE NIVEL DE SERVICIO (SLA)</h6>
+            <p>HIT S.A. de C.V. garantiza una disponibilidad del sistema de alta disponibilidad en nodos críticos con cifrado AES-256-GCM en tránsito y en reposo.</p>
+            <h6 style="color:#ffffff; margin-top:15px;">4. RESPONSABILIDAD DEL USUARIO</h6>
+            <p>El solicitante de acceso es responsable de la integridad de sus credenciales institucionales. El uso de la red para actividades que violen las normativas de cumplimiento resultará en la terminación inmediata del servicio.</p>
+            <h6 style="color:#ffffff; margin-top:15px;">5. JURISDICCIÓN</h6>
+            <p>Para cualquier controversia legal, las partes se someten a las leyes aplicables en la Ciudad de México, renunciando a cualquier otro fuero que pudiera corresponderles por domicilio presente o futuro.</p>
+            </div>`
+        });
+    };
+
+    const showPrivacy = (e) => {
+        e.preventDefault();
+        Swal.fire({ ...swalConfig, title:'<i class="fas fa-user-shield mr-2" style="color:#d71d00;"></i> Aviso de Privacidad', width:'700px', confirmButtonText:'ACEPTAR POLÍTICAS DE SEGURIDAD',
+            html:`<div style="text-align:justify; font-size:0.85rem; height:450px; overflow-y:auto; padding-right:15px; color:rgba(255,255,255,0.8); line-height:1.6;">
+            <p><strong>Responsable:</strong> Human Identification Technologies, S.A. de C.V.</p>
+            <p><strong>Domicilio:</strong> Ayuntamiento #143 Miguel Hidalgo 1ra Secc, Tlalpan, 14250 Ciudad de México.</p>
+            <hr style="border-top:1px solid rgba(255,255,255,0.1);">
+            <h6 style="color:#ffffff;">I. DATOS SOMETIDOS A TRATAMIENTO</h6>
+            <p>HIT recabará y tratará: Nombre completo, CURP, RFC, fotografía facial y firma digital. Estos últimos son considerados <strong>Datos Personales Sensibles</strong> y su tratamiento es indispensable para la validación de Identidad Global.</p>
+            <h6 style="color:#ffffff; margin-top:15px;">II. FINALIDADES PRIMARIAS</h6>
+            <ol>
+                <li>Creación de perfil de Identidad Digital Soberana.</li>
+                <li>Validación de identidad para transacciones financieras de alta seguridad.</li>
+                <li>Soberanía de datos: cifrado AES-256-GCM con control exclusivo del usuario.</li>
+            </ol>
+            <h6 style="color:#ffffff; margin-top:15px;">III. TRANSFERENCIA DE DATOS</h6>
+            <p>HIT no comercializa datos personales. La transferencia de información se limita estrictamente a proveedores de verificación de identidad y autoridades competentes, bajo el Artículo 37 de la Ley Federal de Protección de Datos.</p>
+            <h6 style="color:#ffffff; margin-top:15px;">IV. DERECHOS ARCO</h6>
+            <p>Usted puede ejercer sus derechos de Acceso, Rectificación, Cancelación u Oposición mediante solicitud dirigida a <strong>info@humansystem.mx</strong>. HIT resolverá su solicitud en un plazo máximo de 20 días hábiles.</p>
+            <h6 style="color:#ffffff; margin-top:15px;">V. TECNOLOGÍAS DE RASTREO</h6>
+            <p>Nuestra plataforma utiliza cookies técnicas para mantener sesiones activas y personalizar la experiencia de seguridad. Estos datos de sesión no incluyen información biográfica directa sin consentimiento explícito.</p>
+            </div>`
+        });
+    };
+
+    if(document.getElementById('btn-terms')) document.getElementById('btn-terms').addEventListener('click',showTerms);
+    if(document.getElementById('btn-privacy')) document.getElementById('btn-privacy').addEventListener('click',showPrivacy);
+});
+
+// ── FAQ TOGGLE ───────────────────────────────────────────────────────────────
+function toggleFaq(questionEl) {
+    const item = questionEl.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
+    if(!isOpen) item.classList.add('open');
+}
+</script>

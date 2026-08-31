@@ -1,0 +1,224 @@
+<%- include('partials/header', { title: 'Tecnología', pageClass: 'page-tecnologia' }) %>
+<%- include('partials/navbar', { login: false }) %>
+<%- include('partials/hs-styles') %>
+<%- include('partials/hs-loader') %>
+
+<div class="hs-landing-wrapper">
+    <!-- GUÍA GLOBAL DE EIP -->
+    <%- include('partials/hs-eip-guide') %>
+
+    <!-- ══════════════════════════════════════
+         CARACTERÍSTICAS PRINCIPALES (BENTO GRID)
+    ══════════════════════════════════════ -->
+    <section class="section-convergent-white">
+
+        <!-- ══════════════════════════════════════
+             TECH STRIP — STACK & PARTNERS
+        ══════════════════════════════════════ -->
+        <section class="hs-tech-marquee mt-2 mb-5">
+            <span class="strip-label">Tecnologías que impulsan HumanoID</span>
+            <div class="marquee-fade-mask">
+                <div class="marquee-rail">
+
+                    <!-- ─── SET 1 ─── -->
+                    <div class="m-pill"><i class="fab fa-font-awesome" style="color:#528DD3;"></i><span class="m-label">Font Awesome</span></div>
+                    <div class="m-pill"><i class="fab fa-stripe-s" style="color:#635BFF;"></i><span class="m-label">Stripe</span></div>
+                    <div class="m-pill"><i class="fab fa-google" style="color:#4285F4;"></i><span class="m-label">Google Cloud</span></div>
+                    <div class="m-pill"><i class="fab fa-aws" style="color:#FF9900;"></i><span class="m-label">AWS</span></div>
+                    <div class="m-pill"><span class="m-char" style="color:#13AA52;">M</span><span class="m-label">Mongo DB</span></div>
+                    <div class="m-pill"><i class="fas fa-comment-dots" style="color:#F22F46;"></i><span class="m-label">Twilio</span></div>
+                    <div class="m-pill"><i class="fab fa-cc-visa" style="color:#1565C0;"></i><span class="m-label">Visa</span></div>
+                    <div class="m-pill"><i class="fas fa-satellite-dish" style="color:#1C77D4;"></i><span class="m-label">Thales</span></div>
+                    <div class="m-pill"><i class="fas fa-layer-group" style="color:#7B42BC;"></i><span class="m-label">HashiCorp</span></div>
+                    <div class="m-pill"><i class="fas fa-shield-alt" style="color:#FA582D;"></i><span class="m-label">Palo Alto</span></div>
+                    <div class="m-pill"><i class="fas fa-id-badge" style="color:#00B5D8;"></i><span class="m-label">D-ID</span></div>
+                    <div class="m-pill"><i class="fas fa-video" style="color:#FF4B4B;"></i><span class="m-label">HeyGen</span></div>
+                    <div class="m-pill"><i class="fas fa-qrcode" style="color:#1F4E67;"></i><span class="m-label">Me-QR</span></div>
+                    <div class="m-pill"><i class="fas fa-robot" style="color:#8B5CF6;"></i><span class="m-label">QR AI</span></div>
+
+                    <!-- ─── SET 2 (copia idéntica para loop seamless) ─── -->
+                    <div class="m-pill"><i class="fab fa-font-awesome" style="color:#528DD3;"></i><span class="m-label">Font Awesome</span></div>
+                    <div class="m-pill"><i class="fab fa-stripe-s" style="color:#635BFF;"></i><span class="m-label">Stripe</span></div>
+                    <div class="m-pill"><i class="fab fa-google" style="color:#4285F4;"></i><span class="m-label">Google Cloud</span></div>
+                    <div class="m-pill"><i class="fab fa-aws" style="color:#FF9900;"></i><span class="m-label">AWS</span></div>
+                    <div class="m-pill"><span class="m-char" style="color:#13AA52;">M</span><span class="m-label">MongoDB</span></div>
+                    <div class="m-pill"><i class="fas fa-comment-dots" style="color:#F22F46;"></i><span class="m-label">Twilio</span></div>
+                    <div class="m-pill"><i class="fab fa-cc-visa" style="color:#1565C0;"></i><span class="m-label">Visa</span></div>
+                    <div class="m-pill"><i class="fas fa-satellite-dish" style="color:#1C77D4;"></i><span class="m-label">Thales</span></div>
+                    <div class="m-pill"><i class="fas fa-layer-group" style="color:#7B42BC;"></i><span class="m-label">HashiCorp</span></div>
+                    <div class="m-pill"><i class="fas fa-shield-alt" style="color:#FA582D;"></i><span class="m-label">Palo Alto</span></div>
+                    <div class="m-pill"><i class="fas fa-id-badge" style="color:#00B5D8;"></i><span class="m-label">D-ID</span></div>
+                    <div class="m-pill"><i class="fas fa-video" style="color:#FF4B4B;"></i><span class="m-label">HeyGen</span></div>
+                    <div class="m-pill"><i class="fas fa-qrcode" style="color:#1F4E67;"></i><span class="m-label">Me-QR</span></div>
+                    <div class="m-pill"><i class="fas fa-robot" style="color:#8B5CF6;"></i><span class="m-label">QR AI</span></div>
+
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <div class="text-center mt-5 mb-5 ent-reveal">
+                <h2 class="font-weight-bold mt-4 mb-3" style="color:var(--hs-blue); font-size:3rem;">
+                    <em>Diseñado para tu vida digital del día a día</em>
+                </h2>
+                <p class="lead text-muted" style="max-width:600px; margin:0 auto;">
+                    Unificamos seguridad de grado militar, identidad verificada y finanzas en herramientas prácticas para tu día a día.
+                </p>
+            </div>
+
+            <div class="bento-grid-premium">
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-cyan"><i class="fas fa-id-card fa-2x"></i></div>
+                    <h3>Identity Service</h3>
+                    <p>Validación de identidad con foto, firma y datos verificados en múltiples capas de seguridad.</p>
+                </div>
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-blue"><i class="fas fa-database fa-2x"></i></div>
+                    <h3>Critical Storage</h3>
+                    <p>Almacenamiento encriptado AES-256-GCM con redundancia geográfica 2N+1 en Google Cloud.</p>
+                </div>
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-red"><i class="fas fa-microchip fa-2x"></i></div>
+                    <h3>Algorithmic Capital</h3>
+                    <p>Ejecución de capital con detección de duplicidad vectorial y prevención de fraude por IA.</p>
+                </div>
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-gold"><i class="fas fa-user-check fa-2x"></i></div>
+                    <h3>Verificación Multicapa</h3>
+                    <p>Construye confianza absoluta: confirmación de correo, celular vía Twilio y validación de domicilio real.</p>
+                </div>
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-purple"><i class="fas fa-fingerprint fa-2x"></i></div>
+                    <h3>Sesión Única</h3>
+                    <p>Evita suplantaciones. Restringimos el acceso a una sola sesión activa. Cambios críticos requieren contraseña maestra.</p>
+                </div>
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-green"><i class="fas fa-qrcode fa-2x"></i></div>
+                    <h3>Networking Dinámico</h3>
+                    <p>Comparte perfil y redes (WhatsApp, LinkedIn) con un solo escaneo NFC o QR encriptado en tiempo real.</p>
+                </div>
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-cyan"><i class="fas fa-wallet fa-2x"></i></div>
+                    <h3>Smart Wallet</h3>
+                    <p>Fondea en MXN vía Stripe y transfiere HumanCoins al instante con prevención de duplicidad por IA.</p>
+                </div>
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-blue"><i class="fas fa-file-pdf fa-2x"></i></div>
+                    <h3>Certificados Oficiales</h3>
+                    <p>Expide copias oficiales de tu identidad en PDF firmadas digitalmente para trámites y validaciones.</p>
+                </div>
+                <div class="hs-card-clean ent-reveal" style="border:1px solid var(--hs-cyan);">
+                    <div class="hs-icon-frame frame-red"><i class="fas fa-power-off fa-2x"></i></div>
+                    <h3>Kill Switch</h3>
+                    <p>Protocolo de emergencia: congela tu cuenta e invalida tu tarjeta física con un solo clic desde cualquier dispositivo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         ESPECIFICACIONES TÉCNICAS TARJETA
+    ══════════════════════════════════════ -->
+    <section class="section-convergent-white" style="padding:80px 0; background:#ffffff;">
+        <div class="container">
+            <div class="text-center mb-5 ent-reveal">
+                <span class="hs-badge-premium" style="background:linear-gradient(135deg, #1F4E67, #4ca1af); color:white;">THE ULTIMATE PHYSICAL TOKEN</span>
+                <h2 class="mt-4 font-weight-bold" style="color:var(--hs-dark-blue); font-size:3rem;">
+                    <span style="color:var(--hs-cyan);">Visual Artificial Forense Structure</span>
+                </h2>
+                <p class="lead text-muted" style="max-width:800px; margin:0 auto;">
+                    Construida sobre sustrato de policarbonato de alta densidad, fusionado para evitar la delaminación y garantizar una vida útil de más de 15 años.
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-4 ent-reveal">
+                    <div class="hs-card-clean" style="background:white; border:1px solid #e9ecef; box-shadow:0 10px 30px rgba(0,0,0,0.05); height:100%;">
+                        <div class="hs-icon-frame frame-cyan"><i class="fas fa-microchip fa-2x"></i></div>
+                        <h3 style="color:var(--hs-blue); font-size:1.6rem;">Smart Core</h3>
+                        <p class="text-muted" style="text-align:left; font-size:0.9rem;"><strong>Chip de interfaz dual (Contacto y Contactless)</strong> integrando estándar <strong>EMV</strong> para transacciones seguras y generación de criptogramas anti-skimming.</p>
+                        <ul class="list-unstyled text-left" style="font-size:0.85rem; color:#495057;">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> NFC ISO/IEC 14443 - "Tap-to-Verify"</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> QR Dinámico Visible (Estado en tiempo real)</li>
+                            <li><i class="fas fa-check-circle text-success mr-2"></i> <strong>Photo-QR Esteganográfico:</strong> Código encriptado incrustado en imagen de perfil.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 ent-reveal" style="transition-delay:0.1s;">
+                    <div class="hs-card-clean" style="background:white; border:1px solid #e9ecef; box-shadow:0 10px 30px rgba(0,0,0,0.05); height:100%;">
+                        <div class="hs-icon-frame frame-red"><i class="fas fa-shield-alt fa-2x"></i></div>
+                        <h3 style="color:var(--hs-blue); font-size:1.6rem;">Seguridad Visual</h3>
+                        <p class="text-muted" style="text-align:left; font-size:0.9rem;"><strong>Patrón de seguridad degradado</strong> fusionado con la foto, acompañado de biometría invisible a simple vista.</p>
+                        <ul class="list-unstyled text-left" style="font-size:0.85rem; color:#495057;">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> <strong>OVD Dactilar Holográfico:</strong> Holograma de cambio de color/ángulo.</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Tinta Ópticamente Variable (OVI) 3ra Gen</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Guilloche + Impresión Arcoíris</li>
+                            <li><i class="fas fa-check-circle text-success mr-2"></i> Tinta UV / Fluorescente (luz negra)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 ent-reveal" style="transition-delay:0.2s;">
+                    <div class="hs-card-clean" style="background:white; border:1px solid #e9ecef; box-shadow:0 10px 30px rgba(0,0,0,0.05); height:100%;">
+                        <div class="hs-icon-frame frame-gold"><i class="fas fa-hand-peace fa-2x"></i></div>
+                        <h3 style="color:var(--hs-blue); font-size:1.6rem;">Anti-Intrusión</h3>
+                        <p class="text-muted" style="text-align:left; font-size:0.9rem;"><strong>Elementos táctiles y de manipulación</strong> que permiten verificación al tacto y soporte para usuarios con discapacidad visual.</p>
+                        <ul class="list-unstyled text-left" style="font-size:0.85rem; color:#495057;">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Grabado Láser Táctil (Braille-ready)</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Sticker de Validación (Sello de seguridad)</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Marca de Agua (visible al trasluz)</li>
+                            <li><i class="fas fa-check-circle text-success mr-2"></i> Banda Magnética + Código de Barras</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5 g-4">
+                <div class="col-md-6 ent-reveal">
+                    <div style="background:rgba(31,78,103,0.03); border:1px solid rgba(31,78,103,0.2); border-radius:24px; padding:30px; height:100%; color:#495057; transition:all 0.3s ease;">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-certificate fa-2x" style="color:var(--hs-cyan);"></i>
+                            <h4 class="mb-0 ml-3" style="color:var(--hs-blue);">Human Registration Certificate</h4>
+                        </div>
+                        <p style="font-size:0.95rem; color:#555;">El documento oficial comparte la misma arquitectura forense en versión física impresa y digital:</p>
+                        <ul class="list-unstyled" style="font-size:0.9rem;">
+                            <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> <strong>Sincronía Esteganográfica:</strong> Photo-QR incrustado y Holograma OVD.</li>
+                            <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> <strong>Tag NFC embebido</strong> directamente en el papel.</li>
+                            <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Sello de autenticidad físico (Security Seal)</li>
+                            <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Sustrato de seguridad con fibras visibles bajo luz UV</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 ent-reveal" style="transition-delay:0.1s;">
+                    <div style="background:rgba(31,78,103,0.03); border:1px solid rgba(31,78,103,0.2); border-radius:24px; padding:30px; height:100%; color:#495057; transition:all 0.3s ease;">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-cubes fa-2x" style="color:var(--hs-red);"></i>
+                            <h4 class="mb-0 ml-3" style="color:var(--hs-blue);">Materiales &amp; Acabados</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <strong style="color:var(--hs-cyan);">Materiales Premium:</strong>
+                                <p class="small mb-2" style="color:#555;">PVC, PET, Policarbonato, Metal, Madera, PC</p>
+                                <strong style="color:var(--hs-cyan);">Estándares:</strong>
+                                <p class="small" style="color:#555;">ISO/IEC 14443-2/3 A<br>IC EAL 5+<br>Cifrado AES-256-GCM<br>Vida útil datos: 25 años</p>
+                            </div>
+                            <div class="col-6">
+                                <strong style="color:var(--hs-cyan);">Chips Soportados:</strong>
+                                <p class="small" style="color:#555;">Mifare DESFire, Plus, Classic<br>Serie NXP<br><strong>EMV Level 1 / Contactless</strong></p>
+                                <strong style="color:var(--hs-cyan);">Acabados:</strong>
+                                <p class="small" style="color:#555;">YMCK, Pantone, Laminado holográfico, Numeración láser</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<%- include('partials/hs-footer') %>
+
+<%- include('partials/footer', { login: login }) %>
+<%- include('partials/hs-scripts') %>

@@ -11,6 +11,12 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 COPY package*.json ./
+
+# Agrega estas dos líneas para evitar descargas pesadas de navegadores
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+
+RUN npm install --verbose
 RUN npm install
 
 COPY . .

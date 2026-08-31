@@ -26,6 +26,21 @@ const Human = require('../models/User'); // Asegúrate de que la ruta a tu model
 const viewsController = require('../controllers/viewsController');
 const authController = require('../controllers/authController');
 
+
+const nodemailer = require('nodemailer');
+
+// --- CONFIGURACIÓN DE CORREO (Nodemailer) ---
+const mailTransporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT) || 587,       
+    secure: false, // false para 587 (STARTTLS), true solo para 465
+    auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+    }
+});
+
+
 // --- MIDDLEWARE DE PROTECCIÓN ---
 function isAuthenticated(req, res, next) {
     if (req.session.loggedin) {
@@ -38,6 +53,9 @@ function isAuthenticated(req, res, next) {
 // --- PÁGINAS PRINCIPALES ---
 router.get('/', viewsController.renderHome);
 router.get('/info', viewsController.renderInfo);
+
+router.get('/tecnologia', viewsController.renderTecnologia);
+router.get('/casos-uso', viewsController.renderCasosUso);
 
 // ✅ RUTA ORIGINAL
 router.get('/validation', viewsController.renderValidation);
@@ -166,6 +184,69 @@ router.post('/verificarDuplicados', async (req, res) => {
         });
     }
 });
+
+// ════════════════════════════════════════════════════════════════════════════
+//  ENVÍO POR CORREO — GUÍA GLOBAL DE EVALUACIÓN DE IMPACTO A LA PRIVACIDAD
+// ════════════════════════════════════════════════════════════════════════════
+router.post('/api/send-eip-guide', async (req, res) => {
+    try {
+        const { correo } = req.body;
+
+        // Validación básica de formato de correo
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!correo || !emailRegex.test(correo)) {
+            return res.status(400).json({ success: false, message: 'Correo electrónico inválido.' });
+        }
+
+        const correoLimpio = correo.trim().toLowerCase();
+        const guiaUrl = 'https://storage.googleapis.com/humansystem/Guía_Global_de_EIP.pdf';
+
+        const mailOptions = {
+            from: process.env.SMTP_FROM || `"Human System" <${process.env.SMTP_USER}>`,
+            to: correoLimpio,
+            subject: 'Tu Guía Global de Evaluación de Impacto a la Privacidad — Human System',
+            html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background:#0a1120; color:#ffffff; border-radius: 16px; overflow: hidden;">
+                <div style="background: linear-gradient(135deg, #0a1120 0%, #1F4E67 100%); padding: 40px 30px; text-align: center;">
+                    <img src="https://storage.googleapis.com/humansystem/Full%20Logo.png" alt="Human System" width="80" style="margin-bottom: 20px;">
+                    <h1 style="color:#ffffff; font-size: 24px; margin: 0;">Tu Guía Global de EIP está lista</h1>
+                </div>
+                <div style="padding: 35px 30px; background:#ffffff; color:#333333;">
+                    <p style="font-size: 15px; line-height: 1.6;">Hola,</p>
+                    <p style="font-size: 15px; line-height: 1.6;">
+                        Gracias por tu interés en la <strong>Guía Global de Evaluación de Impacto a la Privacidad</strong> de Human System.
+                        Aquí tienes tu copia:
+                    </p>
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="${guiaUrl}" target="_blank"
+                           style="background: linear-gradient(135deg, #1F4E67, #4ca1af); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 10px; font-weight: bold; display: inline-block;">
+                            Descargar Guía (PDF)
+                        </a>
+                    </div>
+                    <p style="font-size: 13px; color: #777; line-height: 1.6;">
+                        Si el botón no funciona, copia y pega este enlace en tu navegador:<br>
+                        <a href="${guiaUrl}" style="color:#1F4E67;">${guiaUrl}</a>
+                    </p>
+                    <hr style="border: none; border-top: 1px solid #eee; margin: 25px 0;">
+                    <p style="font-size: 12px; color: #999;">
+                        Human Identification Technologies, S.A. de C.V. · Ayuntamiento 143, Int. A-201, Col. Miguel Hidalgo 1ra Secc, Tlalpan, CDMX.
+                    </p>
+                </div>
+            </div>
+            `
+        };
+
+        await mailTransporter.sendMail(mailOptions);
+
+        console.log(`[MAIL] ✅ Guía EIP enviada a: ${correoLimpio}`);
+        return res.json({ success: true, message: 'Guía enviada correctamente.' });
+
+    } catch (error) {
+        console.error('[MAIL] ❌ Error al enviar guía EIP:', error);
+        return res.status(500).json({ success: false, message: 'No se pudo enviar el correo. Intenta de nuevo más tarde.' });
+    }
+});
+
 
 // Ruta para procesar pago despues de validar la unicidad de los datos personales
 router.post('/procesarPago', async (req, res) => {

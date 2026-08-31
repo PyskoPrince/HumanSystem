@@ -96,6 +96,21 @@ exports.renderInfo = (req, res) => {
         pageClass: 'page-info'
     });
 };
+exports.renderTecnologia = (req, res) => {
+    res.render('tecnologia', { 
+        title: 'Tecnología', 
+        login: !!(req.session && req.session.loggedin),
+        pageClass: 'page-tecnologia'
+    });
+};
+
+exports.renderCasosUso = (req, res) => {
+    res.render('casos-uso', { 
+        title: 'Casos de Uso', 
+        login: !!(req.session && req.session.loggedin),
+        pageClass: 'page-casos-uso'
+    });
+};
 
 exports.renderValidation = (req, res) => {
     res.render('validation', { 

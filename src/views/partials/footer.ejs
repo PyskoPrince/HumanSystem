@@ -1227,12 +1227,14 @@ function subscribeToPlan(planName) {
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const pageClass = document.body.className.trim();
-    const pageMap = {
-      'page-info': 'info',
-      'page-register': 'register',
-      'page-login': 'login',
-      'page-validation': 'validation'
-    };
+   const pageMap = {
+  'page-info': 'info',
+  'page-register': 'register',
+  'page-login': 'login',
+  'page-validation': 'validation',
+  'page-tecnologia': 'tecnologia',
+  'page-casos-uso': 'casos-uso'
+};
     const currentPage = pageMap[pageClass];
     if (currentPage) {
       const navItem = document.querySelector(`.nav-item[data-page="${currentPage}"]`);

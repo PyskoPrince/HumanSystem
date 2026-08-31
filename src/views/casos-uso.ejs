@@ -1,0 +1,290 @@
+<%- include('partials/header', { title: 'Casos de Uso', pageClass: 'page-casos-uso' }) %>
+<%- include('partials/navbar', { login: false }) %>
+<%- include('partials/hs-styles') %>
+<%- include('partials/hs-loader') %>
+
+<div class="hs-landing-wrapper">
+
+    <!-- ══════════════════════════════════════
+         CASOS DE USO PREMIUM
+    ══════════════════════════════════════ -->
+    <section class="impact-showcase" id="manifesto" style="background:#ffffff;">
+        <div class="container">
+            <div class="text-center mb-5 ent-reveal">
+                <span class="hs-badge-premium" style="background:linear-gradient(135deg, #1F4E67, #4ca1af); color:white;">CASOS DE USO</span>
+                <h2 class="mt-4 font-weight-bold" style="color:var(--hs-dark-blue); font-size:3rem;">
+                    De lo digital a lo físico: <span style="color:var(--hs-cyan);">Así funcionamos.</span>
+                </h2>
+                <p class="lead text-muted" style="max-width:800px; margin:0 auto;">
+                    Descubre cómo tu <strong>Human ID (Tarjeta y Certificado)</strong> interoperan con el mundo real.
+                    Desde validaciones hasta pagos P2P y networking profesional.
+                </p>
+            </div>
+
+            <!-- 1. VERIFICACIÓN OFICIAL -->
+            <div class="row align-items-center mb-5 pb-5">
+                <div class="col-lg-6 ent-reveal-left">
+                    <div class="impact-visual-card">
+                        <div class="main-image-wrapper" id="media-container-1"></div>
+                        <div class="floating-data-card">
+                            <h3 class="text-primary">&lt; 2s</h3>
+                            <span>Tiempo de Validación</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-container-impact ent-reveal-right">
+                    <div class="impact-icon-box" style="background:#e3f2fd; color:#1F4E67;">
+                        <i class="fas fa-user-check fa-lg"></i>
+                    </div>
+                    <h2 class="font-weight-bold" style="color:#1F4E67;">Verificación Oficial <br><em style="color:#4ca1af;">en Tiempo Real</em></h2>
+                    <p class="lead text-muted">Entrega tu identidad y sé validado al instante. El agente escanea tu <strong>Human ID</strong> (NFC/QR) y el sistema corrobora el estatus de tu credencial al momento.</p>
+                    <ul class="list-unstyled small text-muted">
+                        <li class="mb-2"><i class="fas fa-check text-primary mr-2"></i> <strong>Caso de uso:</strong> Migración, Notarías, Acceso Corporativo.</li>
+                        <li class="mb-2"><i class="fas fa-check text-primary mr-2"></i> El <strong>Certificado Oficial PDF</strong> comparte la misma arquitectura forense (QR, OVD).</li>
+                        <li class="mb-2"><i class="fas fa-check text-primary mr-2"></i> <strong>Flujo:</strong> Tap-to-Verify → Servidor Zero-Trust → Validación en ≤ 2 segundos.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 2. TRANSFERENCIA P2P -->
+            <div class="row align-items-center mb-5 pb-5">
+                <div class="col-lg-6 order-2 order-lg-2 ent-reveal-right">
+                    <div class="impact-visual-card">
+                        <div class="main-image-wrapper" id="media-container-2"></div>
+                        <div class="floating-data-card right">
+                            <h3 class="text-success">Instantáneo</h3>
+                            <span>Sin Comisiones</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 order-1 order-lg-1 text-container-impact left-align ent-reveal-left">
+                    <div class="impact-icon-box" style="background:#e8f5e9; color:#28a745;">
+                        <i class="fas fa-hand-holding-usd fa-lg"></i>
+                    </div>
+                    <h2 class="font-weight-bold" style="color:#1F4E67;">Transferencia P2P <br><em style="color:#28a745;">Wallet a Tarjeta NFC</em></h2>
+                    <p class="lead text-muted">Envía HumanCoins directamente a otra persona. El remitente acerca su celular a la tarjeta física del destinatario y en un solo "tap" la transacción queda sellada.</p>
+                    <ul class="list-unstyled small text-muted">
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> <strong>Seguridad:</strong> Prevención de duplicidad por similitud vectorial en cada transacción.</li>
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Ideal para pagos divididos, remesas familiares o intercambios en eventos.</li>
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Registro en tiempo real en tu historial de billetera.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 3. PAGO CON QR -->
+            <div class="row align-items-center mb-5 pb-5">
+                <div class="col-lg-6 ent-reveal-left">
+                    <div class="impact-visual-card">
+                        <div class="main-image-wrapper" id="media-container-3"></div>
+                        <div class="floating-data-card">
+                            <h3 class="text-warning">QR Dinámico</h3>
+                            <span>Anti-Falsificación</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-container-impact ent-reveal-right">
+                    <div class="impact-icon-box" style="background:#fff3e0; color:#fcc404;">
+                        <i class="fas fa-qrcode fa-lg"></i>
+                    </div>
+                    <h2 class="font-weight-bold" style="color:#1F4E67;">Pago con QR Biotec <br><em style="color:#fcc404;">Escanea y Transfiere</em></h2>
+                    <p class="lead text-muted">El comercio escanea tu <strong>Photo-QR Esteganográfico</strong> incrustado en tu tarjeta. El monto se autoriza y la tecnología identifica la transacción al instante, evitando duplicidad.</p>
+                    <ul class="list-unstyled small text-muted">
+                        <li class="mb-2"><i class="fas fa-check text-warning mr-2"></i> <strong>Innovación:</strong> El QR cambia en cada refresco, invalidando capturas de pantalla.</li>
+                        <li class="mb-2"><i class="fas fa-check text-warning mr-2"></i> Aceptado en comercios aliados mediante la app de validador HS.</li>
+                        <li class="mb-2"><i class="fas fa-check text-warning mr-2"></i> Conciliación automática con tu Wallet y emisión de comprobante.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 4. IDENTIFICACIÓN UNIVERSAL -->
+            <div class="row align-items-center mb-5 pb-5">
+                <div class="col-lg-6 order-2 order-lg-2 ent-reveal-right">
+                    <div class="impact-visual-card">
+                        <div class="main-image-wrapper" id="media-container-4"></div>
+                        <div class="floating-data-card right">
+                            <h3 class="text-info">Universal</h3>
+                            <span>Profesional / Social</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 order-1 order-lg-1 text-container-impact left-align ent-reveal-left">
+                    <div class="impact-icon-box" style="background:#e0f7fa; color:#17a2b8;">
+                        <i class="fas fa-id-card fa-lg"></i>
+                    </div>
+                    <h2 class="font-weight-bold" style="color:#1F4E67;">Identificación Universal <br><em style="color:#17a2b8;">Un Tap, Todo tu Perfil</em></h2>
+                    <p class="lead text-muted">Comparte tu perfil profesional, portfolio y redes sociales con un solo gesto. El receptor acerca su smartphone a tu tarjeta y accede a tu perfil seguro instantáneamente.</p>
+                    <ul class="list-unstyled small text-muted">
+                        <li class="mb-2"><i class="fas fa-check text-info mr-2"></i> <strong>Zero-Knowledge:</strong> Tú decides qué muestra el endpoint NFC en cada momento.</li>
+                        <li class="mb-2"><i class="fas fa-check text-info mr-2"></i> Ideal para Networking en conferencias o intercambio de referencias.</li>
+                        <li class="mb-2"><i class="fas fa-check text-info mr-2"></i> Reemplaza las tarjetas de presentación tradicionales de plástico.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="text-center mt-5 pt-4 ent-reveal">
+                <a href="/register" class="btn-hs btn-primary" style="background:linear-gradient(135deg, #1F4E67, #4ca1af);">
+                    <i class="fas fa-id-card"></i> Activar mi Human ID
+                </a>
+                <p class="small text-muted mt-3">* La tarjeta física incluye chip EMV contactless, banda magnética, tecnología NFC y certificado de autenticidad.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="hs-hero-main py-5">
+        <div class="hs-hero-blob" style="top:-10%; left:-5%;"></div>
+        <div class="hs-hero-blob" style="bottom:-10%; right:-5%; background:radial-gradient(circle, rgba(215,29,0,0.1) 0%, transparent 70%);"></div>
+
+
+        <div class="container position-relative py-5" style="z-index:2;">
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-6 ent-reveal-left ">
+                    <div class="glass-form-container mx-lg-3 mt-5 mb-5" style="border:1px solid var(--hs-cyan);">
+                        <span class="hs-badge-premium" style="background:var(--hs-red); font-size:0.9rem; padding:5px 15px; margin-bottom:15px;">HARDWARE OFICIAL</span>
+                        <h2 class="mb-3" style="font-size:3rem; text-transform:uppercase;">Tu <span style="color:var(--hs-cyan);">HUMAN ID</span> Física</h2>
+                        <p style="font-size:1.2rem; color:rgba(255,255,255,0.8); margin-bottom:20px; line-height:1.4;">
+                            Materializa tu identidad digital. Adquiere tu tarjeta oficial y lleva tu credencial, tu firma y tus datos encriptados a donde vayas.
+                        </p>
+
+                        <div class="price-tag mb-2" style="font-size:3.5rem; color:var(--hs-cyan); font-weight:bold;">
+                            $500.00 <small style="font-size:1.5rem; color:rgba(255,255,255,0.6);">MXN</small>
+                        </div>
+
+                        <ul class="list-unstyled mb-3" style="font-size:1.2rem; color:rgba(255,255,255,0.9);">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Tarjeta física de alta durabilidad y diseño premium.</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Banda magnética y Tecnología Chip NFC para compartir perfil al instante.</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Vinculación biométrica instantánea y activación de Billetera Digital.</li>
+                            <li class="mt-4 mb-2"><i class="fas fa-truck text-warning mr-2"></i> <strong>Entrega estimada: 3 a 7 días hábiles</strong> en toda la República Mexicana.</li>
+                        </ul>
+
+                        <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px; padding:12px 16px; border:1px solid rgba(40,167,69,0.35); border-radius:14px; background:rgba(40,167,69,0.07);">
+                            <i class="fas fa-leaf" style="color:#28a745; font-size:1.4rem; flex-shrink:0;"></i>
+                            <div>
+                                <strong style="color:#28a745; font-size:0.82rem; letter-spacing:1.5px; text-transform:uppercase; display:block;">FSC &amp; Eco-Friendly Packaging</strong>
+                                <span style="font-size:0.8rem; color:rgba(255,255,255,0.55);">Cajas y etiquetas de envío certificadas con materiales sostenibles.</span>
+                            </div>
+                        </div>
+
+                        <a href="/register" class="btn-hs btn-primary w-100 justify-content-center" style="font-size:1.5rem;">
+                            <i class="fas fa-id-card"></i> Obtener mi Tarjeta
+                        </a>
+
+                        <p style="margin-top:15px; font-size:0.9rem; color:rgba(255,255,255,0.5); text-align:center;">
+                            * Certificados de identidad adicionales en PDF disponibles por +$100.00 MXN directamente en la plataforma.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 ent-reveal-right mt-5 mt-lg-0 d-flex justify-content-center">
+                    <div class="card-3d-container">
+                        <div class="card-bg-animated">
+                            <div class="circuit-lines"></div>
+                            <div class="hologram-layer"></div>
+                        </div>
+                        <div class="card-3d" id="mission-hero-card">
+                            <div class="card-user-data p-4">
+                                <div class="user-photo-container">
+                                    <img src="https://storage.googleapis.com/humansystem/Gemini_Generated_Image_n1w6uin1w6uin1w6-Photoroom.png" id="main-avatar" class="user-photo" alt="User">
+                                </div>
+                           <div style="color: var(--hs-red); font-weight: bold !important; font-style: italic; 
+text-transform: uppercase; text-align: left; font-size: 1.0rem; margin-top: 16px; 
+padding: 0 15px; word-wrap: break-word; line-height: 1.0; margin-bottom: 0px;">
+Nombre Legal:</div>
+
+                                <div class="user-info-clean">
+                                    <h2 id="user-name-display" class="brand-name-style"><em>CARGANDO...</em></h2>
+                                </div>
+                       <div style="color: var(--hs-red); font-weight: bold !important; font-style: italic; 
+text-transform: uppercase; text-align: left; font-size: 1.0rem; margin-top: 0px; 
+padding: 0 15px; word-wrap: break-word; line-height: 1.0; margin-bottom: 0px;">
+Humano:</div>
+                                <div class="text-center mt-1">
+                                    <div id="user-id-key">ESP01850412993842</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<!-- Script específico de esta página: reproducción de video/imagen en cada caso de uso -->
+<script>
+const mediaAssets = {
+    1: { video:"https://storage.googleapis.com/humansystem/5.mp4", staticImg:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_xnjmb7xnjmb7xnjm%20(1).png"},
+    2: { video:"https://storage.googleapis.com/humansystem/4.mp4", staticImg:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_n30epdn30epdn30e.png" },
+    3: { video:"https://storage.googleapis.com/humansystem/2.mp4", staticImg:"https://storage.googleapis.com/humansystem/img.png" },
+    4: { video:"https://storage.googleapis.com/humansystem/1.mp4", staticImg:"https://storage.googleapis.com/humansystem/Gemini_Generated_Image_3v8j6n3v8j6n3v8j.png" }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    function playClip(container) {
+        if (container.isPlaying) return;
+        container.isPlaying = true;
+        container.videoEl.style.display = 'block';
+        container.imgEl.style.display = 'none';
+        container.videoEl.currentTime = 0;
+        const p = container.videoEl.play();
+        if (p && p.catch) p.catch(() => stopClip(container));
+    }
+
+    function stopClip(container) {
+        container.isPlaying = false;
+        container.videoEl.pause();
+        container.videoEl.style.display = 'none';
+        container.imgEl.style.display = 'block';
+    }
+
+    for (let i = 1; i <= 4; i++) {
+        const container = document.getElementById(`media-container-${i}`);
+        if (!container) continue;
+
+        const img = document.createElement('img');
+        img.src = mediaAssets[i].staticImg;
+        img.alt = `Human System Asset ${i}`;
+        img.style.cssText = 'width:100%; height:100%; object-fit:cover; cursor:pointer; display:block;';
+
+        const video = document.createElement('video');
+        video.src = mediaAssets[i].video;
+        video.muted = true;
+        video.defaultMuted = true;
+        video.setAttribute('muted', '');
+        video.playsInline = true;
+        video.setAttribute('playsinline', '');
+        video.preload = 'auto';
+        video.style.cssText = 'width:100%; height:100%; object-fit:cover; cursor:pointer; display:none;';
+
+        container.innerHTML = '';
+        container.appendChild(img);
+        container.appendChild(video);
+
+        container.imgEl = img;
+        container.videoEl = video;
+        container.isPlaying = false;
+
+        video.addEventListener('ended', () => stopClip(container));
+        video.addEventListener('error', () => stopClip(container));
+    }
+
+    for (let i = 1; i <= 4; i++) {
+        const container = document.getElementById(`media-container-${i}`);
+        if (!container) continue;
+        container.addEventListener('mouseenter', () => playClip(container));
+        container.addEventListener('touchstart', () => playClip(container), { passive: true });
+    }
+
+    const mediaObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) playClip(entry.target); });
+    }, { root: null, rootMargin: '0px', threshold: 0.5 });
+
+    for (let i = 1; i <= 4; i++) {
+        const container = document.getElementById(`media-container-${i}`);
+        if (container) mediaObserver.observe(container);
+    }
+});
+</script>
+
+<%- include('partials/hs-footer') %>
+
+<%- include('partials/footer', { login: login }) %>
+<%- include('partials/hs-scripts') %>

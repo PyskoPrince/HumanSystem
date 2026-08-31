@@ -22,6 +22,10 @@
                                 (typeof pageClass !== 'undefined' && pageClass.includes('page-info'));
                let isLoginPage = (typeof currentPage !== 'undefined' && currentPage === 'login') || 
                                  (typeof pageClass !== 'undefined' && pageClass.includes('page-login'));
+               let isTecnologiaPage = (typeof currentPage !== 'undefined' && currentPage === 'tecnologia') || 
+                                 (typeof pageClass !== 'undefined' && pageClass.includes('page-tecnologia'));
+               let isCasosUsoPage = (typeof currentPage !== 'undefined' && currentPage === 'casos-uso') || 
+                                 (typeof pageClass !== 'undefined' && pageClass.includes('page-casos-uso'));
             %>
             
             <% if (isInfoPage) { %>
@@ -58,21 +62,39 @@
                             </a>
                         </li>
                     <% } %>
-                    
+
                     <li class="nav-item" data-page="register">
                         <a class="nav-link registro" href="/register">
-                            <i class="mr-1 fas fa-user-plus"></i> Registro
+                            <i class="mr-1 fas fa-user-plus"></i> Registrate
                         </a>
                     </li>
-                    
+
+                    <!-- Botón Casos de uso -->
+                    <% if (!isCasosUsoPage) { %>
+                        <li class="nav-item" data-page="casos-uso">
+                            <a class="nav-link" href="/casos-uso" style="background-color: orange !important; color: white !important;">
+                                <i class="mr-1 fas fa-layer-group"></i> Casos de uso
+                            </a>
+                        </li>
+                    <% } %>
+
+                    <!-- Botón Tecnologías -->
+                    <% if (!isTecnologiaPage) { %>
+                        <li class="nav-item" data-page="tecnologia">
+                            <a class="nav-link" href="/tecnologia" style="background-color: #007bff !important; color: white !important;">
+                                <i class="mr-1 fas fa-microchip"></i> Tecnologías
+                            </a>
+                        </li>
+                    <% } %>
+
                     <% if (!isLoginPage) { %>
                         <li class="nav-item" data-page="login">
                             <a class="nav-link ingreso" href="/login">
-                                <i class="mr-1 fas fa-sign-in-alt"></i> Iniciar Sesión
+                                <i class="mr-1 fas fa-sign-in-alt"></i> Inicia Sesión
                             </a>
                         </li>
                     <% } %>
                 </ul>
             </div>
         </nav>
-    <% } %> 
+    <% } %>
