@@ -1,7 +1,6 @@
 <%- include('partials/header', { title: 'Casos de Uso', pageClass: 'page-casos-uso' }) %>
 <%- include('partials/navbar', { login: false }) %>
 <%- include('partials/hs-styles') %>
-<%- include('partials/hs-loader') %>
 
 <div class="hs-landing-wrapper">
 
@@ -129,84 +128,87 @@
             </div>
         </div>
     </section>
-    
-    <section class="hs-hero-main py-5">
+   
+   
+      <section class="hs-hero-main py-5">
         <div class="hs-hero-blob" style="top:-10%; left:-5%;"></div>
-        <div class="hs-hero-blob" style="bottom:-10%; right:-5%; background:radial-gradient(circle, rgba(215,29,0,0.1) 0%, transparent 70%);"></div>
 
+        <div class="container position-relative" style="z-index:2;">
+            <!-- ══════════════════════════════════════
+                 SECCIÓN PARTNERS / INTEGRADORES
+            ══════════════════════════════════════ -->
+            <div class="row align-items-center pt-5 mt-5 pl-5 pr-5">
+                <div class="col-lg-6 mb-5 mb-lg-0 ent-reveal">
+                   <span class="hs-badge-premium" style="background:var(--hs-gold); color:#000;">Partners Estratégicos · 2026</span>
+                    <h2 class="hero-title" style="font-size:3.5rem;">
+                        Intégrate a nuestro<br>
+                        <span style="color:var(--hs-cyan);">ecosistema.</span>
+                    </h2>
+                    <p class="hero-lead" style="color:rgba(255,255,255,0.85); font-size:1.1rem; line-height:1.7; margin-bottom:20px;">
+                        Construye sobre nuestra infraestructura. Diseña tu <strong>esquema propio de identidad</strong>,
+                        emite credenciales con tu marca y conecta tu plataforma a nuestra red de validación.
+                        Acceso para integradores, desarrolladores y empresas con requerimientos de identidad soberana.
+                    </p>
 
-        <div class="container position-relative py-5" style="z-index:2;">
-            <div class="row align-items-center mb-5">
-                <div class="col-lg-6 ent-reveal-left ">
-                    <div class="glass-form-container mx-lg-3 mt-5 mb-5" style="border:1px solid var(--hs-cyan);">
-                        <span class="hs-badge-premium" style="background:var(--hs-red); font-size:0.9rem; padding:5px 15px; margin-bottom:15px;">HARDWARE OFICIAL</span>
-                        <h2 class="mb-3" style="font-size:3rem; text-transform:uppercase;">Tu <span style="color:var(--hs-cyan);">HUMAN ID</span> Física</h2>
-                        <p style="font-size:1.2rem; color:rgba(255,255,255,0.8); margin-bottom:20px; line-height:1.4;">
-                            Materializa tu identidad digital. Adquiere tu tarjeta oficial y lleva tu credencial, tu firma y tus datos encriptados a donde vayas.
-                        </p>
-
-                        <div class="price-tag mb-2" style="font-size:3.5rem; color:var(--hs-cyan); font-weight:bold;">
-                            $500.00 <small style="font-size:1.5rem; color:rgba(255,255,255,0.6);">MXN</small>
+                    <div class="partner-features">
+                        <div class="partner-feature">
+                            <i class="fas fa-palette"></i>
+                            <span>White-label con tu branding</span>
                         </div>
-
-                        <ul class="list-unstyled mb-3" style="font-size:1.2rem; color:rgba(255,255,255,0.9);">
-                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Tarjeta física de alta durabilidad y diseño premium.</li>
-                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Banda magnética y Tecnología Chip NFC para compartir perfil al instante.</li>
-                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Vinculación biométrica instantánea y activación de Billetera Digital.</li>
-                            <li class="mt-4 mb-2"><i class="fas fa-truck text-warning mr-2"></i> <strong>Entrega estimada: 3 a 7 días hábiles</strong> en toda la República Mexicana.</li>
-                        </ul>
-
-                        <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px; padding:12px 16px; border:1px solid rgba(40,167,69,0.35); border-radius:14px; background:rgba(40,167,69,0.07);">
-                            <i class="fas fa-leaf" style="color:#28a745; font-size:1.4rem; flex-shrink:0;"></i>
-                            <div>
-                                <strong style="color:#28a745; font-size:0.82rem; letter-spacing:1.5px; text-transform:uppercase; display:block;">FSC &amp; Eco-Friendly Packaging</strong>
-                                <span style="font-size:0.8rem; color:rgba(255,255,255,0.55);">Cajas y etiquetas de envío certificadas con materiales sostenibles.</span>
-                            </div>
+                        <div class="partner-feature">
+                            <i class="fas fa-code"></i>
+                            <span>API REST de identidad y pagos</span>
                         </div>
+                        <div class="partner-feature">
+                            <i class="fas fa-id-badge"></i>
+                            <span>Emisión de credenciales propias</span>
+                        </div>
+                        <div class="partner-feature">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Validación en tu infraestructura</span>
+                        </div>
+                    </div>
 
-                        <a href="/register" class="btn-hs btn-primary w-100 justify-content-center" style="font-size:1.5rem;">
-                            <i class="fas fa-id-card"></i> Obtener mi Tarjeta
-                        </a>
-
-                        <p style="margin-top:15px; font-size:0.9rem; color:rgba(255,255,255,0.5); text-align:center;">
-                            * Certificados de identidad adicionales en PDF disponibles por +$100.00 MXN directamente en la plataforma.
-                        </p>
+                    <div class="d-flex flex-column align-items-center align-items-lg-start gap-3 mt-4">
+                        <div class="tpill mb-2" style="border:1px solid rgba(40,167,69,0.3); width:fit-content;">
+                            <div class="dot-active"></div> RED ACTIVA — CONTÁCTANOS PARA ACCESO
+                        </div>
+                        <div class="tpill" style="width:fit-content;">
+                            <i class="fas fa-lock text-warning"></i> CIFRADO AES-256-GCM · ZERO-TRUST
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-lg-6 ent-reveal-right mt-5 mt-lg-0 d-flex justify-content-center">
-                    <div class="card-3d-container">
-                        <div class="card-bg-animated">
-                            <div class="circuit-lines"></div>
-                            <div class="hologram-layer"></div>
+                <div class="col-lg-5 offset-lg-1 ent-reveal" style="transition-delay:0.2s;">
+                    <div class="glass-form-container" style="border:1px solid var(--hs-cyan);">
+                        <div class="text-center mb-4">
+                            <h3 class="font-weight-bold">Enviar Mensaje</h3>
+                            <p class="small text-white-50">Completa el formulario y te contactamos en menos de 24 horas.</p>
                         </div>
-                        <div class="card-3d" id="mission-hero-card">
-                            <div class="card-user-data p-4">
-                                <div class="user-photo-container">
-                                    <img src="https://storage.googleapis.com/humansystem/Gemini_Generated_Image_n1w6uin1w6uin1w6-Photoroom.png" id="main-avatar" class="user-photo" alt="User">
-                                </div>
-                           <div style="color: var(--hs-red); font-weight: bold !important; font-style: italic; 
-text-transform: uppercase; text-align: left; font-size: 1.0rem; margin-top: 16px; 
-padding: 0 15px; word-wrap: break-word; line-height: 1.0; margin-bottom: 0px;">
-Nombre Legal:</div>
-
-                                <div class="user-info-clean">
-                                    <h2 id="user-name-display" class="brand-name-style"><em>CARGANDO...</em></h2>
-                                </div>
-                       <div style="color: var(--hs-red); font-weight: bold !important; font-style: italic; 
-text-transform: uppercase; text-align: left; font-size: 1.0rem; margin-top: 0px; 
-padding: 0 15px; word-wrap: break-word; line-height: 1.0; margin-bottom: 0px;">
-Humano:</div>
-                                <div class="text-center mt-1">
-                                    <div id="user-id-key">ESP01850412993842</div>
-                                </div>
+                        <form id="killerContactForm">
+                            <div class="form-group mb-3">
+                                <input type="text" id="cf-nombre" class="form-control form-control-lg form-glass-input" placeholder="Nombre completo" required>
                             </div>
-                        </div>
+                            <div class="form-group mb-3">
+                                <input type="email" id="cf-correo" class="form-control form-control-lg form-glass-input" placeholder="Correo electrónico" required>
+                            </div>
+                            <div class="form-group mb-4">
+                                <textarea id="cf-mensaje" class="form-control form-glass-input" rows="4" placeholder="Cuéntanos tu caso de uso o proyecto..." style="height:auto !important;"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-submit-premium btn-block w-100 py-3">
+                                ENVIAR MENSAJE <i class="fas fa-paper-plane ml-2"></i>
+                            </button>
+                        </form>
+                        <p class="text-center mt-3 mb-0" style="font-size:9px; color:rgba(255,255,255,0.4); text-transform:uppercase;">
+                            Tu información está protegida por encriptación de extremo a extremo.
+                        </p>
                     </div>
                 </div>
             </div>
-        </div>
     </section>
+    <!-- DE LOS CREADORES DE TAPNI -->
+    <%- include('partials/hs-tapni-badge') %>
+</div>
 <!-- Script específico de esta página: reproducción de video/imagen en cada caso de uso -->
 <script>
 const mediaAssets = {

@@ -1,64 +1,15 @@
 <%- include('partials/header', { title: 'Tecnología', pageClass: 'page-tecnologia' }) %>
 <%- include('partials/navbar', { login: false }) %>
 <%- include('partials/hs-styles') %>
-<%- include('partials/hs-loader') %>
 
 <div class="hs-landing-wrapper">
-    <!-- GUÍA GLOBAL DE EIP -->
-    <%- include('partials/hs-eip-guide') %>
-
     <!-- ══════════════════════════════════════
          CARACTERÍSTICAS PRINCIPALES (BENTO GRID)
     ══════════════════════════════════════ -->
     <section class="section-convergent-white">
-
-        <!-- ══════════════════════════════════════
-             TECH STRIP — STACK & PARTNERS
-        ══════════════════════════════════════ -->
-        <section class="hs-tech-marquee mt-2 mb-5">
-            <span class="strip-label">Tecnologías que impulsan HumanoID</span>
-            <div class="marquee-fade-mask">
-                <div class="marquee-rail">
-
-                    <!-- ─── SET 1 ─── -->
-                    <div class="m-pill"><i class="fab fa-font-awesome" style="color:#528DD3;"></i><span class="m-label">Font Awesome</span></div>
-                    <div class="m-pill"><i class="fab fa-stripe-s" style="color:#635BFF;"></i><span class="m-label">Stripe</span></div>
-                    <div class="m-pill"><i class="fab fa-google" style="color:#4285F4;"></i><span class="m-label">Google Cloud</span></div>
-                    <div class="m-pill"><i class="fab fa-aws" style="color:#FF9900;"></i><span class="m-label">AWS</span></div>
-                    <div class="m-pill"><span class="m-char" style="color:#13AA52;">M</span><span class="m-label">Mongo DB</span></div>
-                    <div class="m-pill"><i class="fas fa-comment-dots" style="color:#F22F46;"></i><span class="m-label">Twilio</span></div>
-                    <div class="m-pill"><i class="fab fa-cc-visa" style="color:#1565C0;"></i><span class="m-label">Visa</span></div>
-                    <div class="m-pill"><i class="fas fa-satellite-dish" style="color:#1C77D4;"></i><span class="m-label">Thales</span></div>
-                    <div class="m-pill"><i class="fas fa-layer-group" style="color:#7B42BC;"></i><span class="m-label">HashiCorp</span></div>
-                    <div class="m-pill"><i class="fas fa-shield-alt" style="color:#FA582D;"></i><span class="m-label">Palo Alto</span></div>
-                    <div class="m-pill"><i class="fas fa-id-badge" style="color:#00B5D8;"></i><span class="m-label">D-ID</span></div>
-                    <div class="m-pill"><i class="fas fa-video" style="color:#FF4B4B;"></i><span class="m-label">HeyGen</span></div>
-                    <div class="m-pill"><i class="fas fa-qrcode" style="color:#1F4E67;"></i><span class="m-label">Me-QR</span></div>
-                    <div class="m-pill"><i class="fas fa-robot" style="color:#8B5CF6;"></i><span class="m-label">QR AI</span></div>
-
-                    <!-- ─── SET 2 (copia idéntica para loop seamless) ─── -->
-                    <div class="m-pill"><i class="fab fa-font-awesome" style="color:#528DD3;"></i><span class="m-label">Font Awesome</span></div>
-                    <div class="m-pill"><i class="fab fa-stripe-s" style="color:#635BFF;"></i><span class="m-label">Stripe</span></div>
-                    <div class="m-pill"><i class="fab fa-google" style="color:#4285F4;"></i><span class="m-label">Google Cloud</span></div>
-                    <div class="m-pill"><i class="fab fa-aws" style="color:#FF9900;"></i><span class="m-label">AWS</span></div>
-                    <div class="m-pill"><span class="m-char" style="color:#13AA52;">M</span><span class="m-label">MongoDB</span></div>
-                    <div class="m-pill"><i class="fas fa-comment-dots" style="color:#F22F46;"></i><span class="m-label">Twilio</span></div>
-                    <div class="m-pill"><i class="fab fa-cc-visa" style="color:#1565C0;"></i><span class="m-label">Visa</span></div>
-                    <div class="m-pill"><i class="fas fa-satellite-dish" style="color:#1C77D4;"></i><span class="m-label">Thales</span></div>
-                    <div class="m-pill"><i class="fas fa-layer-group" style="color:#7B42BC;"></i><span class="m-label">HashiCorp</span></div>
-                    <div class="m-pill"><i class="fas fa-shield-alt" style="color:#FA582D;"></i><span class="m-label">Palo Alto</span></div>
-                    <div class="m-pill"><i class="fas fa-id-badge" style="color:#00B5D8;"></i><span class="m-label">D-ID</span></div>
-                    <div class="m-pill"><i class="fas fa-video" style="color:#FF4B4B;"></i><span class="m-label">HeyGen</span></div>
-                    <div class="m-pill"><i class="fas fa-qrcode" style="color:#1F4E67;"></i><span class="m-label">Me-QR</span></div>
-                    <div class="m-pill"><i class="fas fa-robot" style="color:#8B5CF6;"></i><span class="m-label">QR AI</span></div>
-
-                </div>
-            </div>
-        </section>
-
         <div class="container">
-            <div class="text-center mt-5 mb-5 ent-reveal">
-                <h2 class="font-weight-bold mt-4 mb-3" style="color:var(--hs-blue); font-size:3rem;">
+            <div class="text-center mb-5 ent-reveal">
+                <h2 class="font-weight-bold mb-5" style="color:var(--hs-blue); font-size:3rem;">
                     <em>Diseñado para tu vida digital del día a día</em>
                 </h2>
                 <p class="lead text-muted" style="max-width:600px; margin:0 auto;">
@@ -114,8 +65,14 @@
                 </div>
             </div>
         </div>
+
+
+        
     </section>
 
+
+
+    
     <!-- ══════════════════════════════════════
          ESPECIFICACIONES TÉCNICAS TARJETA
     ══════════════════════════════════════ -->
@@ -201,7 +158,7 @@
                                 <strong style="color:var(--hs-cyan);">Materiales Premium:</strong>
                                 <p class="small mb-2" style="color:#555;">PVC, PET, Policarbonato, Metal, Madera, PC</p>
                                 <strong style="color:var(--hs-cyan);">Estándares:</strong>
-                                <p class="small" style="color:#555;">ISO/IEC 14443-2/3 A<br>IC EAL 5+<br>Cifrado AES-256-GCM<br>Vida útil datos: 25 años</p>
+                                <p class="small" style="color:#555;">ISO/IEC 14443-2/3 A<br>IC EAL 5+<br>Cifrado AES-256-GCM<br>Vida útil datos: 25 años<br><strong>Conformidad OACI (ICAO Doc 9303)</strong></p>
                             </div>
                             <div class="col-6">
                                 <strong style="color:var(--hs-cyan);">Chips Soportados:</strong>
@@ -216,8 +173,126 @@
         </div>
     </section>
 
-</div>
+    <section class="hs-hero-main py-5">
+        <div class="hs-hero-blob" style="top:-10%; left:-5%;"></div>
+        <div class="hs-hero-blob" style="bottom:-10%; right:-5%; background:radial-gradient(circle, rgba(215,29,0,0.1) 0%, transparent 70%);"></div>
 
+        <div class="container position-relative py-5" style="z-index:2;">
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-6 ent-reveal-left ">
+                    <div class="glass-form-container mx-lg-3 mt-5 mb-5" style="border:1px solid var(--hs-cyan);">
+                        <span class="hs-badge-premium" style="background:var(--hs-red); font-size:0.9rem; padding:5px 15px; margin-bottom:15px;">HARDWARE OFICIAL</span>
+                        <h2 class="mb-3" style="font-size:3rem; text-transform:uppercase;">Tu <span style="color:var(--hs-cyan);">HUMAN ID</span> Física</h2>
+                        <p style="font-size:1.2rem; color:rgba(255,255,255,0.8); margin-bottom:20px; line-height:1.4;">
+                            Materializa tu identidad digital. Adquiere tu tarjeta oficial y lleva tu credencial, tu firma y tus datos encriptados a donde vayas.
+                        </p>
+
+                        <div class="price-tag mb-2" style="font-size:3.5rem; color:var(--hs-cyan); font-weight:bold;">
+                            $500.00 <small style="font-size:1.5rem; color:rgba(255,255,255,0.6);">MXN</small>
+                        </div>
+
+                        <ul class="list-unstyled mb-3" style="font-size:1.2rem; color:rgba(255,255,255,0.9);">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Tarjeta física de alta durabilidad y diseño premium.</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Banda magnética y Tecnología Chip NFC para compartir perfil al instante.</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i> Vinculación biométrica instantánea y activación de Billetera Digital.</li>
+                            <li class="mt-4 mb-2"><i class="fas fa-truck text-warning mr-2"></i> <strong>Entrega estimada: 3 a 7 días hábiles</strong> en toda la República Mexicana.</li>
+                        </ul>
+
+                        <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px; padding:12px 16px; border:1px solid rgba(40,167,69,0.35); border-radius:14px; background:rgba(40,167,69,0.07);">
+                            <i class="fas fa-leaf" style="color:#28a745; font-size:1.4rem; flex-shrink:0;"></i>
+                            <div>
+                                <strong style="color:#28a745; font-size:0.82rem; letter-spacing:1.5px; text-transform:uppercase; display:block;">FSC &amp; Eco-Friendly Packaging</strong>
+                                <span style="font-size:0.8rem; color:rgba(255,255,255,0.55);">Cajas y etiquetas de envío certificadas con materiales sostenibles.</span>
+                            </div>
+                        </div>
+
+                        <a href="/register" class="btn-hs btn-primary w-100 justify-content-center" style="font-size:1.5rem;">
+                            <i class="fas fa-id-card"></i> Obtener mi Tarjeta
+                        </a>
+
+                        <p style="margin-top:15px; font-size:0.9rem; color:rgba(255,255,255,0.5); text-align:center;">
+                            * Certificados de identidad adicionales en PDF disponibles por +$100.00 MXN directamente en la plataforma.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 ent-reveal-right mt-5 mt-lg-0 d-flex justify-content-center">
+                    <div class="card-3d-container">
+                        <div class="card-bg-animated">
+                            <div class="circuit-lines"></div>
+                            <div class="hologram-layer"></div>
+                        </div>
+                        <div class="card-3d" id="mission-hero-card">
+                            <div class="card-user-data p-4">
+                                <div class="user-photo-container">
+                                    <img src="https://storage.googleapis.com/humansystem/Gemini_Generated_Image_n1w6uin1w6uin1w6-Photoroom.png" id="main-avatar" class="user-photo" alt="User">
+                                </div>
+                           <div style="color: var(--hs-red); font-weight: bold !important; font-style: italic; 
+text-transform: uppercase; text-align: left; font-size: 1.0rem; margin-top: 16px; 
+padding: 0 15px; word-wrap: break-word; line-height: 1.0; margin-bottom: 0px;">
+Nombre Legal:</div>
+
+                                <div class="user-info-clean">
+                                    <h2 id="user-name-display" class="brand-name-style"><em>CARGANDO...</em></h2>
+                                </div>
+                       <div style="color: var(--hs-red); font-weight: bold !important; font-style: italic; 
+text-transform: uppercase; text-align: left; font-size: 1.0rem; margin-top: 0px; 
+padding: 0 15px; word-wrap: break-word; line-height: 1.0; margin-bottom: 0px;">
+Humano:</div>
+                                <div class="text-center mt-1">
+                                    <div id="user-id-key">ESP01850412993842</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+          <!-- ══════════════════════════════════════
+             TECH STRIP — STACK & PARTNERS
+        ══════════════════════════════════════ -->
+        <section class="hs-tech-marquee mb-5 ent-reveal" style="background:linear-gradient(90deg, rgba(231, 241, 247, 0.05) 0%, rgba(31,78,103,0.02) 100%); border-top:1px solid rgba(0,0,0,0.05); border-bottom:1px solid rgba(0,0,0,0.05);">
+            <span class="strip-label mb-2" style="color:#ffffff;">Tecnologías que impulsan día a día Human-ID</span>
+            <div class="marquee-fade-mask">
+                <div class="marquee-rail">
+                <!-- ─── SET 1 ─── -->
+                <div class="m-pill"><i class="fab fa-font-awesome" style="color:#528DD3;"></i><span class="m-label" style="color:#ffffff;">Font Awesome</span></div>
+                <div class="m-pill"><i class="fab fa-stripe-s" style="color:#635BFF;"></i><span class="m-label" style="color:#ffffff;">Stripe</span></div>
+                <div class="m-pill"><i class="fab fa-google" style="color:#4285F4;"></i><span class="m-label" style="color:#ffffff;">Google Cloud</span></div>
+                <div class="m-pill"><i class="fab fa-aws" style="color:#FF9900;"></i><span class="m-label" style="color:#ffffff;">AWS</span></div>
+                <div class="m-pill"><span class="m-char" style="color:#13AA52;">M</span><span class="m-label" style="color:#ffffff;">Mongo DB</span></div>
+                <div class="m-pill"><i class="fas fa-comment-dots" style="color:#F22F46;"></i><span class="m-label" style="color:#ffffff;">Twilio</span></div>
+                <div class="m-pill"><i class="fab fa-cc-visa" style="color:#1565C0;"></i><span class="m-label" style="color:#ffffff;" >Visa</span></div>
+                <div class="m-pill"><i class="fas fa-satellite-dish" style="color:#1C77D4;"></i><span class="m-label" style="color:#ffffff;">Thales</span></div>
+                <div class="m-pill"><i class="fas fa-layer-group" style="color:#7B42BC;"></i><span class="m-label" style="color:#ffffff;">HashiCorp</span></div>
+                <div class="m-pill"><i class="fas fa-shield-alt" style="color:#FA582D;"></i><span class="m-label" style="color:#ffffff;">Palo Alto</span></div>
+                <div class="m-pill"><i class="fas fa-id-badge" style="color:#00B5D8;"></i><span class="m-label" style="color:#ffffff;">D-ID</span></div>
+                <div class="m-pill"><i class="fas fa-video" style="color:#FF4B4B;"></i><span class="m-label" style="color:#ffffff;">HeyGen</span></div>
+                <div class="m-pill"><i class="fas fa-qrcode" style="color:#1F4E67;"></i><span class="m-label" style="color:#ffffff;">Me-QR</span></div>
+                <div class="m-pill"><i class="fas fa-robot" style="color:#8B5CF6;"></i><span class="m-label" style="color:#ffffff;">QR AI</span></div>
+                <div class="m-pill"><i class="fas fa-terminal" style="color:#22C55E;"></i><span class="m-label" style="color:#ffffff;">PromptQL</span></div>
+
+                <!-- ─── SET 2 (copia idéntica para loop seamless) ─── -->
+                <div class="m-pill"><i class="fab fa-font-awesome" style="color:#528DD3;"></i><span class="m-label" style="color:#ffffff;">Font Awesome</span></div>
+                <div class="m-pill"><i class="fab fa-stripe-s" style="color:#635BFF;"></i><span class="m-label" style="color:#ffffff;">Stripe</span></div>
+                <div class="m-pill"><i class="fab fa-google" style="color:#4285F4;"></i><span class="m-label" style="color:#ffffff;">Google Cloud</span></div>
+                <div class="m-pill"><i class="fab fa-aws" style="color:#FF9900;"></i><span class="m-label" style="color:#ffffff;">AWS</span></div>
+                <div class="m-pill"><span class="m-char" style="color:#13AA52;">M</span><span class="m-label" style="color:#ffffff;">Mongo DB</span></div>
+                <div class="m-pill"><i class="fas fa-comment-dots" style="color:#F22F46;"></i><span class="m-label" style="color:#ffffff;">Twilio</span></div>
+                <div class="m-pill"><i class="fab fa-cc-visa" style="color:#1565C0;"></i><span class="m-label" style="color:#ffffff;" >Visa</span></div>
+                <div class="m-pill"><i class="fas fa-satellite-dish" style="color:#1C77D4;"></i><span class="m-label" style="color:#ffffff;">Thales</span></div>
+                <div class="m-pill"><i class="fas fa-layer-group" style="color:#7B42BC;"></i><span class="m-label" style="color:#ffffff;">HashiCorp</span></div>
+                <div class="m-pill"><i class="fas fa-shield-alt" style="color:#FA582D;"></i><span class="m-label" style="color:#ffffff;">Palo Alto</span></div>
+                <div class="m-pill"><i class="fas fa-id-badge" style="color:#00B5D8;"></i><span class="m-label" style="color:#ffffff;">D-ID</span></div>
+                <div class="m-pill"><i class="fas fa-video" style="color:#FF4B4B;"></i><span class="m-label" style="color:#ffffff;">HeyGen</span></div>
+                <div class="m-pill"><i class="fas fa-qrcode" style="color:#1F4E67;"></i><span class="m-label" style="color:#ffffff;">Me-QR</span></div>
+                <div class="m-pill"><i class="fas fa-robot" style="color:#8B5CF6;"></i><span class="m-label" style="color:#ffffff;">QR AI</span></div>
+                <div class="m-pill"><i class="fas fa-terminal" style="color:#22C55E;"></i><span class="m-label" style="color:#ffffff;">PromptQL</span></div>
+                </div>
+            </div>
+        </section>
+    </section>
+    </div>
 <%- include('partials/hs-footer') %>
 
 <%- include('partials/footer', { login: login }) %>
